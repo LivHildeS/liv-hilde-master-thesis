@@ -1,6 +1,6 @@
 # Masters thesis in Information Secrity at The University of Oslo
 
-This code is part of my masters thesis, and is greated in order to process and analyse the data from the experiment and from the survey. 
+This code is part of my masters thesis, and is created in order to process and analyse the data from the experiment and from the survey.
 
 Here is some `code text`.
 
