@@ -13,6 +13,8 @@ def process_nettskjema_data(df):
     """
     Processes the nettskjema data.
     Calculates a score based on the cookie answers.
+    Makes a quantitative version of the Likert answers.
+    Make int version of the ages.
 
     Args:
         df (pd.DataFrame): Pandas dataframe with the nettskjema data.
@@ -39,6 +41,16 @@ def process_nettskjema_data(df):
                 df.loc[i, "cookie_questions_wrong"] += 1
 
     df["cookie_questions_score"] = df["cookie_questions_correct"] - df["cookie_questions_wrong"]
+
+    # Make an int version of the Likert answer
+    cookie_consent_likert_mapping = CONSTANTS["cookie_consent_likert_mapping"]
+    df["understand_cookie_consent"] = df["understand_cookie_consent"].str.strip()  # Remove trailing whitespace
+    df["understand_cookie_consent_int"] = df["understand_cookie_consent"].map(cookie_consent_likert_mapping)
+
+    # Make age into int in order to compare ages easier. 35 will represent 30-39 group and similar.
+    age_mapping = CONSTANTS["age_mapping"]
+    df["age"] = df["age"].str.strip()  # Remove trailing whitespace
+    df["age_int"] = df["age"].map(age_mapping)
 
     return df
 

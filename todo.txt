@@ -7,8 +7,8 @@ TODO:
 
     - Prosessering:
         - Nettskjema:
+            .- Ny kolonne: Multiple choice tell antall riktig og lag ny kolonne, kan ta gjennomsnittet.
             - Likert spm 11, ta gjennomsnitt.
-            - Ny kolonne: Multiple choice tell antall riktig og lag ny kolonne, kan ta gjennomsnittet.
             - Alder kan gjøres til en int for å lettere kondisjonere
 
         - Eksperiment:

@@ -42,6 +42,20 @@ wrong_cookie_answers:
   - mc_cookies_virus
   - mc_cookies_delete_virus
   - mc_cookies_hackers
+cookie_consent_likert_mapping:
+  "Not at all": -2 
+  "To a small extent": -1
+  "Neither nor": 0
+  "To some extent": 1
+  "To a great extent": 2
+  "Don't know": 0
+age_mapping:
+  "15 - 19 years": 15
+  "20 - 29 years": 25
+  "30 - 39 years": 35
+  "40 - 49 years": 45
+  "50 - 59 years": 55
+  "60&#43; years": 65
 devices:
   - phone
   - computer
