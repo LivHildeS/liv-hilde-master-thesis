@@ -33,6 +33,15 @@ nettskjema_column_names:
   19: it_background  # Yes, programming and / or design, yes other, no
   20: freetext_additional_comments
   21: answer_time
+correct_cookie_answers:
+  - mc_cookies_store_user_preference
+  - mc_cookies_track_user_activity
+  - mc_cookies_analytics
+  - mc_cookies_text_files
+wrong_cookie_answers:
+  - mc_cookies_virus
+  - mc_cookies_delete_virus
+  - mc_cookies_hackers
 devices:
   - phone
   - computer

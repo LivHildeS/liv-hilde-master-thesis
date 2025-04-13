@@ -9,6 +9,40 @@ from src.paths import ALL_EXPERIMENTS_PATH, NETTSKJEMA_PATH, NETTSKJEMA_QUESTION
 CONSTANTS = get_constants()
 
 
+def process_nettskjema_data(df):
+    """
+    Processes the nettskjema data.
+    Calculates a score based on the cookie answers.
+
+    Args:
+        df (pd.DataFrame): Pandas dataframe with the nettskjema data.
+
+    Returns:
+        pd.DataFrame: The dataframe processed.
+    """
+    # Calculate amount of correctly answered cookie questions
+    correct_cookie_answers = CONSTANTS["correct_cookie_answers"]
+    wrong_cookie_answers = CONSTANTS["wrong_cookie_answers"]
+
+    df["cookie_questions_correct"] = 0
+    df["cookie_questions_wrong"] = 0
+
+    for correct_cookie_answer in correct_cookie_answers:
+        not_checked = df[correct_cookie_answer].isna()
+        for i in range(len(df)):
+            if not not_checked[i]:
+                df.loc[i, "cookie_questions_correct"] += 1
+    for wrong_cookie_answer in wrong_cookie_answers:
+        not_checked = df[wrong_cookie_answer].isna()
+        for i in range(len(df)):
+            if not not_checked[i]:
+                df.loc[i, "cookie_questions_wrong"] += 1
+
+    df["cookie_questions_score"] = df["cookie_questions_correct"] - df["cookie_questions_wrong"]
+
+    return df
+
+
 def read_nettskjema_data():
     """
     Reads the nettskjema data and returns as a pandas dataframe.
@@ -19,6 +53,8 @@ def read_nettskjema_data():
     df = pd.read_excel(NETTSKJEMA_PATH)
     column_names = CONSTANTS["nettskjema_column_names"]
     df.columns = column_names.values()
+    df = process_nettskjema_data(df)
+
     return df
 
 
