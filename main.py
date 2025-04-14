@@ -1,4 +1,5 @@
 from src.utils import get_all_data, read_nettskjema_data, read_participant_data
+from src.generate_results import run_group_test
 
 
 if __name__ == "__main__":
