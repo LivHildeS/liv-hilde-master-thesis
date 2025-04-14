@@ -1,5 +1,6 @@
 import os
 
+import numpy as np
 import pandas as pd
 import yaml
 
@@ -102,6 +103,27 @@ def _get_experiment_results(participant_number):
     return results
 
 
+def _quantisize_answers(text):
+    """
+    Given an answer to a website (accept_all, reject_all, alternatives_reject_all, etc), returns 1
+    if "accept" is included and 0 if "reject" is included in the answer. If neither are, return 0.
+
+    Args:
+        text (str): The text answer.
+
+    Returns:
+        int: 1 if accept is included, 0 if reject is included, else np.nan.
+    """
+    if pd.isna(text):
+        return np.nan
+    text = text.lower()
+    if "accept" in text:
+        return 1
+    if "reject" in text:
+        return 0
+    return np.nan
+
+
 def process_participant_data():
     """
     Processes the data that is qualitivly assigned and then quantized into yaml files.
@@ -114,6 +136,20 @@ def process_participant_data():
         data = _get_experiment_results(participant_number=participant_number)
         all_data.append(pd.json_normalize(data))
     df = pd.concat(all_data, ignore_index=True)
+
+    # Quantisize the amount of accepts
+    df["computer_accepts"] = 0
+    df["phone_accepts"] = 0
+
+    devices = ["computer", "phone"]
+    websites = ["finn", "dnb", "facebook", "google", "dagens"]
+    for device in devices:
+        for website in websites:
+            column_name = f"{device}.{website}.answer"
+            df[f"{column_name}.int"] = df[column_name].apply(_quantisize_answers)
+            df[f"{device}_accepts"] += df[f"{column_name}.int"]
+
+    df["total_accepts"] = df["computer_accepts"] + df["phone_accepts"]
 
     df.to_csv(ALL_EXPERIMENTS_PATH)
 
