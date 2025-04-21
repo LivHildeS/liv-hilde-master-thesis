@@ -1,8 +1,14 @@
 from itertools import combinations
 
 import pandas as pd
-from scipy.stats import mannwhitneyu, shapiro, ttest_ind
+from scipy.stats import friedmanchisquare, mannwhitneyu, shapiro, ttest_ind, wilcoxon
 from statsmodels.stats.contingency_tables import cochrans_q, mcnemar
+
+from src.get_constants import get_constants
+
+CONSTANTS = get_constants()
+WEBSITES = CONSTANTS["websites"]
+DEVICES = CONSTANTS["devices"]
 
 
 def run_group_test(group_df1, group_df2, value_column, test_type, group_names=None):
@@ -119,6 +125,68 @@ def run_pairwise_mcnemar_tests(df, device, exact=True):
             "table": table,
             "statistic": test_result.statistic,
             "p_value": test_result.pvalue
+        })
+
+    return results
+
+
+def run_friedman_test(df):
+    """
+    Runs the Friedman test on repeated ordinal data across multiple websites.
+
+    Args:
+        df (pd.DataFrame): The data from the study.
+
+    Returns:
+        Dictionary with test type, websites, test statistic, degrees of freedom, and p-value.
+    """
+    columns = [f"{site}_accepts_int" for site in WEBSITES]
+    data = df[columns]
+
+    # Friedman expects each column to be a condition, and each row to be a subject
+    stat, p_value = friedmanchisquare(*[data[col] for col in columns])
+
+    return {
+        "test_type": "friedman",
+        "websites": WEBSITES,
+        "statistic": stat,
+        "df": len(WEBSITES) - 1,
+        "p_value": p_value
+    }
+
+
+def run_pairwise_wilcoxon_tests(df):
+    """
+    Runs Wilcoxon signed-rank tests for all pairs of websites with ordinal response values (0-2).
+
+    Args:
+        df (pd.DataFrame): DataFrame of ordinal data per website per participant.
+
+    Returns:
+        List of dictionaries with test results for each pair of websites.
+    """
+    results = []
+
+    for site1, site2 in combinations(WEBSITES, 2):
+        col1 = f"{site1}_accepts_int"
+        col2 = f"{site2}_accepts_int"
+
+        # Drop rows with equal values — wilcoxon test requires non-zero differences
+        mask = df[col1] != df[col2]
+        data1 = df.loc[mask, col1]
+        data2 = df.loc[mask, col2]
+
+        if len(data1) >= 3:
+            stat, p_value = wilcoxon(data1, data2, zero_method="wilcox", alternative="two-sided", method="auto")
+        else:
+            stat, p_value = None, None
+
+        results.append({
+            "test_type": "wilcoxon",
+            "pair": (site1, site2),
+            "n": len(data1),
+            "statistic": stat,
+            "p_value": p_value
         })
 
     return results

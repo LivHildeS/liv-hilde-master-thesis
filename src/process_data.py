@@ -6,6 +6,8 @@ from src.get_constants import get_constants
 from src.paths import get_experiment_results_path
 
 CONSTANTS = get_constants()
+WEBSITES = CONSTANTS["websites"]
+DEVICES = CONSTANTS["devices"]
 
 
 def _quantisize_answers(text):
@@ -76,13 +78,15 @@ def process_participant_data():
     df["computer_accepts"] = 0
     df["phone_accepts"] = 0
 
-    devices = ["computer", "phone"]
-    websites = ["finn", "dnb", "facebook", "google", "dagens"]
-    for device in devices:
-        for website in websites:
+    for website in WEBSITES:
+        df[f"{website}_accepts_int"] = 0
+
+    for device in DEVICES:
+        for website in WEBSITES:
             column_name = f"{device}.{website}.answer"
             df[f"{column_name}.int"] = df[column_name].apply(_quantisize_answers)
             df[f"{device}_accepts"] += df[f"{column_name}.int"]
+            df[f"{website}_accepts_int"] += df[f"{column_name}.int"]
 
     df["total_accepts"] = df["computer_accepts"] + df["phone_accepts"]
 

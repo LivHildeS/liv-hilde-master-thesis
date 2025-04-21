@@ -1,8 +1,7 @@
 import pandas as pd
-import numpy as np
 
 from src.get_constants import get_constants
-from src.paths import ALL_EXPERIMENTS_PATH, NETTSKJEMA_PATH, NETTSKJEMA_QUESTIONS_PATH
+from src.paths import NETTSKJEMA_PATH, NETTSKJEMA_QUESTIONS_PATH
 from src.process_data import process_nettskjema_data, process_participant_data
 
 CONSTANTS = get_constants()

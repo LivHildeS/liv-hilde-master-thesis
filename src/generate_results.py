@@ -24,6 +24,23 @@ def print_pairwise_mcnemar_results(results):
         print(f"{site1:<12} {site2:<12} {stat:>6} {pval:>10}")
 
 
+def print_pairwise_wilcoxon_results(results):
+    """
+    Prints Wilcoxon pairwise test results in a formatted table.
+
+    Args:
+        results (list): Output from run_pairwise_wilcoxon_tests.
+    """
+    print("Pairwise Wilcoxon Test Results:")
+    print(f"{'Site 1':<12} {'Site 2':<12} {'N':>3} {'Stat':>8} {'p-value':>10}")
+    print("-" * 48)
+    for r in results:
+        site1, site2 = r['pair']
+        stat = f"{r['statistic']:.2f}" if r['statistic'] is not None else "-"
+        pval = f"{r['p_value']:.4f}" if r['p_value'] is not None else "-"
+        print(f"{site1:<12} {site2:<12} {r['n']:>3} {stat:>8} {pval:>10}")
+
+
 def get_website_averages(df):
     """
     Calculates the average number of accepts per website and per device.
