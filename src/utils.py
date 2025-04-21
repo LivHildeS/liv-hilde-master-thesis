@@ -1,59 +1,21 @@
-import os
-
-import numpy as np
 import pandas as pd
-import yaml
+import numpy as np
 
 from src.get_constants import get_constants
-from src.paths import ALL_EXPERIMENTS_PATH, NETTSKJEMA_PATH, NETTSKJEMA_QUESTIONS_PATH, get_experiment_results_path
+from src.paths import ALL_EXPERIMENTS_PATH, NETTSKJEMA_PATH, NETTSKJEMA_QUESTIONS_PATH
+from src.process_data import process_nettskjema_data, process_participant_data
 
 CONSTANTS = get_constants()
 
 
-def process_nettskjema_data(df):
+def write_nettskjema_questions_to_file():
     """
-    Processes the nettskjema data.
-    Calculates a score based on the cookie answers.
-    Makes a quantitative version of the Likert answers.
-    Make int version of the ages.
-
-    Args:
-        df (pd.DataFrame): Pandas dataframe with the nettskjema data.
-
-    Returns:
-        pd.DataFrame: The dataframe processed.
+    Writes the original questions to file, which are the original columns names in the nettskjema file.
     """
-    # Calculate amount of correctly answered cookie questions
-    correct_cookie_answers = CONSTANTS["correct_cookie_answers"]
-    wrong_cookie_answers = CONSTANTS["wrong_cookie_answers"]
-
-    df["cookie_questions_correct"] = 0
-    df["cookie_questions_wrong"] = 0
-
-    for correct_cookie_answer in correct_cookie_answers:
-        not_checked = df[correct_cookie_answer].isna()
-        for i in range(len(df)):
-            if not not_checked[i]:
-                df.loc[i, "cookie_questions_correct"] += 1
-    for wrong_cookie_answer in wrong_cookie_answers:
-        not_checked = df[wrong_cookie_answer].isna()
-        for i in range(len(df)):
-            if not not_checked[i]:
-                df.loc[i, "cookie_questions_wrong"] += 1
-
-    df["cookie_questions_score"] = df["cookie_questions_correct"] - df["cookie_questions_wrong"]
-
-    # Make an int version of the Likert answer
-    cookie_consent_likert_mapping = CONSTANTS["cookie_consent_likert_mapping"]
-    df["understand_cookie_consent"] = df["understand_cookie_consent"].str.strip()  # Remove trailing whitespace
-    df["understand_cookie_consent_int"] = df["understand_cookie_consent"].map(cookie_consent_likert_mapping)
-
-    # Make age into int in order to compare ages easier. 35 will represent 30-39 group and similar.
-    age_mapping = CONSTANTS["age_mapping"]
-    df["age"] = df["age"].str.strip()  # Remove trailing whitespace
-    df["age_int"] = df["age"].map(age_mapping)
-
-    return df
+    df = pd.read_excel(NETTSKJEMA_PATH)
+    with open(NETTSKJEMA_QUESTIONS_PATH, "w") as outfile:
+        for i, question in enumerate(df.columns):
+            outfile.write(f"{i}: {question} \n")
 
 
 def read_nettskjema_data():
@@ -71,117 +33,24 @@ def read_nettskjema_data():
     return df
 
 
-def write_nettskjema_questions_to_file():
+def read_participant_data():
     """
-    Writes the original questions to file, which are the original columns names in the nettskjema file.
-    """
-    df = pd.read_excel(NETTSKJEMA_PATH)
-    with open(NETTSKJEMA_QUESTIONS_PATH, "w") as outfile:
-        for i, question in enumerate(df.columns):
-            outfile.write(f"{i}: {question} \n")
-
-
-def _get_experiment_results(participant_number):
-    """
-    Given a participant, retun a dictionary with the corresponding experiment results.
-
-    Args:
-        participant_number (int): The participant number.
-
-    Raises:
-        FileNotFoundError: If there are no data for the participant number.
-
-    Returns:
-        dict: Dictionary with the experiment results.
-    """
-    file_path = get_experiment_results_path(participant_number=participant_number)
-    if not file_path.exists():
-        raise FileNotFoundError(f"File {file_path} not found. ")
-
-    with open(file_path, "r") as infile:
-        results = yaml.safe_load(infile)
-    return results
-
-
-def _quantisize_answers(text):
-    """
-    Given an answer to a website (accept_all, reject_all, alternatives_reject_all, etc), returns 1
-    if "accept" is included and 0 if "reject" is included in the answer. If neither are, return 0.
-
-    Args:
-        text (str): The text answer.
-
-    Returns:
-        int: 1 if accept is included, 0 if reject is included, else np.nan.
-    """
-    if pd.isna(text):
-        return np.nan
-    text = text.lower()
-    if "accept" in text:
-        return 1
-    if "reject" in text:
-        return 0
-    return np.nan
-
-
-def process_participant_data():
-    """
-    Processes the data that is qualitivly assigned and then quantized into yaml files.
-    Writes result to csv.
-    """
-    n_participants = CONSTANTS["number_of_participants"]
-    all_data = []
-
-    for participant_number in range(1, n_participants + 1):
-        data = _get_experiment_results(participant_number=participant_number)
-        all_data.append(pd.json_normalize(data))
-    df = pd.concat(all_data, ignore_index=True)
-
-    # Quantisize the amount of accepts
-    df["computer_accepts"] = 0
-    df["phone_accepts"] = 0
-
-    devices = ["computer", "phone"]
-    websites = ["finn", "dnb", "facebook", "google", "dagens"]
-    for device in devices:
-        for website in websites:
-            column_name = f"{device}.{website}.answer"
-            df[f"{column_name}.int"] = df[column_name].apply(_quantisize_answers)
-            df[f"{device}_accepts"] += df[f"{column_name}.int"]
-
-    df["total_accepts"] = df["computer_accepts"] + df["phone_accepts"]
-
-    df.to_csv(ALL_EXPERIMENTS_PATH)
-
-
-def read_participant_data(process_data=False):
-    """
-    Reads the experiment results and returns it as pandas DataFrame. If the data is not yet processed, or if
-    `process_data` is `True`, will call process_participant_data to write data to csv first.
-
-    Args:
-        process_data (bool, optional): If True, will always call `process_participant_data()`.
+    Reads the experiment results and returns it as pandas DataFrame.
 
     Returns:
         pd: Dataframe with the experiment results.
     """
-    if process_data or not os.path.isfile(ALL_EXPERIMENTS_PATH):
-        process_participant_data()
-    return pd.read_csv(ALL_EXPERIMENTS_PATH)
+    return process_participant_data()
 
 
-def get_all_data(process_data=False):
+def get_all_data():
     """
     Reads and merges the nettskjema data and the participant data.
-
-    Args:
-        process_data (bool, optional): If True, will always call `process_participant_data()`, which processes the
-            participant data.
 
     Returns:
         pd: Dataframe with the nettskjema data and the experiment data.
     """
     nettskjema_df = read_nettskjema_data()
-    participant_df = read_participant_data(process_data=process_data)
+    participant_df = read_participant_data()
     df = pd.merge(nettskjema_df, participant_df, left_on="submission_id", right_on="nettskjema_id")
     return df

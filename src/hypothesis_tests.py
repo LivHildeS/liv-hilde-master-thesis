@@ -110,7 +110,7 @@ def run_pairwise_mcnemar_tests(df, device, exact=True):
         # Normalize to ensure all 2x2 cells exist
         table = table.reindex(index=[0, 1], columns=[0, 1], fill_value=0)
 
-        test_result = mcnemar(table, exact=True)
+        test_result = mcnemar(table, exact=exact)
 
         results.append({
             "test_type": "mcnemar",
