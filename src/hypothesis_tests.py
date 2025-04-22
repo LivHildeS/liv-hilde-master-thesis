@@ -35,6 +35,7 @@ def run_group_test(group_df1, group_df2, value_column, test_type, group_names=No
     values2 = group_df2[value_column]
 
     result = {
+        "test_statistic": value_column,
         "test_type": test_type,
         "group_names": group_names,
         "group_sizes": [len(values1), len(values2)],

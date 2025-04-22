@@ -77,6 +77,8 @@ def process_participant_data():
     # Now process the data further. Quantify the number of accepts per websites.
     df["computer_accepts"] = 0
     df["phone_accepts"] = 0
+    df["computer_average_time"] = 0
+    df["phone_average_time"] = 0
 
     for website in WEBSITES:
         df[f"{website}_accepts_int"] = 0
@@ -87,8 +89,13 @@ def process_participant_data():
             df[f"{column_name}.int"] = df[column_name].apply(_quantisize_answers)
             df[f"{device}_accepts"] += df[f"{column_name}.int"]
             df[f"{website}_accepts_int"] += df[f"{column_name}.int"]
+            df[f"{device}_average_time"] += df[f"{device}.{website}.time"]
 
     df["total_accepts"] = df["computer_accepts"] + df["phone_accepts"]
+
+    df["computer_average_time"] = df["computer_average_time"] / len(WEBSITES)
+    df["phone_average_time"] = df["phone_average_time"] / len(WEBSITES)
+    df["total_average_time"] = (df["computer_average_time"] + df["phone_average_time"]) / 2
 
     return df
 
