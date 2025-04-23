@@ -113,6 +113,10 @@ def process_nettskjema_data(df):
     Returns:
         pd.DataFrame: The dataframe processed.
     """
+    # Set new column names
+    column_names = CONSTANTS["nettskjema_column_names"]
+    df.columns = column_names.values()
+
     # Calculate amount of correctly answered cookie questions
     correct_cookie_answers = CONSTANTS["correct_cookie_answers"]
     wrong_cookie_answers = CONSTANTS["wrong_cookie_answers"]
@@ -142,5 +146,17 @@ def process_nettskjema_data(df):
     age_mapping = CONSTANTS["age_mapping"]
     df["age"] = df["age"].str.strip()  # Remove trailing whitespace
     df["age_int"] = df["age"].map(age_mapping)
+
+    # Remove trailing whitespaces and wrongly encoded unicode characters (from UiO Nettskjema)
+    for column in column_names.values():
+        if column == "submission_id":
+            continue
+        df[column] = (
+            df[column]
+            .astype(str)
+            .str.strip()
+            .str.replace("&#43;", "+", regex=False)
+            .str.replace("&#39;", "'", regex=False)
+        )
 
     return df
