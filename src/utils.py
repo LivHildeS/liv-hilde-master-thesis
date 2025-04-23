@@ -1,3 +1,5 @@
+import warnings
+
 import pandas as pd
 
 from src.get_constants import get_constants
@@ -24,9 +26,9 @@ def read_nettskjema_data():
     Returns:
         pd.DataFrame: The dataframe with the data.
     """
-    df = pd.read_excel(NETTSKJEMA_PATH)
-    column_names = CONSTANTS["nettskjema_column_names"]
-    df.columns = column_names.values()
+    with warnings.catch_warnings():  # Ignore warning about non standard formating in excel file
+        warnings.filterwarnings("ignore", message="Workbook contains no default style")
+        df = pd.read_excel(NETTSKJEMA_PATH)
     df = process_nettskjema_data(df)
 
     return df
