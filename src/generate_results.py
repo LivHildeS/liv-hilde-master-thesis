@@ -101,81 +101,71 @@ def get_website_averages(df):
     print(f"{len(df)=}")
 
 
-def make_nettskjema_report(df):
-    columns = [
-        "privacy_concern",
-        "knows_cookies",
-        "understand_cookie_consent",
-        "cookie_sharing_feeling",
-        "cookie_banner_response",
-        "have_withdrawn_consent",
-        "aware_withdrawal_ease",
-        "age",
-        "it_background",
-        "cookie_questions_score",
-    ]
-    with open("data/nettskjema_report.txt", "w") as outfile:
-        for column in columns:
-            outfile.write(str(df[column].value_counts()) + "\n\n")
-
-
-def print_all_group_test_results(df):
+def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
     """
+    Run grouped tests for all the groups and test statistics of interest.
 
     Args:
         df (pd.Dataframe): All the data.
+        test_type (str): In ["t-test", "mannwhitney", "u-test", "permutation"].
+        print_values (bool): Whether to print results or not.
 
+    Returns:
+        dict: Dict of all the results.
     """
-    cookie_questions = {
-        "df1": df[df["cookie_questions_score"] == 4],
-        "df2": df[df["cookie_questions_score"] < 4],
-        "group_names": ["4/4 correct cookie questions", "<4 correct cookie questions"]
-    }
-    it_background = {
-        "df1": df[df["it_background"] != "No"],
-        "df2": df[df["it_background"] == "No"],
-        "group_names": ["With IT background", "Without IT background"]
-    }
-    age = {
-        "df1": df[df["age_int"] < 30],
-        "df2": df[df["age_int"] > 30],
-        "group_names": ["Under 30 years", "30 years or older"]
-    }
     privacy_concern = {
         "df1": df[df["privacy_concern"] != "Slightly concerned"],
         "df2": df[df["privacy_concern"] == "Slightly concerned"],
-        "group_names": ["Concerned", "Not concerned"]
+        "group_names": ["Q1. Quite or very concerned about privacy", "Q1. Slightly concered about privacy"],
+        "grouping_name": "privacy concern",
     }
     understand_cookie_consent = {
-        "df1": df[~df["understand_cookie_consent"].isin(["Not at all", "To a small extent", "Neither nor"])],
-        "df2": df[~df["understand_cookie_consent"].isin(["To a great extent", "To some extent"])],
-        "group_names": ["Understand a lot", "Do not understand so much"]
+        "df1": df[~df["understand_cookie_consent"].isin(["To a great extent", "To some extent"])],
+        "df2": df[~df["understand_cookie_consent"].isin(["Not at all", "To a small extent", "Neither nor"])],
+        "group_names": [
+            "Q4. Understand cookie consent to some or more extent", "Q4. Do not understand cookie consent well"
+        ],
+        "grouping_name": "understands cookie concent",
     }
     cookie_banner_response = {
         "df1": df[df["cookie_banner_response"] == "I actively take steps to withhold my consent."],
         "df2": df[df["cookie_banner_response"] != "I actively take steps to withhold my consent."],
-        "group_names": ["Witholds consent", "Does always withhold consent"]
+        "group_names": ["Q7. Activly withholds consent", "Q7. Does not activly withhold consent"],
+        "grouping_name": "witholds consent",
     }
     have_withdrawn_consent = {
         "df1": df[df["have_withdrawn_consent"] == "Yes"],
         "df2": df[df["have_withdrawn_consent"] == "No"],
-        "group_names": ["Have withdrawn", "Have not withdrawn"]
+        "group_names": ["Q8. Have withdrawn consent", "Q8. Have not withdrawn consent"],
+        "grouping_name": "withdrawn consent",
     }
     aware_withdrawal_ease = {
         "df1": df[df["aware_withdrawal_ease"] == "Yes"],
         "df2": df[df["aware_withdrawal_ease"] == "No"],
-        "group_names": ["Awere of withdrawal ease", "Not aware of withdrawal ease"]
+        "group_names": ["Q9. Aware of withdrawal ease", "Q9. Not aware of withdrawal ease"],
+        "grouping_name": "aware withdrawal ease",
+    }
+    age = {
+        "df1": df[df["age_int"] < 30],
+        "df2": df[df["age_int"] > 30],
+        "group_names": ["Q11. Under 30 years", "Q11. 30 years or older"],
+        "grouping_name": "age",
+    }
+    it_background = {
+        "df1": df[df["it_background"] != "No"],
+        "df2": df[df["it_background"] == "No"],
+        "group_names": ["Q12. With IT background", "Q12. Without IT background"],
+        "grouping_name": "it background",
     }
 
     groups = [
-        cookie_questions,
-        it_background,
-        age,
         privacy_concern,
         understand_cookie_consent,
         cookie_banner_response,
         have_withdrawn_consent,
-        aware_withdrawal_ease
+        aware_withdrawal_ease,
+        age,
+        it_background,
     ]
 
     test_variables = [
@@ -188,9 +178,32 @@ def print_all_group_test_results(df):
         "total_average_time",
     ]
 
+    all_results = {}
     for test_variable in test_variables:
+        test_variable_results = {}
+
         for group in groups:
             result = run_group_test(
-                group["df1"], group["df2"], value_column=test_variable, test_type="mannwhitney",
-                group_names=group["group_names"])
+                group["df1"], group["df2"], value_column=test_variable, test_type=test_type,
+                group_names=group["group_names"]
+            )
+            test_variable_results[group["grouping_name"]] = result
+            if print_values:
+                print_group_test_result(result)
+
+        all_results[test_variable] = test_variable_results
+
+    return all_results
+
+
+def test_time_given_accept(df):
+    for device in DEVICES:
+        for website in WEBSITES:
+            df1 = df[df[f"{device}.{website}.answer.int"] == 0]
+            df2 = df[df[f"{device}.{website}.answer.int"] == 1]
+            group_names = [f"Accept {device} {website}", f"Reject {device} {website}"]
+            test_variable = f"{device}.{website}.time"
+            result = run_group_test(
+                df1, df2, value_column=test_variable, test_type="permutation", group_names=group_names
+            )
             print_group_test_result(result)
