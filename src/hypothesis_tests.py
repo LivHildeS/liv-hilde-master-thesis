@@ -1,5 +1,6 @@
 from itertools import combinations
 
+import numpy as np
 import pandas as pd
 from scipy.stats import friedmanchisquare, mannwhitneyu, shapiro, ttest_ind, wilcoxon
 from statsmodels.stats.contingency_tables import cochrans_q, mcnemar
@@ -11,22 +12,44 @@ WEBSITES = CONSTANTS["websites"]
 DEVICES = CONSTANTS["devices"]
 
 
-def run_group_test(group_df1, group_df2, value_column, test_type, group_names=None):
+def run_shapriro_wilk_normality_test(values):
     """
-    Runs an independent samples test (t-test or Mann-Whitney U) on two groups.
+    Performs a Shapiro-Wilk test on values, which tests if data is close to normally distributed.
+    If W is high, data is close to normal, and if p is low, one can reject normality with high certainty.
+
+    Args:
+        values (pd.Series or list type): The data to test for normality
+
+    Returns:
+        dict: Dict with the W and p values.
+    """
+    if len(values) >= 3:
+        W1, p1 = shapiro(values)
+        return {"W": W1, "p": p1}
+    return {"W": -1, "p": - 1}
+
+
+def run_group_test(group_df1, group_df2, value_column, test_type, group_names=None, n_permutations=10000,
+                   random_state=2025):
+    """
+    Runs an independent samples test (t-test, Mann-Whitney U, or permutation test) on two groups.
+    Also tests for normality with Shapiro-Wilk.
 
     Args:
         group_df1 (pd.DataFrame): Dataframe with rows for the first group.
         group_df2 (pd.DataFrame): Dataframe with rows for the second group.
         value_column (str): Name of numeric column to compare between groups.
-        test_type (str): In ["t-test", "mannwhitney", "u-test"].
+        test_type (str): In ["t-test", "mannwhitney", "u-test", "permutation"].
         group_names (list of str or None): Optional list of names for the two groups.
+        n_permutations (int): Number of permutations for the permutation test.
+        random_state (int or None): Random seed for reproducibility.
 
     Returns:
         Dictionary with group labels, sizes, means, normality checks, test statistic, and p-value.
     """
-    if test_type not in ["t-test", "mannwhitney", "u-test"]:
-        raise ValueError(f"Unsupported test type. Use 't-test', 'mannwhitney' or 'u-test'. Got {test_type}")
+    if test_type not in ["t-test", "mannwhitney", "u-test", "permutation"]:
+        raise ValueError(
+            f"Unsupported test type. Use 't-test', 'mannwhitney', 'u-test', or 'permutation'. Got {test_type}")
 
     if group_names is None:
         group_names = ["group1", "group2"]
@@ -35,7 +58,7 @@ def run_group_test(group_df1, group_df2, value_column, test_type, group_names=No
     values2 = group_df2[value_column]
 
     result = {
-        "test_statistic": value_column,
+        "test_variable": value_column,
         "test_type": test_type,
         "group_names": group_names,
         "group_sizes": [len(values1), len(values2)],
@@ -45,17 +68,26 @@ def run_group_test(group_df1, group_df2, value_column, test_type, group_names=No
         "p_value": None
     }
 
-    if len(values1) >= 3:
-        W1, p1 = shapiro(values1)
-        result["normality"][str(group_names[0])] = {"W": W1, "p": p1}
-    if len(values2) >= 3:
-        W2, p2 = shapiro(values2)
-        result["normality"][str(group_names[1])] = {"W": W2, "p": p2}
+    result["normality"][str(group_names[0])] = run_shapriro_wilk_normality_test(values1)
+    result["normality"][str(group_names[1])] = run_shapriro_wilk_normality_test(values2)
 
     if test_type == "t-test":
         stat, p_value = ttest_ind(values1, values2, equal_var=False)
-    else:
+    elif test_type in ["mannwhitney", "u-test"]:
         stat, p_value = mannwhitneyu(values1, values2, alternative="two-sided", method="exact")
+    elif test_type == "permutation":
+        rng = np.random.default_rng(seed=random_state)
+        observed_diff = abs(values1.mean() - values2.mean())
+        combined = np.concatenate([values1, values2])
+        n1 = len(values1)
+        count = 0
+        for _ in range(n_permutations):
+            rng.shuffle(combined)
+            new_diff = abs(combined[:n1].mean() - combined[n1:].mean())
+            if new_diff >= observed_diff:
+                count += 1
+        stat = observed_diff
+        p_value = count / n_permutations
 
     result["stat"] = stat
     result["p_value"] = p_value
