@@ -1,7 +1,9 @@
-from src.get_constants import get_constants
-from src.process_data import _quantisize_answers
-from src.hypothesis_tests import run_group_test
+import numpy as np
 
+from src.get_constants import get_constants
+from src.hypothesis_tests import (get_means_and_sd, run_bootstrap_test, run_group_test,
+                                  run_grouped_shapiro_wilk_normality_test)
+from src.process_data import _quantisize_answers
 
 CONSTANTS = get_constants()
 WEBSITES = CONSTANTS["websites"]
@@ -18,12 +20,12 @@ def print_group_test_result(result):
     group1, group2 = result["group_names"]
     size1, size2 = result["group_sizes"]
     mean1, mean2 = result["group_means"]
-
+    sd1, sd2 = result["group_sds"]
     print("-----------------------------------------")
-    print(f"Test statistic: {result['test_statistic']}")
+    print(f"Test variable : {result['test_variable']}")
     print(f"Test type     : {result['test_type']}")
-    print(f"Group 1       : {group1} (n={size1}, mean={mean1:.3f})")
-    print(f"Group 2       : {group2} (n={size2}, mean={mean2:.3f})")
+    print(f"Group 1       : {group1} (n={size1}, mean={mean1:.3f}, sd={sd1:.3f})")
+    print(f"Group 2       : {group2} (n={size2}, mean={mean2:.3f}, sd={sd2:.3f})")
 
     if "normality" in result:
         print("\nNormality (Shapiro-Wilk):")
@@ -31,6 +33,14 @@ def print_group_test_result(result):
             W = result["normality"][group]["W"]
             p = result["normality"][group]["p"]
             print(f"  {group:<12}: W = {W:.3f}, p = {p:.4f}")
+
+    if "bootstrap_ci" in result:
+        significant = np.sign(result['bootstrap_ci'][0]) == np.sign(result['bootstrap_ci'][1])
+        print(f"Observed mean difference : {result['observed_mean_difference']:.3f}")
+        print(f"Cohen's d                : {result['cohens_d']:.3f}")
+        print(f"Bootstrap lower CI       : {result['bootstrap_ci'][0]:.3f}")
+        print(f"Bootstrap upper CI       : {result['bootstrap_ci'][1]:.3f}")
+        print(f"Significant              : {significant}")
 
     print("\nTest statistic:")
     print(f"  stat = {result['stat']:.4f}")
@@ -107,12 +117,18 @@ def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
 
     Args:
         df (pd.Dataframe): All the data.
-        test_type (str): In ["t-test", "mannwhitney", "u-test", "permutation"].
+        test_type (str): In ["mean-sd", "shapiro-wilk", "t-test", "mannwhitney", "permutation", "bootstrap"].
         print_values (bool): Whether to print results or not.
 
     Returns:
         dict: Dict of all the results.
     """
+    test_type = test_type.lower().strip()
+    test_types = ["mean-sd", "shapiro-wilk", "t-test", "mannwhitney", "permutation", "bootstrap"]
+    if test_type not in test_types:
+        raise ValueError(f"Test type must be in {test_types}. Was {test_type}. ")
+
+    # Group the data based on all the groups we want to use
     privacy_concern = {
         "df1": df[df["privacy_concern"] != "Slightly concerned"],
         "df2": df[df["privacy_concern"] == "Slightly concerned"],
@@ -183,10 +199,23 @@ def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
         test_variable_results = {}
 
         for group in groups:
-            result = run_group_test(
-                group["df1"], group["df2"], value_column=test_variable, test_type=test_type,
-                group_names=group["group_names"]
-            )
+            if test_type == "mean-sd":
+                result = get_means_and_sd(
+                    group["df1"], group["df2"], value_column=test_variable, group_names=group["group_names"]
+                )
+            elif test_type == "shapiro-wilk":
+                result = run_grouped_shapiro_wilk_normality_test(
+                    group["df1"], group["df2"], value_column=test_variable, group_names=group["group_names"]
+                )
+            elif test_type == "bootstrap":
+                result = run_bootstrap_test(
+                    group["df1"], group["df2"], value_column=test_variable, group_names=group["group_names"]
+                )
+            else:
+                result = run_group_test(
+                    group["df1"], group["df2"], value_column=test_variable, test_type=test_type,
+                    group_names=group["group_names"]
+                )
             test_variable_results[group["grouping_name"]] = result
             if print_values:
                 print_group_test_result(result)

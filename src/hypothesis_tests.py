@@ -12,6 +12,36 @@ WEBSITES = CONSTANTS["websites"]
 DEVICES = CONSTANTS["devices"]
 
 
+def get_means_and_sd(group_df1, group_df2, value_column, group_names):
+    """
+    On the same format as the other tests, but do not perform a test. Only finds the means and sd's of the subgroups.
+
+    Args:
+        group_df1 (pd.DataFrame): Dataframe with rows for the first group.
+        group_df2 (pd.DataFrame): Dataframe with rows for the second group.
+        value_column (str): Name of numeric column to compare between groups.
+        group_names (list of str or None): Optional list of names for the two groups.
+
+    Returns:
+        Dictionary with group labels and normality check.
+    """
+    if group_names is None:
+        group_names = ["group1", "group2"]
+
+    values1 = group_df1[value_column]
+    values2 = group_df2[value_column]
+
+    result = {
+        "test_variable": value_column,
+        "group_names": group_names,
+        "group_sizes": [len(values1), len(values2)],
+        "group_means": [values1.mean(), values2.mean()],
+        "group_sds": [values1.std(), values2.std()],
+    }
+
+    return result
+
+
 def run_shapriro_wilk_normality_test(values):
     """
     Performs a Shapiro-Wilk test on values, which tests if data is close to normally distributed.
@@ -27,6 +57,38 @@ def run_shapriro_wilk_normality_test(values):
         W1, p1 = shapiro(values)
         return {"W": W1, "p": p1}
     return {"W": -1, "p": - 1}
+
+
+def run_grouped_shapiro_wilk_normality_test(group_df1, group_df2, value_column, group_names):
+    """
+    Runs Shapiro-Wilk test on two groups and returns a dictionary of results.
+
+    Args:
+        group_df1 (pd.DataFrame): Dataframe with rows for the first group.
+        group_df2 (pd.DataFrame): Dataframe with rows for the second group.
+        value_column (str): Name of numeric column to compare between groups.
+        group_names (list of str or None): Optional list of names for the two groups.
+
+    Returns:
+        Dictionary with group labels and normality check.
+    """
+    if group_names is None:
+        group_names = ["group1", "group2"]
+
+    values1 = group_df1[value_column]
+    values2 = group_df2[value_column]
+
+    result = {
+        "test_variable": value_column,
+        "group_names": group_names,
+        "group_sizes": [len(values1), len(values2)],
+        "normality": {},
+    }
+
+    result["normality"][str(group_names[0])] = run_shapriro_wilk_normality_test(values1)
+    result["normality"][str(group_names[1])] = run_shapriro_wilk_normality_test(values2)
+
+    return result
 
 
 def run_group_test(group_df1, group_df2, value_column, test_type, group_names=None, n_permutations=10000,
@@ -63,6 +125,7 @@ def run_group_test(group_df1, group_df2, value_column, test_type, group_names=No
         "group_names": group_names,
         "group_sizes": [len(values1), len(values2)],
         "group_means": [values1.mean(), values2.mean()],
+        "group_sds": [values1.std(), values2.std()],
         "normality": {},
         "stat": None,
         "p_value": None
@@ -91,6 +154,68 @@ def run_group_test(group_df1, group_df2, value_column, test_type, group_names=No
 
     result["stat"] = stat
     result["p_value"] = p_value
+
+    return result
+
+
+def run_bootstrap_test(group_df1, group_df2, value_column, group_names=None, n_bootstraps=100, random_state=2025):
+    """
+    Runs a bootstrap hypothesis test between two groups based on the mean difference.
+    Also calculates group means, standard deviations, and Cohen's d.
+
+    Args:
+        group_df1 (pd.DataFrame): DataFrame for the first group.
+        group_df2 (pd.DataFrame): DataFrame for the second group.
+        value_column (str): Column name to compare.
+        group_names (list of str or None): Optional list of names for the two groups.
+        n_bootstraps (int): Number of bootstrap resamples.
+        random_state (int): Random seed for reproducibility.
+
+    Returns:
+        dict: Results including group statistics, observed mean difference, bootstrap CI, and Cohen's d.
+    """
+    if group_names is None:
+        group_names = ["group1", "group2"]
+
+    rng = np.random.default_rng(seed=random_state)
+
+    values1 = group_df1[value_column].dropna()
+    values2 = group_df2[value_column].dropna()
+
+    mean1 = values1.mean()
+    mean2 = values2.mean()
+    sd1 = values1.std()
+    sd2 = values2.std()
+    observed_diff = mean1 - mean2
+
+    pooled_sd = np.sqrt(
+        ((len(values1) - 1) * sd1**2 + (len(values2) - 1) * sd2**2) / (len(values1) + len(values2) - 2)
+    )
+    cohens_d = observed_diff / pooled_sd
+
+    # Bootstrap
+    bootstrap_diffs = []
+    for _ in range(n_bootstraps):
+        sample1 = rng.choice(values1, size=len(values1), replace=True)
+        sample2 = rng.choice(values2, size=len(values2), replace=True)
+        diff = sample1.mean() - sample2.mean()
+        bootstrap_diffs.append(diff)
+
+    bootstrap_diffs = np.array(bootstrap_diffs)
+    ci_lower = np.percentile(bootstrap_diffs, 2.5)
+    ci_upper = np.percentile(bootstrap_diffs, 97.5)
+
+    result = {
+        "test_variable": value_column,
+        "test_type": "bootstrap",
+        "group_names": group_names,
+        "group_sizes": [len(values1), len(values2)],
+        "group_means": [mean1, mean2],
+        "group_sds": [sd1, sd2],
+        "observed_mean_difference": observed_diff,
+        "bootstrap_ci": [ci_lower, ci_upper],
+        "cohens_d": cohens_d,
+    }
 
     return result
 
