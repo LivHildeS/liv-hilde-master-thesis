@@ -2,11 +2,12 @@ paths:
   folders:
     data_folder: data
     participant_folder_base: participant
+    latex_tables_folder: latex_tables
   filenames:
-    experiment_results: experiment_results.yaml
     nettskjema: nettskjema21participants.xlsx
-    all_experiment_results: all_experiment_results.csv
     nettskjema_questions: nettskjema_questions.txt
+    experiment_results: experiment_results.yaml
+    all_experiment_results: all_experiment_results.csv
 number_of_participants: 21
 nettskjema_column_names:
   0: submission_id
