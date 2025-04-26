@@ -1,5 +1,7 @@
 import re
 
+import numpy as np
+
 
 def _get_nettskjema_answer_options():
     """
@@ -268,6 +270,69 @@ def make_mean_sd_latex_table(results_dict, test_variables=None, groups=None, cap
 
                 subgroup_formatted = re.sub(r"(Q\d{1,2}\.)", r"\\textbf{\1}", subgroup)
                 lines.append(f"        {subgroup_formatted} & {n} & {mean:.2f} & {sd:.2f} \\\\")
+
+        lines.append("        \\hline")
+
+    lines.append("    \\end{tabular}")
+    if caption:
+        lines.append(f"    \\caption{{{caption}}}")
+    if label:
+        lines.append(f"    \\label{{{label}}}")
+    lines.append("\\end{table}")
+
+    return "\n".join(lines)
+
+
+def make_bootstrap_latex_table(results_dict, test_variables=None, groups=None, caption="", label=""):
+    """
+    Generate a LaTeX table for bootstrap confidence interval results from a nested result dict.
+
+    Args:
+        results_dict (dict): The nested dictionary returned by run_bootstrap_group_test results.
+        test_variables (list of str or None): Which test variables to include.
+        groups (list of str or None): Which groupings to include.
+        caption (str): Caption text for the LaTeX table.
+        label (str): Label for the LaTeX table.
+
+    Returns:
+        str: A LaTeX-formatted table string.
+    """
+    test_variable_mapping = _get_test_varible_mapping()
+
+    lines = []
+    lines.append("\\begin{table}[tb]")
+    lines.append("    \\centering")
+    lines.append("    \\begin{tabular}{|l|r|r|r|}")
+    lines.append("        \\hline")
+    header = "        \\textbf{Group comparison} & \\textbf{Mean difference} & \\textbf{Cohen's d} "
+    header += "& \\textbf{95\\% Bootstrap CI} \\\\"
+    lines.append(header)
+    lines.append("        \\hline")
+
+    for test_variable, group_dict in results_dict.items():
+        if test_variables and test_variable not in test_variables:
+            continue
+
+        test_variable_description = test_variable_mapping[test_variable]
+        lines.append(f"        \\multicolumn{{4}}{{|l|}}{{\\textbf{{{test_variable_description}}}}} \\\\")
+        lines.append("        \\hline")
+
+        for group_name, result in group_dict.items():
+            if groups and group_name not in groups:
+                continue
+
+            grouping_name = result.get("grouping_name", "group")
+            mean_diff = result.get("observed_mean_difference", "?")
+            cohens_d = result.get("cohens_d", "?")
+            ci_low, ci_high = result.get("bootstrap_ci", ["?", "?"])
+            if np.sign(ci_low) == np.sign(ci_high):
+                confidence_intervals = f"\\textbf{{[{ci_low:.2f}, {ci_high:.2f}]}}"
+            else:
+                confidence_intervals = f"[{ci_low:.2f}, {ci_high:.2f}]"
+
+            lines.append(
+                f"        {grouping_name} & {mean_diff:.2f} & {cohens_d:.2f} & {confidence_intervals} \\\\"
+            )
 
         lines.append("        \\hline")
 

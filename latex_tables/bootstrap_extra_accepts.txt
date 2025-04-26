@@ -1,0 +1,30 @@
+\begin{table}[tb]
+    \centering
+    \begin{tabular}{|l|r|r|r|}
+        \hline
+        \textbf{Group comparison} & \textbf{Mean difference} & \textbf{Cohen's d} & \textbf{95\% Bootstrap CI} \\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Total accepts on computer}} \\
+        \hline
+        Quite or very concerned about privacy & -1.77 & -1.14 & \textbf{[-3.39, -0.45]} \\
+        Understands cookie concent & 1.10 & 0.66 & [-0.05, 2.40] \\
+        Activly witholds consent & -0.86 & -0.50 & [-1.97, 0.25] \\
+        Have withdrawn consent & -0.38 & -0.21 & [-1.88, 1.53] \\
+        Aware of withdrawal ease & 0.29 & 0.16 & [-1.28, 1.85] \\
+        Age & -0.72 & -0.42 & [-1.93, 0.50] \\
+        IT background & -0.04 & -0.02 & [-1.76, 1.48] \\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Total accepts on phone}} \\
+        \hline
+        Quite or very concerned about privacy & -2.23 & -1.97 & \textbf{[-3.90, -0.87]} \\
+        Understands cookie concent & 1.23 & 0.87 & \textbf{[0.10, 2.54]} \\
+        Activly witholds consent & -0.57 & -0.37 & [-1.50, 0.57] \\
+        Have withdrawn consent & -1.31 & -0.89 & \textbf{[-2.28, -0.34]} \\
+        Aware of withdrawal ease & -0.18 & -0.12 & [-1.36, 1.18] \\
+        Age & -0.99 & -0.67 & [-2.03, 0.11] \\
+        IT background & -0.74 & -0.49 & [-2.33, 0.44] \\
+        \hline
+    \end{tabular}
+    \caption{ \textbf{Bootstrap confidence intervals (CI) for the number of cookie banner accepts on different devices}. The CI's not containing 0 rejects the null hypothesis, and are marked in \textbf{bold}. The bootstrap used 1000 iterations. }
+    \label{tab:bootstrap_extra_accepts}
+\end{table}

@@ -133,7 +133,7 @@ def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
         "df1": df[df["privacy_concern"] != "Slightly concerned"],
         "df2": df[df["privacy_concern"] == "Slightly concerned"],
         "group_names": ["Q1. Quite or very concerned about privacy", "Q1. Slightly concered about privacy"],
-        "grouping_name": "privacy concern",
+        "grouping_name": "Quite or very concerned about privacy",
     }
     understand_cookie_consent = {
         "df1": df[~df["understand_cookie_consent"].isin(["To a great extent", "To some extent"])],
@@ -141,37 +141,37 @@ def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
         "group_names": [
             "Q4. Understand cookie consent to some or more extent", "Q4. Do not understand cookie consent well"
         ],
-        "grouping_name": "understands cookie concent",
+        "grouping_name": "Understands cookie concent",
     }
     cookie_banner_response = {
         "df1": df[df["cookie_banner_response"] == "I actively take steps to withhold my consent."],
         "df2": df[df["cookie_banner_response"] != "I actively take steps to withhold my consent."],
         "group_names": ["Q7. Activly withholds consent", "Q7. Does not activly withhold consent"],
-        "grouping_name": "witholds consent",
+        "grouping_name": "Activly witholds consent",
     }
     have_withdrawn_consent = {
         "df1": df[df["have_withdrawn_consent"] == "Yes"],
         "df2": df[df["have_withdrawn_consent"] == "No"],
         "group_names": ["Q8. Have withdrawn consent", "Q8. Have not withdrawn consent"],
-        "grouping_name": "withdrawn consent",
+        "grouping_name": "Have withdrawn consent",
     }
     aware_withdrawal_ease = {
         "df1": df[df["aware_withdrawal_ease"] == "Yes"],
         "df2": df[df["aware_withdrawal_ease"] == "No"],
         "group_names": ["Q9. Aware of withdrawal ease", "Q9. Not aware of withdrawal ease"],
-        "grouping_name": "aware withdrawal ease",
+        "grouping_name": "Aware of withdrawal ease",
     }
     age = {
         "df1": df[df["age_int"] < 30],
         "df2": df[df["age_int"] > 30],
         "group_names": ["Q11. Under 30 years", "Q11. 30 years or older"],
-        "grouping_name": "age",
+        "grouping_name": "Age",
     }
     it_background = {
         "df1": df[df["it_background"] != "No"],
         "df2": df[df["it_background"] == "No"],
         "group_names": ["Q12. With IT background", "Q12. Without IT background"],
-        "grouping_name": "it background",
+        "grouping_name": "IT background",
     }
 
     groups = [
@@ -216,6 +216,7 @@ def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
                     group["df1"], group["df2"], value_column=test_variable, test_type=test_type,
                     group_names=group["group_names"]
                 )
+            result["grouping_name"] = group["grouping_name"]
             test_variable_results[group["grouping_name"]] = result
             if print_values:
                 print_group_test_result(result)

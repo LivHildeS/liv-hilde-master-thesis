@@ -2,10 +2,13 @@ from pathlib import Path
 
 from src.generate_results import get_all_group_test_results
 from src.get_constants import get_constants
-from src.latex_table_captions import (MEAN_AND_SD_EXTRA_ACCEPTS, MEAN_AND_SD_EXTRA_TIME, MEAN_AND_SD_MAIN,
+from src.latex_table_captions import (BOOTSTRAP_EXTRA_ACCEPTS_CAPTION, BOOTSTRAP_EXTRA_TIME_CAPTION,
+                                      BOOTSTRAP_MAIN_CAPTION, MEAN_AND_SD_EXTRA_ACCEPTS_CAPTION,
+                                      MEAN_AND_SD_EXTRA_TIME_CAPTION, MEAN_AND_SD_MAIN_CAPTION,
                                       NETTSKJEMA_REPORT_CAPTION, SHAPIRO_WILK_EXTRA_ACCEPTS_CAPTION,
                                       SHAPIRO_WILK_EXTRA_TIME_CAPTION, SHAPIRO_WILK_MAIN_CAPTION)
-from src.make_latex_tables import make_mean_sd_latex_table, make_nettskjema_report_latex, make_shapiro_latex_table
+from src.make_latex_tables import (make_bootstrap_latex_table, make_mean_sd_latex_table, make_nettskjema_report_latex,
+                                   make_shapiro_latex_table)
 
 CONSTANTS = get_constants()
 
@@ -121,7 +124,7 @@ def write_mean_sd_main(df):
     Args:
         df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
     """
-    caption = MEAN_AND_SD_MAIN.replace("\n", " ")
+    caption = MEAN_AND_SD_MAIN_CAPTION.replace("\n", " ")
     label = "tab:mean_and_sd_main"
     filename = "mean_and_sd_main.txt"
     results = get_all_group_test_results(df, test_type="mean-sd", print_values=False)
@@ -146,7 +149,7 @@ def write_mean_sd_extra_accepts(df):
     Args:
         df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
     """
-    caption = MEAN_AND_SD_EXTRA_ACCEPTS.replace("\n", " ")
+    caption = MEAN_AND_SD_EXTRA_ACCEPTS_CAPTION.replace("\n", " ")
     label = "tab:mean_and_sd_extra_accepts"
     filename = "mean_and_sd_extra_accepts.txt"
     results = get_all_group_test_results(df, test_type="mean-sd", print_values=False)
@@ -169,11 +172,81 @@ def write_mean_sd_extra_time(df):
     Args:
         df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
     """
-    caption = MEAN_AND_SD_EXTRA_TIME.replace("\n", " ")
+    caption = MEAN_AND_SD_EXTRA_TIME_CAPTION.replace("\n", " ")
     label = "tab:mean_and_sd_extra_time"
     filename = "mean_and_sd_extra_time.txt"
     results = get_all_group_test_results(df, test_type="mean-sd", print_values=False)
     mean_and_sd_table = make_mean_sd_latex_table(
+        results_dict=results,
+        test_variables=[
+            "computer_average_time",
+            "phone_average_time",
+        ],
+        caption=caption,
+        label=label,
+    )
+    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename)
+
+
+def write_bootstrap_main(df):
+    """
+    Writes table with bootstrap confidence intervals metrics.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    caption = BOOTSTRAP_MAIN_CAPTION.replace("\n", " ")
+    label = "tab:bootstrap_main"
+    filename = "bootstrap_main.txt"
+    results = get_all_group_test_results(df, test_type="bootstrap", print_values=False)
+    mean_and_sd_table = make_bootstrap_latex_table(
+        results_dict=results,
+        test_variables=[
+            "cookie_questions_score",
+            "total_accepts",
+            "total_average_time",
+        ],
+        caption=caption,
+        label=label,
+    )
+    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename)
+
+
+def write_bootstrap_extra_accepts(df):
+    """
+    Writes table with bootstrap confidence intervals metrics for number of accepts on computer and phone.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    caption = BOOTSTRAP_EXTRA_ACCEPTS_CAPTION.replace("\n", " ")
+    label = "tab:bootstrap_extra_accepts"
+    filename = "bootstrap_extra_accepts.txt"
+    results = get_all_group_test_results(df, test_type="bootstrap", print_values=False)
+    mean_and_sd_table = make_bootstrap_latex_table(
+        results_dict=results,
+        test_variables=[
+            "computer_accepts",
+            "phone_accepts",
+        ],
+        caption=caption,
+        label=label,
+    )
+    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename)
+
+
+def write_bootstrap_extra_time(df):
+    """
+    Writes table with bootstrap confidence intervals metrics for time spent on cookie banner for computer and phone.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    caption = BOOTSTRAP_EXTRA_TIME_CAPTION.replace("\n", " ")
+    label = "tab:bootstrap_extra_time"
+    filename = "bootstrap_extra_time.txt"
+    results = get_all_group_test_results(df, test_type="bootstrap", print_values=False)
+    mean_and_sd_table = make_bootstrap_latex_table(
         results_dict=results,
         test_variables=[
             "computer_average_time",
@@ -199,3 +272,6 @@ def write_all_latex_tables(df):
     write_mean_sd_main(df)
     write_mean_sd_extra_accepts(df)
     write_mean_sd_extra_time(df)
+    write_bootstrap_main(df)
+    write_bootstrap_extra_accepts(df)
+    write_bootstrap_extra_time(df)

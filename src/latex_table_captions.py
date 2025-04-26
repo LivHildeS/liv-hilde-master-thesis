@@ -28,16 +28,34 @@ have high \\textbf{W} and p-values, suggesting that the data is approximately no
 small number of groups overall.
 """ + SHAPIRO_WILK_GENERIC_CAPTION
 
-MEAN_AND_SD_MAIN = """
+MEAN_AND_SD_MAIN_CAPTION = """
 \\textbf{Means and standard deviations} for the subgroups investigated and variables investigated. The means and
 standard deviations are calculated on the cookie question score, the total amount of cookie consent accepts and the
 average time spent answering the cookie consent banners. The groups are made from the survey question responses.
 """
 
-MEAN_AND_SD_EXTRA_ACCEPTS = """
+MEAN_AND_SD_EXTRA_ACCEPTS_CAPTION = """
 \\textbf{Means and standard deviations of the number of accepts on different devices}.
 """
 
-MEAN_AND_SD_EXTRA_TIME = """
+MEAN_AND_SD_EXTRA_TIME_CAPTION = """
 \\textbf{Means and standard deviations of cookie banner response time on different devices}.
+"""
+
+BOOTSTRAP_MAIN_CAPTION = """
+\\textbf{Bootstrap confidence intervals (CI) and statistics for the survey groups}.
+The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{bold}.
+The bootstrap used 1000 iterations.
+"""
+
+BOOTSTRAP_EXTRA_ACCEPTS_CAPTION = """
+\\textbf{Bootstrap confidence intervals (CI) for the number of cookie banner accepts on different devices}.
+The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{bold}.
+The bootstrap used 1000 iterations.
+"""
+
+BOOTSTRAP_EXTRA_TIME_CAPTION = """
+\\textbf{Bootstrap confidence intervals (CI) for cookie banner response time on different devices}.
+The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{bold}.
+The bootstrap used 1000 iterations.
 """
