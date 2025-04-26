@@ -2,9 +2,10 @@ from pathlib import Path
 
 from src.generate_results import get_all_group_test_results
 from src.get_constants import get_constants
-from src.latex_table_captions import (NETTSKJEMA_REPORT_CAPTION, SHAPIRO_WILK_EXTRA_ACCEPTS_CAPTION,
+from src.latex_table_captions import (MEAN_AND_SD_EXTRA_ACCEPTS, MEAN_AND_SD_EXTRA_TIME, MEAN_AND_SD_MAIN,
+                                      NETTSKJEMA_REPORT_CAPTION, SHAPIRO_WILK_EXTRA_ACCEPTS_CAPTION,
                                       SHAPIRO_WILK_EXTRA_TIME_CAPTION, SHAPIRO_WILK_MAIN_CAPTION)
-from src.make_latex_tables import make_nettskjema_report_latex, make_shapiro_latex_table
+from src.make_latex_tables import make_mean_sd_latex_table, make_nettskjema_report_latex, make_shapiro_latex_table
 
 CONSTANTS = get_constants()
 
@@ -50,7 +51,7 @@ def write_shapiro_wilk_main(df):
     caption = SHAPIRO_WILK_MAIN_CAPTION.replace("\n", " ")
     label = "tab:shapiro_wilk_main"
     filename = "shapiro_wilk_main.txt"
-    results = get_all_group_test_results(df, print_values=False)
+    results = get_all_group_test_results(df, test_type="shapiro-wilk", print_values=False)
     shapiro_wilk_table = make_shapiro_latex_table(
         results,
         test_variables=[
@@ -75,7 +76,7 @@ def write_shapiro_wilk_extra_accepts(df):
     caption = SHAPIRO_WILK_EXTRA_ACCEPTS_CAPTION.replace("\n", " ")
     label = "tab:shapiro_wilk_extra_accepts"
     filename = "shapiro_wilk_extra_accepts.txt"
-    results = get_all_group_test_results(df, print_values=False)
+    results = get_all_group_test_results(df, test_type="shapiro-wilk", print_values=False)
     shapiro_wilk_table = make_shapiro_latex_table(
         results,
         test_variables=[
@@ -99,7 +100,7 @@ def write_shapiro_wilk_extra_time(df):
     caption = SHAPIRO_WILK_EXTRA_TIME_CAPTION.replace("\n", " ")
     label = "tab:shapiro_wilk_extra_time"
     filename = "shapiro_wilk_extra_time.txt"
-    results = get_all_group_test_results(df, print_values=False)
+    results = get_all_group_test_results(df, test_type="shapiro-wilk", print_values=False)
     shaprio_wilk_table = make_shapiro_latex_table(
         results,
         test_variables=[
@@ -110,6 +111,78 @@ def write_shapiro_wilk_extra_time(df):
         label=label,
     )
     _write_latex_table_to_file(text=shaprio_wilk_table, filename=filename)
+
+
+def write_mean_sd_main(df):
+    """
+    Writes table with means and standard deviations for all subgroups, given the cookie answers, total accepts and
+    total average time spent on cookie banners.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    caption = MEAN_AND_SD_MAIN.replace("\n", " ")
+    label = "tab:mean_and_sd_main"
+    filename = "mean_and_sd_main.txt"
+    results = get_all_group_test_results(df, test_type="mean-sd", print_values=False)
+    mean_and_sd_table = make_mean_sd_latex_table(
+        results_dict=results,
+        test_variables=[
+            "cookie_questions_score",
+            "total_accepts",
+            "total_average_time",
+        ],
+        caption=caption,
+        label=label,
+    )
+    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename)
+
+
+def write_mean_sd_extra_accepts(df):
+    """
+    Writes table with means and standard deviations for all subgroups for computer and phone for the total amount of
+    accepts.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    caption = MEAN_AND_SD_EXTRA_ACCEPTS.replace("\n", " ")
+    label = "tab:mean_and_sd_extra_accepts"
+    filename = "mean_and_sd_extra_accepts.txt"
+    results = get_all_group_test_results(df, test_type="mean-sd", print_values=False)
+    mean_and_sd_table = make_mean_sd_latex_table(
+        results_dict=results,
+        test_variables=[
+            "computer_accepts",
+            "phone_accepts",
+        ],
+        caption=caption,
+        label=label,
+    )
+    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename)
+
+
+def write_mean_sd_extra_time(df):
+    """
+    Writes table with means and standard deviations for all subgroups for computer and phone for the answer time.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    caption = MEAN_AND_SD_EXTRA_TIME.replace("\n", " ")
+    label = "tab:mean_and_sd_extra_time"
+    filename = "mean_and_sd_extra_time.txt"
+    results = get_all_group_test_results(df, test_type="mean-sd", print_values=False)
+    mean_and_sd_table = make_mean_sd_latex_table(
+        results_dict=results,
+        test_variables=[
+            "computer_average_time",
+            "phone_average_time",
+        ],
+        caption=caption,
+        label=label,
+    )
+    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename)
 
 
 def write_all_latex_tables(df):
@@ -123,3 +196,6 @@ def write_all_latex_tables(df):
     write_shapiro_wilk_main(df)
     write_shapiro_wilk_extra_accepts(df)
     write_shapiro_wilk_extra_time(df)
+    write_mean_sd_main(df)
+    write_mean_sd_extra_accepts(df)
+    write_mean_sd_extra_time(df)

@@ -1,0 +1,61 @@
+\begin{table}[tb]
+    \centering
+    \begin{tabular}{|l|r|r|r|}
+        \hline
+        \textbf{Group} & \textbf{n} & \textbf{Mean} & \textbf{SD} \\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Q3. Cookie questions score}} \\
+        \hline
+        \textbf{Q1.} Quite or very concerned about privacy & 15 & 3.47 & 0.52 \\
+        \textbf{Q1.} Slightly concered about privacy & 6 & 3.50 & 0.55 \\
+        \textbf{Q4.} Understand cookie consent to some or more extent & 8 & 3.50 & 0.53 \\
+        \textbf{Q4.} Do not understand cookie consent well & 13 & 3.46 & 0.52 \\
+        \textbf{Q7.} Activly withholds consent & 7 & 3.43 & 0.53 \\
+        \textbf{Q7.} Does not activly withhold consent & 14 & 3.50 & 0.52 \\
+        \textbf{Q8.} Have withdrawn consent & 6 & 3.50 & 0.55 \\
+        \textbf{Q8.} Have not withdrawn consent & 14 & 3.43 & 0.51 \\
+        \textbf{Q9.} Aware of withdrawal ease & 8 & 3.38 & 0.52 \\
+        \textbf{Q9.} Not aware of withdrawal ease & 13 & 3.54 & 0.52 \\
+        \textbf{Q11.} Under 30 years & 8 & 3.75 & 0.46 \\
+        \textbf{Q11.} 30 years or older & 13 & 3.31 & 0.48 \\
+        \textbf{Q12.} With IT background & 16 & 3.44 & 0.51 \\
+        \textbf{Q12.} Without IT background & 5 & 3.60 & 0.55 \\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Total accepts on both devices}} \\
+        \hline
+        \textbf{Q1.} Quite or very concerned about privacy & 15 & 1.67 & 1.68 \\
+        \textbf{Q1.} Slightly concered about privacy & 6 & 5.67 & 3.83 \\
+        \textbf{Q4.} Understand cookie consent to some or more extent & 8 & 4.25 & 4.17 \\
+        \textbf{Q4.} Do not understand cookie consent well & 13 & 1.92 & 1.66 \\
+        \textbf{Q7.} Activly withholds consent & 7 & 1.86 & 2.67 \\
+        \textbf{Q7.} Does not activly withhold consent & 14 & 3.29 & 3.15 \\
+        \textbf{Q8.} Have withdrawn consent & 6 & 1.67 & 2.25 \\
+        \textbf{Q8.} Have not withdrawn consent & 14 & 3.36 & 3.32 \\
+        \textbf{Q9.} Aware of withdrawal ease & 8 & 2.88 & 3.48 \\
+        \textbf{Q9.} Not aware of withdrawal ease & 13 & 2.77 & 2.83 \\
+        \textbf{Q11.} Under 30 years & 8 & 1.75 & 1.39 \\
+        \textbf{Q11.} 30 years or older & 13 & 3.46 & 3.57 \\
+        \textbf{Q12.} With IT background & 16 & 2.62 & 2.85 \\
+        \textbf{Q12.} Without IT background & 5 & 3.40 & 3.78 \\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Average banner answer time on both devices}} \\
+        \hline
+        \textbf{Q1.} Quite or very concerned about privacy & 15 & 6.89 & 3.48 \\
+        \textbf{Q1.} Slightly concered about privacy & 6 & 4.63 & 1.12 \\
+        \textbf{Q4.} Understand cookie consent to some or more extent & 8 & 5.26 & 1.62 \\
+        \textbf{Q4.} Do not understand cookie consent well & 13 & 6.85 & 3.73 \\
+        \textbf{Q7.} Activly withholds consent & 7 & 8.24 & 4.44 \\
+        \textbf{Q7.} Does not activly withhold consent & 14 & 5.25 & 1.70 \\
+        \textbf{Q8.} Have withdrawn consent & 6 & 8.07 & 3.67 \\
+        \textbf{Q8.} Have not withdrawn consent & 14 & 5.71 & 2.70 \\
+        \textbf{Q9.} Aware of withdrawal ease & 8 & 6.59 & 3.37 \\
+        \textbf{Q9.} Not aware of withdrawal ease & 13 & 6.04 & 3.12 \\
+        \textbf{Q11.} Under 30 years & 8 & 6.21 & 3.92 \\
+        \textbf{Q11.} 30 years or older & 13 & 6.27 & 2.74 \\
+        \textbf{Q12.} With IT background & 16 & 6.03 & 2.66 \\
+        \textbf{Q12.} Without IT background & 5 & 6.94 & 4.70 \\
+        \hline
+    \end{tabular}
+    \caption{ \textbf{Means and standard deviations} for the subgroups investigated and variables investigated. The means and standard deviations are calculated on the cookie question score, the total amount of cookie consent accepts and the average time spent answering the cookie consent banners. The groups are made from the survey question responses. }
+    \label{tab:mean_and_sd_main}
+\end{table}

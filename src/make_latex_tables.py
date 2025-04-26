@@ -219,3 +219,63 @@ def make_shapiro_latex_table(results_dict, test_variables=None, groups=None, cap
     lines.append("\\end{table}")
 
     return "\n".join(lines)
+
+
+def make_mean_sd_latex_table(results_dict, test_variables=None, groups=None, caption="", label=""):
+    """
+    Generate a LaTeX table for group means and standard deviations from a nested result dict.
+
+    Args:
+        results_dict (dict): The nested dictionary returned by run_group_test results.
+        test_variables (list of str or None): Which test variables to include.
+        groups (list of str or None): Which groupings to include.
+        caption (str): Caption text for the LaTeX table.
+        label (str): Label for the LaTeX table.
+
+    Returns:
+        str: A LaTeX-formatted table string.
+    """
+    test_variable_mapping = _get_test_varible_mapping()
+
+    lines = []
+    lines.append("\\begin{table}[tb]")
+    lines.append("    \\centering")
+    lines.append("    \\begin{tabular}{|l|r|r|r|}")
+    lines.append("        \\hline")
+    lines.append("        \\textbf{Group} & \\textbf{n} & \\textbf{Mean} & \\textbf{SD} \\\\")
+    lines.append("        \\hline")
+
+    for test_variable, group_dict in results_dict.items():
+        if test_variables and test_variable not in test_variables:
+            continue
+
+        test_variable_description = test_variable_mapping[test_variable]
+        lines.append(f"        \\multicolumn{{4}}{{|l|}}{{\\textbf{{{test_variable_description}}}}} \\\\")
+        lines.append("        \\hline")
+
+        for group_name, result in group_dict.items():
+            if groups and group_name not in groups:
+                continue
+
+            group_sizes = result.get("group_sizes", [None, None])
+            group_means = result.get("group_means", [None, None])
+            group_sds = result.get("group_sds", [None, None])
+
+            for idx, subgroup in enumerate(result["group_names"]):
+                n = group_sizes[idx] if idx < len(group_sizes) else "?"
+                mean = group_means[idx] if idx < len(group_means) else "?"
+                sd = group_sds[idx] if idx < len(group_sds) else "?"
+
+                subgroup_formatted = re.sub(r"(Q\d{1,2}\.)", r"\\textbf{\1}", subgroup)
+                lines.append(f"        {subgroup_formatted} & {n} & {mean:.2f} & {sd:.2f} \\\\")
+
+        lines.append("        \\hline")
+
+    lines.append("    \\end{tabular}")
+    if caption:
+        lines.append(f"    \\caption{{{caption}}}")
+    if label:
+        lines.append(f"    \\label{{{label}}}")
+    lines.append("\\end{table}")
+
+    return "\n".join(lines)

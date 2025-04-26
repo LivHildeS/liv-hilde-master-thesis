@@ -1,0 +1,44 @@
+\begin{table}[tb]
+    \centering
+    \begin{tabular}{|l|r|r|r|}
+        \hline
+        \textbf{Group} & \textbf{n} & \textbf{Mean} & \textbf{SD} \\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Average computer banner answer time}} \\
+        \hline
+        \textbf{Q1.} Quite or very concerned about privacy & 15 & 8.92 & 6.86 \\
+        \textbf{Q1.} Slightly concered about privacy & 6 & 5.20 & 1.91 \\
+        \textbf{Q4.} Understand cookie consent to some or more extent & 8 & 6.00 & 2.32 \\
+        \textbf{Q4.} Do not understand cookie consent well & 13 & 9.00 & 7.38 \\
+        \textbf{Q7.} Activly withholds consent & 7 & 11.11 & 9.36 \\
+        \textbf{Q7.} Does not activly withhold consent & 14 & 6.23 & 2.76 \\
+        \textbf{Q8.} Have withdrawn consent & 6 & 10.23 & 7.85 \\
+        \textbf{Q8.} Have not withdrawn consent & 14 & 7.16 & 5.32 \\
+        \textbf{Q9.} Aware of withdrawal ease & 8 & 8.85 & 6.55 \\
+        \textbf{Q9.} Not aware of withdrawal ease & 13 & 7.25 & 5.94 \\
+        \textbf{Q11.} Under 30 years & 8 & 7.08 & 7.49 \\
+        \textbf{Q11.} 30 years or older & 13 & 8.34 & 5.29 \\
+        \textbf{Q12.} With IT background & 16 & 7.27 & 5.15 \\
+        \textbf{Q12.} Without IT background & 5 & 9.72 & 8.90 \\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Average phone banner answer time}} \\
+        \hline
+        \textbf{Q1.} Quite or very concerned about privacy & 15 & 4.87 & 2.59 \\
+        \textbf{Q1.} Slightly concered about privacy & 6 & 4.07 & 0.56 \\
+        \textbf{Q4.} Understand cookie consent to some or more extent & 8 & 4.53 & 2.36 \\
+        \textbf{Q4.} Do not understand cookie consent well & 13 & 4.71 & 2.22 \\
+        \textbf{Q7.} Activly withholds consent & 7 & 5.37 & 3.15 \\
+        \textbf{Q7.} Does not activly withhold consent & 14 & 4.27 & 1.60 \\
+        \textbf{Q8.} Have withdrawn consent & 6 & 5.90 & 3.86 \\
+        \textbf{Q8.} Have not withdrawn consent & 14 & 4.26 & 0.73 \\
+        \textbf{Q9.} Aware of withdrawal ease & 8 & 4.33 & 2.97 \\
+        \textbf{Q9.} Not aware of withdrawal ease & 13 & 4.83 & 1.71 \\
+        \textbf{Q11.} Under 30 years & 8 & 5.35 & 2.02 \\
+        \textbf{Q11.} 30 years or older & 13 & 4.20 & 2.29 \\
+        \textbf{Q12.} With IT background & 16 & 4.79 & 2.48 \\
+        \textbf{Q12.} Without IT background & 5 & 4.16 & 1.01 \\
+        \hline
+    \end{tabular}
+    \caption{ \textbf{Means and standard deviations of cookie banner response time on different devices}. }
+    \label{tab:mean_and_sd_extra_time}
+\end{table}

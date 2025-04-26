@@ -27,3 +27,17 @@ average response time on computer, Shapiro-Wilk rejects normality for most group
 have high \\textbf{W} and p-values, suggesting that the data is approximately normal. Nevertheless, this is only for a
 small number of groups overall.
 """ + SHAPIRO_WILK_GENERIC_CAPTION
+
+MEAN_AND_SD_MAIN = """
+\\textbf{Means and standard deviations} for the subgroups investigated and variables investigated. The means and
+standard deviations are calculated on the cookie question score, the total amount of cookie consent accepts and the
+average time spent answering the cookie consent banners. The groups are made from the survey question responses.
+"""
+
+MEAN_AND_SD_EXTRA_ACCEPTS = """
+\\textbf{Means and standard deviations of the number of accepts on different devices}.
+"""
+
+MEAN_AND_SD_EXTRA_TIME = """
+\\textbf{Means and standard deviations of cookie banner response time on different devices}.
+"""
