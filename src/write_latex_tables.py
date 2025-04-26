@@ -2,8 +2,9 @@ from pathlib import Path
 
 from src.generate_results import get_all_group_test_results
 from src.get_constants import get_constants
+from src.latex_table_captions import (NETTSKJEMA_REPORT_CAPTION, SHAPIRO_WILK_EXTRA_ACCEPTS_CAPTION,
+                                      SHAPIRO_WILK_EXTRA_TIME_CAPTION, SHAPIRO_WILK_MAIN_CAPTION)
 from src.make_latex_tables import make_nettskjema_report_latex, make_shapiro_latex_table
-from src.utils import get_all_data
 
 CONSTANTS = get_constants()
 
@@ -31,7 +32,7 @@ def write_nettskjema_report(df):
     Args:
         df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
     """
-    caption = "captio"
+    caption = NETTSKJEMA_REPORT_CAPTION.replace("\n", " ")
     label = "tab:nettskjema_report"
     filename = "nettskjema_report.txt"
     nettskjema_table = make_nettskjema_report_latex(df, caption=caption, label=label)
@@ -46,7 +47,7 @@ def write_shapiro_wilk_main(df):
     Args:
         df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
     """
-    caption = "caption"
+    caption = SHAPIRO_WILK_MAIN_CAPTION.replace("\n", " ")
     label = "tab:shapiro_wilk_main"
     filename = "shapiro_wilk_main.txt"
     results = get_all_group_test_results(df, print_values=False)
@@ -71,9 +72,9 @@ def write_shapiro_wilk_extra_accepts(df):
     Args:
         df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
     """
-    caption = "caption"
-    label = "tab:shapiro_wilk_main"
-    filename = "shapiro_wilk_main.txt"
+    caption = SHAPIRO_WILK_EXTRA_ACCEPTS_CAPTION.replace("\n", " ")
+    label = "tab:shapiro_wilk_extra_accepts"
+    filename = "shapiro_wilk_extra_accepts.txt"
     results = get_all_group_test_results(df, print_values=False)
     shapiro_wilk_table = make_shapiro_latex_table(
         results,
@@ -95,9 +96,9 @@ def write_shapiro_wilk_extra_time(df):
     Args:
         df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
     """
-    caption = "caption"
-    label = "tab:shapiro_wilk_main"
-    filename = "shapiro_wilk_main.txt"
+    caption = SHAPIRO_WILK_EXTRA_TIME_CAPTION.replace("\n", " ")
+    label = "tab:shapiro_wilk_extra_time"
+    filename = "shapiro_wilk_extra_time.txt"
     results = get_all_group_test_results(df, print_values=False)
     shaprio_wilk_table = make_shapiro_latex_table(
         results,

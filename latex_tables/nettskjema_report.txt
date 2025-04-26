@@ -61,4 +61,6 @@
         No & 5 \\
         \hline
     \end{tabular}
+    \caption{ \textbf{Number of answers on the quantitative survey questions.} }
+    \label{tab:nettskjema_report}
 \end{table}

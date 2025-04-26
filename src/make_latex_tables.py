@@ -172,9 +172,9 @@ def make_shapiro_latex_table(results_dict, test_variables=None, groups=None, cap
     lines = []
     lines.append("\\begin{table}[tb]")
     lines.append("    \\centering")
-    lines.append("    \\begin{tabular}{|l|r|r|}")
+    lines.append("    \\begin{tabular}{|l|r|r|r|}")
     lines.append("        \\hline")
-    lines.append("        \\textbf{Group} & \\textbf{W} & \\textbf{p-value} \\\\")
+    lines.append("        \\textbf{Group} & \\textbf{n} & \\textbf{W} & \\textbf{p-value} \\\\")
     lines.append("        \\hline")
 
     for test_variable, group_dict in results_dict.items():
@@ -183,16 +183,20 @@ def make_shapiro_latex_table(results_dict, test_variables=None, groups=None, cap
 
         # Add a header row to separate this test variable
         test_variable_description = test_varible_mapping[test_variable]
-        lines.append(f"        \\multicolumn{{3}}{{|l|}}{{\\textbf{{{test_variable_description}}}}} \\\\")
+        lines.append(f"        \\multicolumn{{4}}{{|l|}}{{\\textbf{{{test_variable_description}}}}} \\\\")
         lines.append("        \\hline")
 
         for group_name, result in group_dict.items():
             if groups and group_name not in groups:
                 continue
 
-            for subgroup, normality in result["normality"].items():
+            group_sizes = result.get("group_sizes", [None, None])
+
+            for idx, (subgroup, normality) in enumerate(result["normality"].items()):
                 W = normality["W"]
                 p = normality["p"]
+                n = group_sizes[idx] if idx < len(group_sizes) else "?"
+
                 if p < 0.05:
                     p_fmt = f"\\textbf{{{p:.4f}}}"
                 else:
@@ -201,8 +205,9 @@ def make_shapiro_latex_table(results_dict, test_variables=None, groups=None, cap
                     w_fmt = f"\\textbf{{{W:.4f}}}"
                 else:
                     w_fmt = f"{W:.3f}"
+
                 subgroup_formatted = re.sub(r"(Q\d{1,2}\.)", r"\\textbf{\1}", subgroup)
-                lines.append(f"        {subgroup_formatted} & {w_fmt} & {p_fmt} \\\\")
+                lines.append(f"        {subgroup_formatted} & {n} & {w_fmt} & {p_fmt} \\\\")
 
         lines.append("        \\hline")
 
