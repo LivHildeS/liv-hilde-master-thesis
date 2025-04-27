@@ -1,15 +1,17 @@
 import os
 from pathlib import Path
 
-from src.generate_results import get_all_friedman_test_results, get_all_group_test_results
+from src.generate_results import get_all_friedman_test_results, get_all_group_test_results, get_website_statistics
 from src.get_constants import get_constants
 from src.latex_table_captions import (BOOTSTRAP_EXTRA_ACCEPTS_CAPTION, BOOTSTRAP_EXTRA_TIME_CAPTION,
                                       BOOTSTRAP_MAIN_CAPTION, FRIEDMAN_CAPTION, MEAN_AND_SD_EXTRA_ACCEPTS_CAPTION,
                                       MEAN_AND_SD_EXTRA_TIME_CAPTION, MEAN_AND_SD_MAIN_CAPTION,
                                       NETTSKJEMA_REPORT_CAPTION, SHAPIRO_WILK_EXTRA_ACCEPTS_CAPTION,
-                                      SHAPIRO_WILK_EXTRA_TIME_CAPTION, SHAPIRO_WILK_MAIN_CAPTION)
+                                      SHAPIRO_WILK_EXTRA_TIME_CAPTION, SHAPIRO_WILK_MAIN_CAPTION,
+                                      WEBSITE_STATISTICS_ACCEPTS_CAPTION, WEBSITE_STATISTICS_TIME_CAPTION)
 from src.make_latex_tables import (make_bootstrap_latex_table, make_friedman_latex_table, make_mean_sd_latex_table,
-                                   make_nettskjema_report_latex, make_shapiro_latex_table)
+                                   make_nettskjema_report_latex, make_shapiro_latex_table,
+                                   make_website_statistics_latex_table)
 
 CONSTANTS = get_constants()
 GROUP_TESTS_FOLDER = CONSTANTS["paths"]["folders"]["group_tests_folder"]
@@ -276,6 +278,48 @@ def write_bootstrap_extra_time(df):
     _write_latex_table_to_file(text=mean_and_sd_table, filename=filename, folder=folder)
 
 
+def write_website_statistics_accepts(df):
+    """
+    Writes table with accepts for each website and every device.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    caption = WEBSITE_STATISTICS_ACCEPTS_CAPTION.replace("\n", " ")
+    label = "tab:website_statistics_accepts"
+    filename = "website_statistics_accepts.txt"
+    folder = WEBISTE_TESTS_FOLDER
+    results = get_website_statistics(df)
+    website_statistics_table = make_website_statistics_latex_table(
+        results,
+        test_variable="accepts",
+        caption=caption,
+        label=label
+    )
+    _write_latex_table_to_file(website_statistics_table, filename=filename, folder=folder)
+
+
+def write_website_statistics_time(df):
+    """
+    Writes the time spent on the different website for all devices, including standard deviations.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    caption = WEBSITE_STATISTICS_TIME_CAPTION.replace("\n", " ")
+    label = "tab:website_statistics_time"
+    filename = "website_statistics_time.txt"
+    folder = WEBISTE_TESTS_FOLDER
+    results = get_website_statistics(df)
+    website_statistics_table = make_website_statistics_latex_table(
+        results,
+        test_variable="time",
+        caption=caption,
+        label=label
+    )
+    _write_latex_table_to_file(website_statistics_table, filename=filename, folder=folder)
+
+
 def write_friedman(df):
     """
     Writes table with Friedman test for the different websites with one row for each device (including "both"),
@@ -298,7 +342,7 @@ def write_friedman(df):
 
 
 def write_all_latex_tables(df, nettskjema_report=False, shapiro_wilk=False, mean_and_sd=False, bootstrap=False,
-                           friedman=False):
+                           website_statistics=False, friedman=False):
     """
     Writes the LaTeX tables, depending on the arguments passed. Calls all of the other functions to do so.
 
@@ -308,7 +352,8 @@ def write_all_latex_tables(df, nettskjema_report=False, shapiro_wilk=False, mean
         shapiro_wilk (bool): Whether or not to write the three Shapiro-Wilk normality tables.
         mean_and_sd (bool): Whether or not to write the three mean and standard deviation tables.
         bootstrap (bool): Whether or not to print the three bootstrap tables.
-        friedman (bool): Whether or not to print the two friedman tables.
+        website_statistics (bool): Whether or not to print the two website statistic tables.
+        friedman (bool): Whether or not to print the friedman table.
     """
     if nettskjema_report:
         write_nettskjema_report(df)
@@ -324,5 +369,8 @@ def write_all_latex_tables(df, nettskjema_report=False, shapiro_wilk=False, mean
         write_bootstrap_main(df)
         write_bootstrap_extra_accepts(df)
         write_bootstrap_extra_time(df)
+    if website_statistics:
+        write_website_statistics_accepts(df)
+        write_website_statistics_time(df)
     if friedman:
         write_friedman(df)

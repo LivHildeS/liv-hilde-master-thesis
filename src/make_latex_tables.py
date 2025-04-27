@@ -346,6 +346,60 @@ def make_bootstrap_latex_table(results_dict, test_variables=None, groups=None, c
     return "\n".join(lines)
 
 
+def make_website_statistics_latex_table(website_stats, test_variable="accepts", caption="", label=""):
+    """
+    Generate a LaTeX table summarizing either accepts or time spent per website and device.
+
+    Args:
+        website_stats (dict): Output dictionary from get_website_statistics.
+        test_variable (str): "accepts" or "time" — determines which set of stats to show.
+        caption (str): Caption text for the LaTeX table.
+        label (str): Label for the LaTeX table.
+
+    Returns:
+        str: A LaTeX-formatted table string.
+    """
+    if test_variable not in ["accepts", "time"]:
+        raise ValueError(f"Invalid test_variable '{test_variable}'. Must be 'accepts' or 'time'.")
+
+    stat_suffix = "accepts" if test_variable == "accepts" else "time"
+
+    lines = []
+    lines.append("\\begin{table}[tb]")
+    lines.append("    \\centering")
+    lines.append("    \\footnotesize")
+    lines.append("    \\begin{tabular}{|l|r|r|r|}")
+    lines.append("        \\hline")
+    if test_variable == "accepts":
+        header = "        \\textbf{Website} & \\textbf{Computer} & \\textbf{Phone} & \\textbf{Total} \\\\"
+    else:
+        header = "        \\textbf{Website} & \\textbf{Computer} (Mean (SD)) & \\textbf{Phone} (Mean (SD)) "
+        header += "& \\textbf{Total} (Mean (SD))\\\\"
+    lines.append(header)
+    lines.append("        \\hline")
+
+    for site, stats in website_stats.items():
+        computer = f"{stats[f'computer_{stat_suffix}']}"
+        phone = f"{stats[f'phone_{stat_suffix}']}"
+        total = f"{stats[f'total_{stat_suffix}']}"
+        if test_variable == "time":  # Add standard deviations
+            computer += f" ({stats[f'computer_{stat_suffix}_std']:.2f})"
+            phone += f" ({stats[f'phone_{stat_suffix}_std']:.2f})"
+            total += f" ({stats[f'total_{stat_suffix}_std']:.2f})"
+        line = f"        {site.capitalize()} & {computer} & {phone} & {total} \\\\"
+        lines.append(line)
+
+    lines.append("        \\hline")
+    lines.append("    \\end{tabular}")
+    if caption:
+        lines.append(f"    \\caption{{{caption}}}")
+    if label:
+        lines.append(f"    \\label{{{label}}}")
+    lines.append("\\end{table}")
+
+    return "\n".join(lines)
+
+
 def make_friedman_latex_table(results_dict, caption="", label=""):
     """
     Generate a LaTeX table for Friedman test results for accepts and time.

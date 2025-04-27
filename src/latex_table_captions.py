@@ -1,3 +1,8 @@
+from src.get_constants import get_constants
+
+CONSTANTS = get_constants()
+
+
 NETTSKJEMA_REPORT_CAPTION = """
 \\textbf{Number of answers on the quantitative survey questions.}
 """
@@ -42,22 +47,32 @@ MEAN_AND_SD_EXTRA_TIME_CAPTION = """
 \\textbf{Means and standard deviations of cookie banner response time on different devices}.
 """
 
-BOOTSTRAP_MAIN_CAPTION = """
-\\textbf{Bootstrap confidence intervals (CI) and statistics for the survey groups}.
-The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{bold}.
-The bootstrap used 10000 iterations.
+BOOTSTRAP_MAIN_CAPTION = f"""
+\\textbf{{Bootstrap confidence intervals (CI) and statistics for the survey groups}}.
+The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{{bold}}.
+The bootstrap used {CONSTANTS['n_bootstraps']} iterations.
 """
 
-BOOTSTRAP_EXTRA_ACCEPTS_CAPTION = """
-\\textbf{Bootstrap confidence intervals (CI) for the number of cookie banner accepts on different devices}.
-The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{bold}.
-The bootstrap used 10000 iterations.
+BOOTSTRAP_EXTRA_ACCEPTS_CAPTION = f"""
+\\textbf{{Bootstrap confidence intervals (CI) for the number of cookie banner accepts on different devices}}.
+The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{{bold}}.
+The bootstrap used {CONSTANTS['n_bootstraps']} iterations.
 """
 
-BOOTSTRAP_EXTRA_TIME_CAPTION = """
-\\textbf{Bootstrap confidence intervals (CI) for cookie banner response time on different devices}.
-The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{bold}.
-The bootstrap used 10000 iterations.
+BOOTSTRAP_EXTRA_TIME_CAPTION = f"""
+\\textbf{{Bootstrap confidence intervals (CI) for cookie banner response time on different devices}}.
+The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{{bold}}.
+The bootstrap used {CONSTANTS['n_bootstraps']} iterations.
+"""
+
+WEBSITE_STATISTICS_ACCEPTS_CAPTION = f"""
+\\textbf{{Total amount of cookie consent accepts}} for the different websites on all devices. There were
+{CONSTANTS['number_of_participants']} number of participants.
+"""
+
+WEBSITE_STATISTICS_TIME_CAPTION = """
+\\textbf{Average time in seconds spent on cookie banner} for the different websites on all devices. The paranthesis
+contains the standard deviations.
 """
 
 FRIEDMAN_CAPTION = """

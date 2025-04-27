@@ -255,6 +255,37 @@ def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
     return all_results
 
 
+def get_website_statistics(df):
+    """
+    Collects high level website data from the dataframe and returns as a dictionary.
+    This data is the total amount of accepts and average time spent on the cookie banner for each of the websites,
+    both means and standard deviations.
+
+    Args:
+        df (pd.Dataframe): All the data.
+
+    Returns:
+        dict: Dict of all the results.
+    """
+    results = {}
+    for website in WEBSITES:
+        results[website] = {
+            "computer_accepts": df[f"computer.{website}.answer.int"].sum(),
+            "computer_accepts_std": df[f"computer.{website}.answer.int"].std(),
+            "phone_accepts": df[f"phone.{website}.answer.int"].sum(),
+            "phone_accepts_std": df[f"phone.{website}.answer.int"].std(),
+            "total_accepts": df[f"{website}_accepts_int"].sum(),
+            "total_accepts_std": df[f"{website}_accepts_int"].std(),
+            "computer_time": df[f"computer.{website}.time"].sum(),
+            "computer_time_std": df[f"computer.{website}.time"].std(),
+            "phone_time": df[f"phone.{website}.time"].sum(),
+            "phone_time_std": df[f"phone.{website}.time"].std(),
+            "total_time": df[f"{website}_average_time"].sum(),
+            "total_time_std": df[f"{website}_average_time"].std(),
+        }
+    return results
+
+
 def get_all_friedman_test_results(df):
     """
     Runs Friedman test with all testing configurations, meaning both the accepts and time as test variables,

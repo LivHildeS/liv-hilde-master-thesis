@@ -1,0 +1,17 @@
+\begin{table}[tb]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|r|r|r|}
+        \hline
+        \textbf{Website} & \textbf{Computer} & \textbf{Phone} & \textbf{Total} \\
+        \hline
+        Finn & 9 & 6 & 15 \\
+        Dnb & 4 & 4 & 8 \\
+        Dagens & 11 & 11 & 22 \\
+        Facebook & 3 & 2 & 5 \\
+        Google & 6 & 3 & 9 \\
+        \hline
+    \end{tabular}
+    \caption{ \textbf{Total amount of cookie consent accepts} for the different websites on all devices. There were 21 number of participants. }
+    \label{tab:website_statistics_accepts}
+\end{table}

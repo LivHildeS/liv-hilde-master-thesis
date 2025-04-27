@@ -9,7 +9,8 @@ if __name__ == "__main__":
         df,
         nettskjema_report=False,
         shapiro_wilk=False,
-        mean_and_sd=True,
+        mean_and_sd=False,
         bootstrap=False,
+        website_statistics=True,
         friedman=False,
     )
