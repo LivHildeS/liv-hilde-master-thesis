@@ -7,9 +7,9 @@ if __name__ == "__main__":
     df = get_all_data()
     write_all_latex_tables(
         df,
-        nettskjema_report=True,
-        shapiro_wilk=True,
+        nettskjema_report=False,
+        shapiro_wilk=False,
         mean_and_sd=True,
         bootstrap=False,
-        friedman=True
+        friedman=False,
     )

@@ -145,7 +145,7 @@ def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
     privacy_concern = {
         "df1": df[df["privacy_concern"] != "Slightly concerned"],
         "df2": df[df["privacy_concern"] == "Slightly concerned"],
-        "group_names": ["Q1. Quite or very concerned about privacy", "Q1. Slightly concered about privacy"],
+        "group_names": ["Q1. Quite or very concerned about privacy", "Q1. Slightly concerned about privacy"],
         "grouping_name": "Quite or very concerned about privacy",
     }
     understand_cookie_consent = {
@@ -158,9 +158,9 @@ def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
     }
     cookie_banner_response = {
         "df1": df[df["cookie_banner_response"] == "I actively take steps to withhold my consent."],
-        "df2": df[df["cookie_banner_response"] != "I actively take steps to withhold my consent."],
-        "group_names": ["Q7. Activly withholds consent", "Q7. Does not activly withhold consent"],
-        "grouping_name": "Activly witholds consent",
+        "df2": df[df["cookie_banner_response"] != "I akictively take steps to withhold my consent."],
+        "group_names": ["Q7. Actively withholds consent", "Q7. Does not actively withhold consent"],
+        "grouping_name": "Actively withholds consent",
     }
     have_withdrawn_consent = {
         "df1": df[df["have_withdrawn_consent"] == "Yes"],
@@ -207,12 +207,28 @@ def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
         "total_average_time",
     ]
 
+    if test_type == "mean-sd":
+        full_group = {
+            "df": df,
+            "group_names": ["\\qquad Full dataset"],
+            "grouping_name": "Full Dataset",
+        }
+        groups.insert(0, full_group)
+
     all_results = {}
     for test_variable in test_variables:
         test_variable_results = {}
 
         for group in groups:
-            if test_type == "mean-sd":
+            if group["grouping_name"] == "Full Dataset":  # Special case for full dataset
+                result = {
+                    "test_variable": test_variable,
+                    "group_names": group["group_names"],
+                    "group_sizes": [len(group["df"])],
+                    "group_means": [group["df"][test_variable].mean()],
+                    "group_sds": [group["df"][test_variable].std()],
+                }
+            elif test_type == "mean-sd":
                 result = get_means_and_sd(
                     group["df1"], group["df2"], value_column=test_variable, group_names=group["group_names"]
                 )
