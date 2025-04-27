@@ -82,6 +82,7 @@ def process_participant_data():
 
     for website in WEBSITES:
         df[f"{website}_accepts_int"] = 0
+        df[f"{website}_average_time"] = 0
 
     for device in DEVICES:
         for website in WEBSITES:
@@ -90,6 +91,7 @@ def process_participant_data():
             df[f"{device}_accepts"] += df[f"{column_name}.int"]
             df[f"{website}_accepts_int"] += df[f"{column_name}.int"]
             df[f"{device}_average_time"] += df[f"{device}.{website}.time"]
+            df[f"{website}_average_time"] += df[f"{device}.{website}.time"]
 
     df["total_accepts"] = df["computer_accepts"] + df["phone_accepts"]
 

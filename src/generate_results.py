@@ -1,8 +1,8 @@
 import numpy as np
 
 from src.get_constants import get_constants
-from src.hypothesis_tests import (get_means_and_sd, run_bootstrap_test, run_group_test,
-                                  run_grouped_shapiro_wilk_normality_test)
+from src.hypothesis_tests import (get_means_and_sd, run_bootstrap_test, run_cochrans_q_test, run_friedman_test,
+                                  run_group_test, run_grouped_shapiro_wilk_normality_test)
 from src.process_data import _quantisize_answers
 
 CONSTANTS = get_constants()
@@ -111,6 +111,19 @@ def get_website_averages(df):
     print(f"{len(df)=}")
 
 
+def test_time_given_accept(df):
+    for device in DEVICES:
+        for website in WEBSITES:
+            df1 = df[df[f"{device}.{website}.answer.int"] == 0]
+            df2 = df[df[f"{device}.{website}.answer.int"] == 1]
+            group_names = [f"Accept {device} {website}", f"Reject {device} {website}"]
+            test_variable = f"{device}.{website}.time"
+            result = run_group_test(
+                df1, df2, value_column=test_variable, test_type="permutation", group_names=group_names
+            )
+            print_group_test_result(result)
+
+
 def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
     """
     Run grouped tests for all the groups and test statistics of interest.
@@ -209,7 +222,7 @@ def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
                 )
             elif test_type == "bootstrap":
                 result = run_bootstrap_test(
-                    group["df1"], group["df2"], value_column=test_variable, group_names=group["group_names"]
+                    group["df1"], group["df2"], value_column=test_variable, group_names=group["group_names"],
                 )
             else:
                 result = run_group_test(
@@ -226,14 +239,21 @@ def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
     return all_results
 
 
-def test_time_given_accept(df):
-    for device in DEVICES:
-        for website in WEBSITES:
-            df1 = df[df[f"{device}.{website}.answer.int"] == 0]
-            df2 = df[df[f"{device}.{website}.answer.int"] == 1]
-            group_names = [f"Accept {device} {website}", f"Reject {device} {website}"]
-            test_variable = f"{device}.{website}.time"
-            result = run_group_test(
-                df1, df2, value_column=test_variable, test_type="permutation", group_names=group_names
-            )
-            print_group_test_result(result)
+def get_all_friedman_test_results(df):
+    """
+    Runs Friedman test with all testing configurations, meaning both the accepts and time as test variables,
+    and computer, phone and both as device.
+
+    Args:
+        df (pd.Dataframe): All the data.
+
+    Returns:
+        dict: Dict of all the results.
+    """
+    all_results = {"accepts": {}, "time": {}}
+    for test_variable in ["accepts", "time"]:
+        for device in ["computer", "phone", "both"]:
+            results = run_friedman_test(df, test_variable=test_variable, device=device)
+            all_results[test_variable][device] = results
+
+    return all_results

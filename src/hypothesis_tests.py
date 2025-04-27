@@ -158,7 +158,7 @@ def run_group_test(group_df1, group_df2, value_column, test_type, group_names=No
     return result
 
 
-def run_bootstrap_test(group_df1, group_df2, value_column, group_names=None, n_bootstraps=100, random_state=2025):
+def run_bootstrap_test(group_df1, group_df2, value_column, group_names=None):
     """
     Runs a bootstrap hypothesis test between two groups based on the mean difference.
     Also calculates group means, standard deviations, and Cohen's d.
@@ -168,8 +168,6 @@ def run_bootstrap_test(group_df1, group_df2, value_column, group_names=None, n_b
         group_df2 (pd.DataFrame): DataFrame for the second group.
         value_column (str): Column name to compare.
         group_names (list of str or None): Optional list of names for the two groups.
-        n_bootstraps (int): Number of bootstrap resamples.
-        random_state (int): Random seed for reproducibility.
 
     Returns:
         dict: Results including group statistics, observed mean difference, bootstrap CI, and Cohen's d.
@@ -177,7 +175,7 @@ def run_bootstrap_test(group_df1, group_df2, value_column, group_names=None, n_b
     if group_names is None:
         group_names = ["group1", "group2"]
 
-    rng = np.random.default_rng(seed=random_state)
+    rng = np.random.default_rng(seed=CONSTANTS["random_state"])
 
     values1 = group_df1[value_column].dropna()
     values2 = group_df2[value_column].dropna()
@@ -195,7 +193,7 @@ def run_bootstrap_test(group_df1, group_df2, value_column, group_names=None, n_b
 
     # Bootstrap
     bootstrap_diffs = []
-    for _ in range(n_bootstraps):
+    for _ in range(CONSTANTS["n_bootstraps"]):
         sample1 = rng.choice(values1, size=len(values1), replace=True)
         sample2 = rng.choice(values2, size=len(values2), replace=True)
         diff = sample1.mean() - sample2.mean()
@@ -223,6 +221,8 @@ def run_bootstrap_test(group_df1, group_df2, value_column, group_names=None, n_b
 def run_cochrans_q_test(df, device):
     """
     Runs Cochran's Q test for binary repeated measures data across multiple conditions.
+    This is just binary Friedman test, so we could wrap it around that function, but we use `cocrhans_q` from a
+    library instead.
 
     Args:
         df (pd.Dataframe): DataFrame with participants as rows, binary responses as columns.
@@ -232,8 +232,7 @@ def run_cochrans_q_test(df, device):
         Dictionary with test statistic and p-value.
     """
     # Extract the relevant columns
-    websites = ["finn", "dnb", "facebook", "google", "dagens"]
-    columns = [f"{device}.{site}.answer.int" for site in websites]
+    columns = [f"{device}.{site}.answer.int" for site in WEBSITES]
     data = df[columns]
 
     # Cochran's Q expects a 2D array of shape (n_subjects, k_conditions) with binary values
@@ -242,7 +241,7 @@ def run_cochrans_q_test(df, device):
     return {
         "test_type": "cochrans_q",
         "device": device,
-        "websites": websites,
+        "websites": WEBSITES,
         "statistic": result.statistic,
         "df": result.df,
         "p_value": result.pvalue
@@ -261,10 +260,9 @@ def run_pairwise_mcnemar_tests(df, device, exact=True):
     Returns:
         List of result dictionaries with test results per website pair.
     """
-    websites = ["finn", "dnb", "facebook", "google", "dagens"]
     results = []
 
-    for site1, site2 in combinations(websites, 2):
+    for site1, site2 in combinations(WEBSITES, 2):
         col1 = f"{device}.{site1}.answer.int"
         col2 = f"{device}.{site2}.answer.int"
 
@@ -288,26 +286,48 @@ def run_pairwise_mcnemar_tests(df, device, exact=True):
     return results
 
 
-def run_friedman_test(df):
+def run_friedman_test(df, test_variable, device):
     """
     Runs the Friedman test on repeated ordinal data across multiple websites.
 
     Args:
         df (pd.DataFrame): The data from the study.
+        test_variable (str): The variable to test, either "accepts" or "time".
+        device (str): The device to test, either "computer", "phone" or "both".
 
     Returns:
         Dictionary with test type, websites, test statistic, degrees of freedom, and p-value.
     """
-    columns = [f"{site}_accepts_int" for site in WEBSITES]
+    test_variable_values = ["accepts", "time"]
+    if test_variable not in test_variable_values:
+        raise ValueError(f"Argument `test_variable` must be in {test_variable_values}. Was {test_variable}. ")
+
+    device_values = ["computer", "phone", "both"]
+    if device not in device_values:
+        raise ValueError(f"Argument `device` must be in {device_values}. Was {device}.")
+
+    if device == "both":
+        if test_variable == "accepts":
+            column_ending = "_accepts_int"
+        if test_variable == "time":
+            column_ending = "_average_time"
+        columns = [f"{website}{column_ending}" for website in WEBSITES]
+    else:
+        if test_variable == "accepts":
+            column_ending = ".answer.int"
+        if test_variable == "time":
+            column_ending = ".time"
+        columns = [f"{device}.{website}{column_ending}" for website in WEBSITES]
+
     data = df[columns]
 
     # Friedman expects each column to be a condition, and each row to be a subject
-    stat, p_value = friedmanchisquare(*[data[col] for col in columns])
+    statistic, p_value = friedmanchisquare(*[data[col] for col in columns])
 
     return {
         "test_type": "friedman",
         "websites": WEBSITES,
-        "statistic": stat,
+        "statistic": statistic,
         "df": len(WEBSITES) - 1,
         "p_value": p_value
     }

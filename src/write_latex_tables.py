@@ -1,28 +1,36 @@
+import os
 from pathlib import Path
 
-from src.generate_results import get_all_group_test_results
+from src.generate_results import get_all_friedman_test_results, get_all_group_test_results
 from src.get_constants import get_constants
 from src.latex_table_captions import (BOOTSTRAP_EXTRA_ACCEPTS_CAPTION, BOOTSTRAP_EXTRA_TIME_CAPTION,
-                                      BOOTSTRAP_MAIN_CAPTION, MEAN_AND_SD_EXTRA_ACCEPTS_CAPTION,
+                                      BOOTSTRAP_MAIN_CAPTION, FRIEDMAN_CAPTION, MEAN_AND_SD_EXTRA_ACCEPTS_CAPTION,
                                       MEAN_AND_SD_EXTRA_TIME_CAPTION, MEAN_AND_SD_MAIN_CAPTION,
                                       NETTSKJEMA_REPORT_CAPTION, SHAPIRO_WILK_EXTRA_ACCEPTS_CAPTION,
                                       SHAPIRO_WILK_EXTRA_TIME_CAPTION, SHAPIRO_WILK_MAIN_CAPTION)
-from src.make_latex_tables import (make_bootstrap_latex_table, make_mean_sd_latex_table, make_nettskjema_report_latex,
-                                   make_shapiro_latex_table)
+from src.make_latex_tables import (make_bootstrap_latex_table, make_friedman_latex_table, make_mean_sd_latex_table,
+                                   make_nettskjema_report_latex, make_shapiro_latex_table)
 
 CONSTANTS = get_constants()
+GROUP_TESTS_FOLDER = CONSTANTS["paths"]["folders"]["group_tests_folder"]
+WEBISTE_TESTS_FOLDER = CONSTANTS["paths"]["folders"]["website_tests_folder"]
+OVERVIEW_TABLES_FOLDER = CONSTANTS["paths"]["folders"]["overview_tables_folder"]
 
 
-def _write_latex_table_to_file(text, filename):
+def _write_latex_table_to_file(text, filename, folder):
     """
     Writes a LaTeX table string to file.
 
     Args:
         text (str): The string of the LaTeX table.
         filename (str): The filename.
+        folder (str): The subfolder to store the latex table in.
     """
     # We have most paths handled in `src.paths.py`, but it is simpler to handle these here.
-    file_path = Path(CONSTANTS["paths"]["folders"]["latex_tables_folder"]) / filename
+    folder_path = Path(CONSTANTS["paths"]["folders"]["latex_tables_folder"]) / folder
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    file_path = folder_path / filename
     with open(file_path, "w") as outfile:
         outfile.write(text)
 
@@ -39,8 +47,9 @@ def write_nettskjema_report(df):
     caption = NETTSKJEMA_REPORT_CAPTION.replace("\n", " ")
     label = "tab:nettskjema_report"
     filename = "nettskjema_report.txt"
+    folder = OVERVIEW_TABLES_FOLDER
     nettskjema_table = make_nettskjema_report_latex(df, caption=caption, label=label)
-    _write_latex_table_to_file(text=nettskjema_table, filename=filename)
+    _write_latex_table_to_file(text=nettskjema_table, filename=filename, folder=folder)
 
 
 def write_shapiro_wilk_main(df):
@@ -54,6 +63,7 @@ def write_shapiro_wilk_main(df):
     caption = SHAPIRO_WILK_MAIN_CAPTION.replace("\n", " ")
     label = "tab:shapiro_wilk_main"
     filename = "shapiro_wilk_main.txt"
+    folder = GROUP_TESTS_FOLDER
     results = get_all_group_test_results(df, test_type="shapiro-wilk", print_values=False)
     shapiro_wilk_table = make_shapiro_latex_table(
         results,
@@ -65,7 +75,7 @@ def write_shapiro_wilk_main(df):
         caption=caption,
         label=label,
     )
-    _write_latex_table_to_file(text=shapiro_wilk_table, filename=filename)
+    _write_latex_table_to_file(text=shapiro_wilk_table, filename=filename, folder=folder)
 
 
 def write_shapiro_wilk_extra_accepts(df):
@@ -79,6 +89,7 @@ def write_shapiro_wilk_extra_accepts(df):
     caption = SHAPIRO_WILK_EXTRA_ACCEPTS_CAPTION.replace("\n", " ")
     label = "tab:shapiro_wilk_extra_accepts"
     filename = "shapiro_wilk_extra_accepts.txt"
+    folder = GROUP_TESTS_FOLDER
     results = get_all_group_test_results(df, test_type="shapiro-wilk", print_values=False)
     shapiro_wilk_table = make_shapiro_latex_table(
         results,
@@ -89,7 +100,7 @@ def write_shapiro_wilk_extra_accepts(df):
         caption=caption,
         label=label,
     )
-    _write_latex_table_to_file(text=shapiro_wilk_table, filename=filename)
+    _write_latex_table_to_file(text=shapiro_wilk_table, filename=filename, folder=folder)
 
 
 def write_shapiro_wilk_extra_time(df):
@@ -103,6 +114,7 @@ def write_shapiro_wilk_extra_time(df):
     caption = SHAPIRO_WILK_EXTRA_TIME_CAPTION.replace("\n", " ")
     label = "tab:shapiro_wilk_extra_time"
     filename = "shapiro_wilk_extra_time.txt"
+    folder = GROUP_TESTS_FOLDER
     results = get_all_group_test_results(df, test_type="shapiro-wilk", print_values=False)
     shaprio_wilk_table = make_shapiro_latex_table(
         results,
@@ -113,7 +125,7 @@ def write_shapiro_wilk_extra_time(df):
         caption=caption,
         label=label,
     )
-    _write_latex_table_to_file(text=shaprio_wilk_table, filename=filename)
+    _write_latex_table_to_file(text=shaprio_wilk_table, filename=filename, folder=folder)
 
 
 def write_mean_sd_main(df):
@@ -127,6 +139,7 @@ def write_mean_sd_main(df):
     caption = MEAN_AND_SD_MAIN_CAPTION.replace("\n", " ")
     label = "tab:mean_and_sd_main"
     filename = "mean_and_sd_main.txt"
+    folder = GROUP_TESTS_FOLDER
     results = get_all_group_test_results(df, test_type="mean-sd", print_values=False)
     mean_and_sd_table = make_mean_sd_latex_table(
         results_dict=results,
@@ -138,7 +151,7 @@ def write_mean_sd_main(df):
         caption=caption,
         label=label,
     )
-    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename)
+    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename, folder=folder)
 
 
 def write_mean_sd_extra_accepts(df):
@@ -152,6 +165,7 @@ def write_mean_sd_extra_accepts(df):
     caption = MEAN_AND_SD_EXTRA_ACCEPTS_CAPTION.replace("\n", " ")
     label = "tab:mean_and_sd_extra_accepts"
     filename = "mean_and_sd_extra_accepts.txt"
+    folder = GROUP_TESTS_FOLDER
     results = get_all_group_test_results(df, test_type="mean-sd", print_values=False)
     mean_and_sd_table = make_mean_sd_latex_table(
         results_dict=results,
@@ -162,7 +176,7 @@ def write_mean_sd_extra_accepts(df):
         caption=caption,
         label=label,
     )
-    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename)
+    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename, folder=folder)
 
 
 def write_mean_sd_extra_time(df):
@@ -175,6 +189,7 @@ def write_mean_sd_extra_time(df):
     caption = MEAN_AND_SD_EXTRA_TIME_CAPTION.replace("\n", " ")
     label = "tab:mean_and_sd_extra_time"
     filename = "mean_and_sd_extra_time.txt"
+    folder = GROUP_TESTS_FOLDER
     results = get_all_group_test_results(df, test_type="mean-sd", print_values=False)
     mean_and_sd_table = make_mean_sd_latex_table(
         results_dict=results,
@@ -185,7 +200,7 @@ def write_mean_sd_extra_time(df):
         caption=caption,
         label=label,
     )
-    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename)
+    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename, folder=folder)
 
 
 def write_bootstrap_main(df):
@@ -198,6 +213,7 @@ def write_bootstrap_main(df):
     caption = BOOTSTRAP_MAIN_CAPTION.replace("\n", " ")
     label = "tab:bootstrap_main"
     filename = "bootstrap_main.txt"
+    folder = GROUP_TESTS_FOLDER
     results = get_all_group_test_results(df, test_type="bootstrap", print_values=False)
     mean_and_sd_table = make_bootstrap_latex_table(
         results_dict=results,
@@ -209,7 +225,7 @@ def write_bootstrap_main(df):
         caption=caption,
         label=label,
     )
-    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename)
+    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename, folder=folder)
 
 
 def write_bootstrap_extra_accepts(df):
@@ -222,6 +238,7 @@ def write_bootstrap_extra_accepts(df):
     caption = BOOTSTRAP_EXTRA_ACCEPTS_CAPTION.replace("\n", " ")
     label = "tab:bootstrap_extra_accepts"
     filename = "bootstrap_extra_accepts.txt"
+    folder = GROUP_TESTS_FOLDER
     results = get_all_group_test_results(df, test_type="bootstrap", print_values=False)
     mean_and_sd_table = make_bootstrap_latex_table(
         results_dict=results,
@@ -232,7 +249,7 @@ def write_bootstrap_extra_accepts(df):
         caption=caption,
         label=label,
     )
-    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename)
+    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename, folder=folder)
 
 
 def write_bootstrap_extra_time(df):
@@ -245,6 +262,7 @@ def write_bootstrap_extra_time(df):
     caption = BOOTSTRAP_EXTRA_TIME_CAPTION.replace("\n", " ")
     label = "tab:bootstrap_extra_time"
     filename = "bootstrap_extra_time.txt"
+    folder = GROUP_TESTS_FOLDER
     results = get_all_group_test_results(df, test_type="bootstrap", print_values=False)
     mean_and_sd_table = make_bootstrap_latex_table(
         results_dict=results,
@@ -255,23 +273,56 @@ def write_bootstrap_extra_time(df):
         caption=caption,
         label=label,
     )
-    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename)
+    _write_latex_table_to_file(text=mean_and_sd_table, filename=filename, folder=folder)
 
 
-def write_all_latex_tables(df):
+def write_friedman(df):
     """
-    Writes all of the LaTeX tables. Calls all of the other functions to do so.
+    Writes table with Friedman test for the different websites with one row for each device (including "both"),
+    looking at the number of accepts given.
 
     Args:
         df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
     """
-    write_nettskjema_report(df)
-    write_shapiro_wilk_main(df)
-    write_shapiro_wilk_extra_accepts(df)
-    write_shapiro_wilk_extra_time(df)
-    write_mean_sd_main(df)
-    write_mean_sd_extra_accepts(df)
-    write_mean_sd_extra_time(df)
-    write_bootstrap_main(df)
-    write_bootstrap_extra_accepts(df)
-    write_bootstrap_extra_time(df)
+    caption = FRIEDMAN_CAPTION.replace("\n", " ")
+    label = "tab:friedman"
+    filename = "friedman.txt"
+    folder = WEBISTE_TESTS_FOLDER
+    results = get_all_friedman_test_results(df)
+    friedman_table = make_friedman_latex_table(
+        results_dict=results,
+        caption=caption,
+        label=label,
+    )
+    _write_latex_table_to_file(text=friedman_table, filename=filename, folder=folder)
+
+
+def write_all_latex_tables(df, nettskjema_report=False, shapiro_wilk=False, mean_and_sd=False, bootstrap=False,
+                           friedman=False):
+    """
+    Writes the LaTeX tables, depending on the arguments passed. Calls all of the other functions to do so.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+        nettskjema_report (bool): Whether or not to write the nettskjema report.
+        shapiro_wilk (bool): Whether or not to write the three Shapiro-Wilk normality tables.
+        mean_and_sd (bool): Whether or not to write the three mean and standard deviation tables.
+        bootstrap (bool): Whether or not to print the three bootstrap tables.
+        friedman (bool): Whether or not to print the two friedman tables.
+    """
+    if nettskjema_report:
+        write_nettskjema_report(df)
+    if shapiro_wilk:
+        write_shapiro_wilk_main(df)
+        write_shapiro_wilk_extra_accepts(df)
+        write_shapiro_wilk_extra_time(df)
+    if mean_and_sd:
+        write_mean_sd_main(df)
+        write_mean_sd_extra_accepts(df)
+        write_mean_sd_extra_time(df)
+    if bootstrap:
+        write_bootstrap_main(df)
+        write_bootstrap_extra_accepts(df)
+        write_bootstrap_extra_time(df)
+    if friedman:
+        write_friedman(df)

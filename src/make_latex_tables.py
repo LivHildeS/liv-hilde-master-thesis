@@ -344,3 +344,66 @@ def make_bootstrap_latex_table(results_dict, test_variables=None, groups=None, c
     lines.append("\\end{table}")
 
     return "\n".join(lines)
+
+
+def make_friedman_latex_table(results_dict, caption="", label=""):
+    """
+    Generate a LaTeX table for Friedman test results for accepts and time.
+
+    Args:
+        results_dict (dict): Dictionary with results for "accepts" and "time".
+        caption (str): Caption text for the LaTeX table.
+        label (str): Label for the LaTeX table.
+
+    Returns:
+        str: A LaTeX-formatted table string.
+    """
+    lines = []
+    lines.append("\\begin{table}[tb]")
+    lines.append("    \\centering")
+    lines.append("    \\begin{tabular}{|l|l|r|r|}")
+    lines.append("        \\hline")
+    lines.append(
+        "        \\textbf{Test variable} & \\textbf{Device} & \\textbf{Test statistic} & \\textbf{p-value} \\\\"
+    )
+    lines.append("        \\hline")
+
+    device_mapping = {
+        "computer": "Computer",
+        "phone": "Phone",
+        "both": "Both devices"
+    }
+
+    test_variable_mapping = {
+        "accepts": "Consent accepts",
+        "time": "Banner answer time"
+    }
+
+    for test_variable in ["accepts", "time"]:
+        readable_test_variable = test_variable_mapping[test_variable]
+        for device in ["computer", "phone", "both"]:
+            device_results = results_dict.get(test_variable, {}).get(device, {})
+            stat = device_results.get("statistic", "?")
+            p = device_results.get("p_value", "?")
+
+            if isinstance(stat, float):
+                stat_fmt = f"{stat:.3f}"
+            else:
+                stat_fmt = str(stat)
+
+            if isinstance(p, float):
+                p_fmt = f"\\textbf{{{p:.8f}}}" if p < 0.05 else f"{p:.8f}"
+            else:
+                p_fmt = str(p)
+
+            lines.append(f"        {readable_test_variable} & {device_mapping[device]} & {stat_fmt} & {p_fmt} \\\\")
+
+    lines.append("        \\hline")
+    lines.append("    \\end{tabular}")
+    if caption:
+        lines.append(f"    \\caption{{{caption}}}")
+    if label:
+        lines.append(f"    \\label{{{label}}}")
+    lines.append("\\end{table}")
+
+    return "\n".join(lines)

@@ -45,17 +45,23 @@ MEAN_AND_SD_EXTRA_TIME_CAPTION = """
 BOOTSTRAP_MAIN_CAPTION = """
 \\textbf{Bootstrap confidence intervals (CI) and statistics for the survey groups}.
 The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{bold}.
-The bootstrap used 1000 iterations.
+The bootstrap used 10000 iterations.
 """
 
 BOOTSTRAP_EXTRA_ACCEPTS_CAPTION = """
 \\textbf{Bootstrap confidence intervals (CI) for the number of cookie banner accepts on different devices}.
 The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{bold}.
-The bootstrap used 1000 iterations.
+The bootstrap used 10000 iterations.
 """
 
 BOOTSTRAP_EXTRA_TIME_CAPTION = """
 \\textbf{Bootstrap confidence intervals (CI) for cookie banner response time on different devices}.
 The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{bold}.
-The bootstrap used 1000 iterations.
+The bootstrap used 10000 iterations.
+"""
+
+FRIEDMAN_CAPTION = """
+\\textbf{Friedman tests on consent accepts and banner answer time on the different websites are highly significant}.
+All of the tests have very low p-values, indicating that the null hypothesis stating that the websites have the
+same expected cookie consent acceptance rate and cookie banner answer time can safely be rejected.
 """

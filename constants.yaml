@@ -3,6 +3,9 @@ paths:
     data_folder: data
     participant_folder_base: participant
     latex_tables_folder: latex_tables
+    overview_tables_folder: overview
+    group_tests_folder: group_tests
+    website_tests_folder: website_tests
   filenames:
     nettskjema: nettskjema21participants.xlsx
     nettskjema_questions: nettskjema_questions.txt
@@ -66,3 +69,5 @@ websites:
   - dagens
   - facebook
   - google
+random_state: 2025
+n_bootstraps: 10000

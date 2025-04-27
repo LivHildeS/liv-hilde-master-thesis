@@ -5,4 +5,11 @@ if __name__ == "__main__":
     nettskjema_df = read_nettskjema_data()
     experiments_df = read_participant_data()
     df = get_all_data()
-    write_all_latex_tables(df)
+    write_all_latex_tables(
+        df,
+        nettskjema_report=True,
+        shapiro_wilk=True,
+        mean_and_sd=True,
+        bootstrap=False,
+        friedman=True
+    )
