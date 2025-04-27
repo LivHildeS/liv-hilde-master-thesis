@@ -1,0 +1,40 @@
+\begin{table}[tb]
+    \centering
+    \begin{tabular}{|l|r|r|r|}
+        \hline
+        \textbf{Group comparison} & \textbf{Mean difference} & \textbf{Cohen's d} & \textbf{95\% Bootstrap CI} \\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Q3. Cookie questions score}} \\
+        \hline
+        Quite or very concerned about privacy & -0.03 & -0.06 & [-0.50, 0.43] \\
+        Understands cookie concent & 0.04 & 0.07 & [-0.41, 0.49] \\
+        Activly witholds consent & -0.07 & -0.14 & [-0.50, 0.36] \\
+        Have withdrawn consent & 0.07 & 0.14 & [-0.40, 0.55] \\
+        Aware of withdrawal ease & -0.16 & -0.32 & [-0.57, 0.27] \\
+        Age & 0.44 & 0.93 & \textbf{[0.04, 0.80]} \\
+        IT background & -0.16 & -0.31 & [-0.62, 0.35] \\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Total accepts on both devices}} \\
+        \hline
+        Quite or very concerned about privacy & -4.00 & -1.64 & \textbf{[-6.97, -1.13]} \\
+        Understands cookie concent & 2.33 & 0.82 & [-0.36, 5.14] \\
+        Activly witholds consent & -1.43 & -0.48 & [-3.71, 1.07] \\
+        Have withdrawn consent & -1.69 & -0.55 & [-4.00, 0.74] \\
+        Aware of withdrawal ease & 0.11 & 0.03 & [-2.53, 2.92] \\
+        Age & -1.71 & -0.58 & [-3.82, 0.29] \\
+        IT background & -0.77 & -0.25 & [-4.30, 2.01] \\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Average banner answer time on both devices}} \\
+        \hline
+        Quite or very concerned about privacy & 2.26 & 0.74 & \textbf{[0.48, 4.28]} \\
+        Understands cookie concent & -1.59 & -0.51 & [-3.91, 0.55] \\
+        Activly witholds consent & 2.99 & 1.05 & \textbf{[0.04, 6.32]} \\
+        Have withdrawn consent & 2.36 & 0.79 & [-0.39, 5.50] \\
+        Aware of withdrawal ease & 0.55 & 0.17 & [-2.05, 3.40] \\
+        Age & -0.06 & -0.02 & [-2.68, 3.06] \\
+        IT background & -0.91 & -0.28 & [-5.27, 2.43] \\
+        \hline
+    \end{tabular}
+    \caption{ \textbf{Bootstrap confidence intervals (CI) and statistics for the survey groups}. The CI's not containing 0 rejects the null hypothesis, and are marked in \textbf{bold}. The bootstrap used 10000 iterations. }
+    \label{tab:bootstrap_main}
+\end{table}

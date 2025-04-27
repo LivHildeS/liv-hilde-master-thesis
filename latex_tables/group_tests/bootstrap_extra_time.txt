@@ -1,0 +1,30 @@
+\begin{table}[tb]
+    \centering
+    \begin{tabular}{|l|r|r|r|}
+        \hline
+        \textbf{Group comparison} & \textbf{Mean difference} & \textbf{Cohen's d} & \textbf{95\% Bootstrap CI} \\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Average computer banner answer time}} \\
+        \hline
+        Quite or very concerned about privacy & 3.72 & 0.62 & \textbf{[0.40, 7.59]} \\
+        Understands cookie concent & -3.00 & -0.50 & [-7.39, 0.85] \\
+        Activly witholds consent & 4.89 & 0.85 & [-1.21, 11.83] \\
+        Have withdrawn consent & 3.08 & 0.50 & [-2.60, 9.75] \\
+        Aware of withdrawal ease & 1.60 & 0.26 & [-3.42, 7.20] \\
+        Age & -1.26 & -0.20 & [-6.14, 4.93] \\
+        IT background & -2.45 & -0.40 & [-10.87, 3.80] \\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Average phone banner answer time}} \\
+        \hline
+        Quite or very concerned about privacy & 0.80 & 0.36 & [-0.46, 2.19] \\
+        Understands cookie concent & -0.18 & -0.08 & [-2.12, 1.72] \\
+        Activly witholds consent & 1.10 & 0.50 & [-1.16, 3.44] \\
+        Have withdrawn consent & 1.64 & 0.77 & [-1.27, 4.45] \\
+        Aware of withdrawal ease & -0.51 & -0.22 & [-2.45, 1.78] \\
+        Age & 1.15 & 0.52 & [-0.68, 2.90] \\
+        IT background & 0.63 & 0.28 & [-0.68, 2.10] \\
+        \hline
+    \end{tabular}
+    \caption{ \textbf{Bootstrap confidence intervals (CI) for cookie banner response time on different devices}. The CI's not containing 0 rejects the null hypothesis, and are marked in \textbf{bold}. The bootstrap used 10000 iterations. }
+    \label{tab:bootstrap_extra_time}
+\end{table}
