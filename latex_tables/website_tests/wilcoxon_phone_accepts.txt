@@ -1,0 +1,22 @@
+\begin{table}[tb]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|r|r|r|}
+        \hline
+        \textbf{Website 1} & \textbf{Website 2} & \textbf{n} & \textbf{Statistic} & \textbf{p-value} \\
+        \hline
+        Facebook & Dnb & 2 & None & None \\
+        Facebook & Google & 1 & None & None \\
+        Facebook & Finn & 4 & 0.0 & 0.125000 \\
+        Facebook & Dagens & 9 & 0.0 & \textbf{0.003906} \\
+        Dnb & Google & 1 & None & None \\
+        Dnb & Finn & 4 & 2.5 & 0.625000 \\
+        Dnb & Dagens & 9 & 5.0 & \textbf{0.039062} \\
+        Google & Finn & 3 & 0.0 & 0.250000 \\
+        Google & Dagens & 8 & 0.0 & \textbf{0.007812} \\
+        Finn & Dagens & 11 & 18.0 & 0.226562 \\
+        \hline
+    \end{tabular}
+    \caption{ \textbf{Pairwise Wilcoxon tests on the consent acceptances on both phone.}  \textbf{n} marks the amount of observations with different responses for each pair of website, as the Wilcoxon test only uses this. The statistic shows bigger difference the closer the number is to 0. }
+    \label{tab:wilcoxon_phone_accepts}
+\end{table}

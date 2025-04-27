@@ -1,7 +1,7 @@
 import numpy as np
 
 from src.get_constants import get_constants
-from src.hypothesis_tests import (get_means_and_sd, run_bootstrap_test, run_cochrans_q_test, run_friedman_test,
+from src.hypothesis_tests import (get_means_and_sd, run_bootstrap_test, run_pairwise_wilcoxon_tests, run_friedman_test,
                                   run_group_test, run_grouped_shapiro_wilk_normality_test)
 from src.process_data import _quantisize_answers
 
@@ -301,6 +301,27 @@ def get_all_friedman_test_results(df):
     for test_variable in ["accepts", "time"]:
         for device in ["computer", "phone", "both"]:
             results = run_friedman_test(df, test_variable=test_variable, device=device)
+            all_results[test_variable][device] = results
+
+    return all_results
+
+
+def get_all_wilcoxon_test_results(df):
+    """
+    Runs Wilcoxon test with all testing configurations, meaning both the accepts and time as test variables,
+    and computer, phone and both as device.
+    Each Wilcoxon test runs all pairs of websites.
+
+    Args:
+        df (pd.Dataframe): All the data.
+
+    Returns:
+        dict: Dict of all the results.
+    """
+    all_results = {"accepts": {}, "time": {}}
+    for test_variable in ["accepts", "time"]:
+        for device in ["computer", "phone", "both"]:
+            results = run_pairwise_wilcoxon_tests(df, test_variable=test_variable, device=device)
             all_results[test_variable][device] = results
 
     return all_results

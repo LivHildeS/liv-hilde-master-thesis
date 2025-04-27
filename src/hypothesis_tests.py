@@ -333,21 +333,44 @@ def run_friedman_test(df, test_variable, device):
     }
 
 
-def run_pairwise_wilcoxon_tests(df):
+def run_pairwise_wilcoxon_tests(df, test_variable, device):
     """
     Runs Wilcoxon signed-rank tests for all pairs of websites with ordinal response values (0-2).
 
     Args:
         df (pd.DataFrame): DataFrame of ordinal data per website per participant.
+        test_variable (str): The variable to test, either "accepts" or "time".
+        device (str): The device to test, either "computer", "phone" or "both".
 
     Returns:
         List of dictionaries with test results for each pair of websites.
     """
+    test_variable_values = ["accepts", "time"]
+    if test_variable not in test_variable_values:
+        raise ValueError(f"Argument `test_variable` must be in {test_variable_values}. Was {test_variable}. ")
+
+    device_values = ["computer", "phone", "both"]
+    if device not in device_values:
+        raise ValueError(f"Argument `device` must be in {device_values}. Was {device}.")
+
+    if device == "both":
+        if test_variable == "accepts":
+            column_ending = "_accepts_int"
+        if test_variable == "time":
+            column_ending = "_average_time"
+        website_to_column_mapping = {website: f"{website}{column_ending}" for website in WEBSITES}
+    else:
+        if test_variable == "accepts":
+            column_ending = ".answer.int"
+        if test_variable == "time":
+            column_ending = ".time"
+        website_to_column_mapping = {website: f"{device}.{website}{column_ending}" for website in WEBSITES}
+
     results = []
 
     for site1, site2 in combinations(WEBSITES, 2):
-        col1 = f"{site1}_accepts_int"
-        col2 = f"{site2}_accepts_int"
+        col1 = website_to_column_mapping[site1]
+        col2 = website_to_column_mapping[site2]
 
         # Drop rows with equal values — wilcoxon test requires non-zero differences
         mask = df[col1] != df[col2]

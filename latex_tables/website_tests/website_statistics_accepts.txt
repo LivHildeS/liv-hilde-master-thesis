@@ -5,11 +5,11 @@
         \hline
         \textbf{Website} & \textbf{Computer} & \textbf{Phone} & \textbf{Total} \\
         \hline
-        Finn & 9 & 6 & 15 \\
-        Dnb & 4 & 4 & 8 \\
-        Dagens & 11 & 11 & 22 \\
         Facebook & 3 & 2 & 5 \\
+        Dnb & 4 & 4 & 8 \\
         Google & 6 & 3 & 9 \\
+        Finn & 9 & 6 & 15 \\
+        Dagens & 11 & 11 & 22 \\
         \hline
     \end{tabular}
     \caption{ \textbf{Total amount of cookie consent accepts} for the different websites on all devices. There were 21 number of participants. }

@@ -1,0 +1,22 @@
+\begin{table}[tb]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|r|r|r|}
+        \hline
+        \textbf{Website 1} & \textbf{Website 2} & \textbf{n} & \textbf{Statistic} & \textbf{p-value} \\
+        \hline
+        Facebook & Dnb & 18 & 84.0 & 0.947698 \\
+        Facebook & Google & 19 & 45.0 & \textbf{0.042478} \\
+        Facebook & Finn & 17 & 73.5 & 0.886706 \\
+        Facebook & Dagens & 19 & 0.0 & \textbf{0.000130} \\
+        Dnb & Google & 18 & 64.0 & 0.346748 \\
+        Dnb & Finn & 21 & 89.0 & 0.350527 \\
+        Dnb & Dagens & 21 & 2.5 & \textbf{0.000084} \\
+        Google & Finn & 19 & 59.0 & 0.144622 \\
+        Google & Dagens & 20 & 0.0 & \textbf{0.000088} \\
+        Finn & Dagens & 20 & 4.5 & \textbf{0.000174} \\
+        \hline
+    \end{tabular}
+    \caption{ \textbf{Pairwise Wilcoxon tests on the banner response time on both devices.}  \textbf{n} marks the amount of observations with different responses for each pair of website, as the Wilcoxon test only uses this. The statistic shows bigger difference the closer the number is to 0. }
+    \label{tab:wilcoxon_total_times}
+\end{table}

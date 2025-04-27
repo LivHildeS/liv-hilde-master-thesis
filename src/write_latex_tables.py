@@ -3,15 +3,19 @@ from pathlib import Path
 
 from src.generate_results import get_all_friedman_test_results, get_all_group_test_results, get_website_statistics
 from src.get_constants import get_constants
+from src.hypothesis_tests import run_pairwise_wilcoxon_tests
 from src.latex_table_captions import (BOOTSTRAP_EXTRA_ACCEPTS_CAPTION, BOOTSTRAP_EXTRA_TIME_CAPTION,
                                       BOOTSTRAP_MAIN_CAPTION, FRIEDMAN_CAPTION, MEAN_AND_SD_EXTRA_ACCEPTS_CAPTION,
                                       MEAN_AND_SD_EXTRA_TIME_CAPTION, MEAN_AND_SD_MAIN_CAPTION,
                                       NETTSKJEMA_REPORT_CAPTION, SHAPIRO_WILK_EXTRA_ACCEPTS_CAPTION,
                                       SHAPIRO_WILK_EXTRA_TIME_CAPTION, SHAPIRO_WILK_MAIN_CAPTION,
-                                      WEBSITE_STATISTICS_ACCEPTS_CAPTION, WEBSITE_STATISTICS_TIME_CAPTION)
+                                      WEBSITE_STATISTICS_ACCEPTS_CAPTION, WEBSITE_STATISTICS_TIME_CAPTION,
+                                      WILCOXON_COMPUTER_ACCEPTS_CAPTION, WILCOXON_COMPUTER_TIME_CAPTION,
+                                      WILCOXON_PHONE_ACCEPTS_CAPTION, WILCOXON_PHONE_TIME_CAPTION,
+                                      WILCOXON_TOTAL_ACCEPTS_CAPTION, WILCOXON_TOTAL_TIME_CAPTION)
 from src.make_latex_tables import (make_bootstrap_latex_table, make_friedman_latex_table, make_mean_sd_latex_table,
                                    make_nettskjema_report_latex, make_shapiro_latex_table,
-                                   make_website_statistics_latex_table)
+                                   make_website_statistics_latex_table, make_wilcoxon_latex_table)
 
 CONSTANTS = get_constants()
 GROUP_TESTS_FOLDER = CONSTANTS["paths"]["folders"]["group_tests_folder"]
@@ -341,8 +345,158 @@ def write_friedman(df):
     _write_latex_table_to_file(text=friedman_table, filename=filename, folder=folder)
 
 
+def write_wilcoxon_total_accepts(df):
+    """
+    Writes a Wilcoxon table for each pair of website looking at number of accepts on both devices.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    make_wilcoxon_latex_table
+    caption = WILCOXON_TOTAL_ACCEPTS_CAPTION.replace("\n", " ")
+    label = "tab:wilcoxon_total_accepts"
+    filename = "wilcoxon_total_accepts.txt"
+    folder = WEBISTE_TESTS_FOLDER
+    results = run_pairwise_wilcoxon_tests(
+        df,
+        test_variable="accepts",
+        device="both"
+    )
+    wilcoxon_table = make_wilcoxon_latex_table(
+        results,
+        caption=caption,
+        label=label,
+    )
+    _write_latex_table_to_file(text=wilcoxon_table, filename=filename, folder=folder)
+
+
+def write_wilcoxon_computer_accepts(df):
+    """
+    Writes a Wilcoxon table for each pair of website looking at number of accepts on computer.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    make_wilcoxon_latex_table
+    caption = WILCOXON_COMPUTER_ACCEPTS_CAPTION.replace("\n", " ")
+    label = "tab:wilcoxon_computer_accepts"
+    filename = "wilcoxon_computer_accepts.txt"
+    folder = WEBISTE_TESTS_FOLDER
+    results = run_pairwise_wilcoxon_tests(
+        df,
+        test_variable="accepts",
+        device="computer"
+    )
+    wilcoxon_table = make_wilcoxon_latex_table(
+        results,
+        caption=caption,
+        label=label,
+    )
+    _write_latex_table_to_file(text=wilcoxon_table, filename=filename, folder=folder)
+
+
+def write_wilcoxon_phone_accepts(df):
+    """
+    Writes a Wilcoxon table for each pair of website looking at number of accepts on phone.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    make_wilcoxon_latex_table
+    caption = WILCOXON_PHONE_ACCEPTS_CAPTION.replace("\n", " ")
+    label = "tab:wilcoxon_phone_accepts"
+    filename = "wilcoxon_phone_accepts.txt"
+    folder = WEBISTE_TESTS_FOLDER
+    results = run_pairwise_wilcoxon_tests(
+        df,
+        test_variable="accepts",
+        device="phone"
+    )
+    wilcoxon_table = make_wilcoxon_latex_table(
+        results,
+        caption=caption,
+        label=label,
+    )
+    _write_latex_table_to_file(text=wilcoxon_table, filename=filename, folder=folder)
+
+
+def write_wilcoxon_total_time(df):
+    """
+    Writes a Wilcoxon table for each pair of website looking at the time spent on both devices.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    make_wilcoxon_latex_table
+    caption = WILCOXON_TOTAL_TIME_CAPTION.replace("\n", " ")
+    label = "tab:wilcoxon_total_times"
+    filename = "wilcoxon_total_time.txt"
+    folder = WEBISTE_TESTS_FOLDER
+    results = run_pairwise_wilcoxon_tests(
+        df,
+        test_variable="time",
+        device="both"
+    )
+    wilcoxon_table = make_wilcoxon_latex_table(
+        results,
+        caption=caption,
+        label=label,
+    )
+    _write_latex_table_to_file(text=wilcoxon_table, filename=filename, folder=folder)
+
+
+def write_wilcoxon_computer_time(df):
+    """
+    Writes a Wilcoxon table for each pair of website looking at the time spent on computer.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    make_wilcoxon_latex_table
+    caption = WILCOXON_COMPUTER_TIME_CAPTION.replace("\n", " ")
+    label = "tab:wilcoxon_computer_times"
+    filename = "wilcoxon_computer_time.txt"
+    folder = WEBISTE_TESTS_FOLDER
+    results = run_pairwise_wilcoxon_tests(
+        df,
+        test_variable="time",
+        device="computer"
+    )
+    wilcoxon_table = make_wilcoxon_latex_table(
+        results,
+        caption=caption,
+        label=label,
+    )
+    _write_latex_table_to_file(text=wilcoxon_table, filename=filename, folder=folder)
+
+
+def write_wilcoxon_phone_time(df):
+    """
+    Writes a Wilcoxon table for each pair of website looking at the time spent on phone.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    make_wilcoxon_latex_table
+    caption = WILCOXON_PHONE_TIME_CAPTION.replace("\n", " ")
+    label = "tab:wilcoxon_phone_times"
+    filename = "wilcoxon_phone_time.txt"
+    folder = WEBISTE_TESTS_FOLDER
+    results = run_pairwise_wilcoxon_tests(
+        df,
+        test_variable="time",
+        device="phone"
+    )
+    wilcoxon_table = make_wilcoxon_latex_table(
+        results,
+        caption=caption,
+        label=label,
+    )
+    _write_latex_table_to_file(text=wilcoxon_table, filename=filename, folder=folder)
+
+
 def write_all_latex_tables(df, nettskjema_report=False, shapiro_wilk=False, mean_and_sd=False, bootstrap=False,
-                           website_statistics=False, friedman=False):
+                           website_statistics=False, friedman=False, wilcoxon=False):
     """
     Writes the LaTeX tables, depending on the arguments passed. Calls all of the other functions to do so.
 
@@ -354,6 +508,7 @@ def write_all_latex_tables(df, nettskjema_report=False, shapiro_wilk=False, mean
         bootstrap (bool): Whether or not to print the three bootstrap tables.
         website_statistics (bool): Whether or not to print the two website statistic tables.
         friedman (bool): Whether or not to print the friedman table.
+        wilcoxon (bool): Whether or not to print the six Wilcoxon tables.
     """
     if nettskjema_report:
         write_nettskjema_report(df)
@@ -374,3 +529,10 @@ def write_all_latex_tables(df, nettskjema_report=False, shapiro_wilk=False, mean
         write_website_statistics_time(df)
     if friedman:
         write_friedman(df)
+    if wilcoxon:
+        write_wilcoxon_total_accepts(df)
+        write_wilcoxon_computer_accepts(df)
+        write_wilcoxon_phone_accepts(df)
+        write_wilcoxon_total_time(df)
+        write_wilcoxon_computer_time(df)
+        write_wilcoxon_phone_time(df)

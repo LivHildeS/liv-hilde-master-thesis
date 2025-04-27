@@ -71,7 +71,7 @@ WEBSITE_STATISTICS_ACCEPTS_CAPTION = f"""
 """
 
 WEBSITE_STATISTICS_TIME_CAPTION = """
-\\textbf{Average time in seconds spent on cookie banner} for the different websites on all devices. The paranthesis
+\\textbf{Average time in seconds spent on cookie banners} for the different websites on all devices. The paranthesis
 contains the standard deviations.
 """
 
@@ -80,3 +80,32 @@ FRIEDMAN_CAPTION = """
 All of the tests have very low p-values, indicating that the null hypothesis stating that the websites have the
 same expected cookie consent acceptance rate and cookie banner answer time can safely be rejected.
 """
+
+WILCOXON_GENERIC_CAPTION = """
+\\textbf{n} marks the amount of observations with different responses for each pair of website, as the Wilcoxon test
+only uses this. The statistic shows bigger difference the closer the number is to 0.
+"""
+
+WILCOXON_TOTAL_ACCEPTS_CAPTION = """
+\\textbf{Pairwise Wilcoxon tests on the consent acceptances on both devices.}
+""" + WILCOXON_GENERIC_CAPTION
+
+WILCOXON_COMPUTER_ACCEPTS_CAPTION = """
+\\textbf{Pairwise Wilcoxon tests on the consent acceptances on computer.}
+""" + WILCOXON_GENERIC_CAPTION
+
+WILCOXON_PHONE_ACCEPTS_CAPTION = """
+\\textbf{Pairwise Wilcoxon tests on the consent acceptances on both phone.}
+""" + WILCOXON_GENERIC_CAPTION
+
+WILCOXON_TOTAL_TIME_CAPTION = """
+\\textbf{Pairwise Wilcoxon tests on the banner response time on both devices.}
+""" + WILCOXON_GENERIC_CAPTION
+
+WILCOXON_COMPUTER_TIME_CAPTION = """
+\\textbf{Pairwise Wilcoxon tests on the banner response time on computer.}
+""" + WILCOXON_GENERIC_CAPTION
+
+WILCOXON_PHONE_TIME_CAPTION = """
+\\textbf{Pairwise Wilcoxon tests on the banner response time on phone.}
+""" + WILCOXON_GENERIC_CAPTION

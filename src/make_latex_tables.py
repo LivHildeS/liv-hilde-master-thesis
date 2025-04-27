@@ -461,3 +461,52 @@ def make_friedman_latex_table(results_dict, caption="", label=""):
     lines.append("\\end{table}")
 
     return "\n".join(lines)
+
+
+def make_wilcoxon_latex_table(wilcoxon_results, caption="", label=""):
+    """
+    Generate a LaTeX table for Wilcoxon pairwise test results.
+
+    Args:
+        wilcoxon_results (list of dicts): Each dict contains 'pair', 'n', 'statistic', 'p_value'.
+        caption (str): Caption text for the LaTeX table.
+        label (str): Label for the LaTeX table.
+
+    Returns:
+        str: A LaTeX-formatted table string.
+    """
+    lines = []
+    lines.append("\\begin{table}[tb]")
+    lines.append("    \\centering")
+    lines.append("    \\footnotesize")
+    lines.append("    \\begin{tabular}{|l|l|r|r|r|}")
+    lines.append("        \\hline")
+    lines.append(
+        "        \\textbf{Website 1} & \\textbf{Website 2} & \\textbf{n} & \\textbf{Statistic} & \\textbf{p-value} \\\\"
+    )
+    lines.append("        \\hline")
+
+    for res in wilcoxon_results:
+        site1, site2 = res["pair"]
+        n = res["n"]
+        stat = res["statistic"]
+        p = res["p_value"]
+
+        if isinstance(p, float):
+            p_fmt = f"\\textbf{{{p:.6f}}}" if p < 0.05 else f"{p:.6f}"
+        else:
+            p_fmt = str(p)
+
+        stat_fmt = f"{stat:.1f}" if isinstance(stat, float) else str(stat)
+
+        lines.append(f"        {site1.capitalize()} & {site2.capitalize()} & {n} & {stat_fmt} & {p_fmt} \\\\")
+
+    lines.append("        \\hline")
+    lines.append("    \\end{tabular}")
+    if caption:
+        lines.append(f"    \\caption{{{caption}}}")
+    if label:
+        lines.append(f"    \\label{{{label}}}")
+    lines.append("\\end{table}")
+
+    return "\n".join(lines)

@@ -13,4 +13,5 @@ if __name__ == "__main__":
         bootstrap=False,
         website_statistics=True,
         friedman=False,
+        wilcoxon=True,
     )

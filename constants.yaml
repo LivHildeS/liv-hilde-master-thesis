@@ -64,10 +64,10 @@ devices:
   - phone
   - computer
 websites:
-  - finn
-  - dnb
-  - dagens
   - facebook
+  - dnb
   - google
+  - finn
+  - dagens
 random_state: 2025
 n_bootstraps: 10000
