@@ -1,6 +1,7 @@
 import re
 
 import numpy as np
+import pandas as pd
 
 
 def _get_nettskjema_answer_options():
@@ -502,6 +503,84 @@ def make_wilcoxon_latex_table(wilcoxon_results, caption="", label=""):
         lines.append(f"        {site1.capitalize()} & {site2.capitalize()} & {n} & {stat_fmt} & {p_fmt} \\\\")
 
     lines.append("        \\hline")
+    lines.append("    \\end{tabular}")
+    if caption:
+        lines.append(f"    \\caption{{{caption}}}")
+    if label:
+        lines.append(f"    \\label{{{label}}}")
+    lines.append("\\end{table}")
+
+    return "\n".join(lines)
+
+
+def make_withdrawal_statistics_latex_table(results_dict, caption="", label=""):
+    """
+    Generate a LaTeX table summarizing answer times, withdrawal times,
+    and Mann–Whitney U test results per website and device.
+
+    Args:
+        results_dict (dict): Nested dictionary with websites -> devices -> stats.
+        caption (str): Caption for the table.
+        label (str): Label for the table.
+
+    Returns:
+        str: LaTeX table string.
+    """
+    lines = []
+    lines.append("\\begin{table}[tb]")
+    lines.append("    \\centering")
+    lines.append("    \\footnotesize")
+    lines.append("    \\begin{tabular}{|l|l|r|r|r|r|r|r|}")
+    lines.append("        \\hline")
+    header = "\\textbf{Website} & \\textbf{Device} & \\makecell{\\textbf{Answer} \\\\ (mean)} & "
+    header += "\\makecell{\\textbf{Answer} \\\\ (no withdraws)} & \\makecell{\\textbf{Withdraw} \\\\ (mean)} & "
+    header += "\\textbf{ n} & \\textbf{U-value} & \\textbf{p-value}\\\\"
+    lines.append(header)
+    lines.append("        \\hline")
+
+    device_mapping = {
+        "computer": "Computer",
+        "phone": "Phone",
+        "both": "Both"
+    }
+
+    for website, device_dict in results_dict.items():
+        for device in ["computer", "phone", "both"]:
+            data = device_dict.get(device, {})
+
+            avg_answer_all = data.get("avg_answer_all", "-")
+            avg_answer_no_withdraw = data.get("avg_answer_no_withdraw", "-")
+            avg_withdraw = data.get("avg_withdraw", "-")
+            n_withdraw = data.get("n_withdraw", "-")
+
+            stat = data.get("stat", "-")
+            p_value = data.get("p_value", "-")
+
+            def fmt(x):
+                if isinstance(x, (float, int)):
+                    if pd.isna(x):
+                        return "-"
+                    return f"{x:.2f}"
+                if x is None:
+                    return "-"
+                return str(x)
+
+            def fmt_p(x):
+                if isinstance(x, (float, int)):
+                    return f"\\textbf{{{x:.4f}}}" if x < 0.05 else f"{x:.4f}"
+                if x is None:
+                    return "-"
+                return str(x)
+
+            line = (
+                f"        {website.capitalize()} & {device_mapping[device]} & {fmt(avg_answer_all)} & "
+                f"{fmt(avg_answer_no_withdraw)} & {fmt(avg_withdraw)} & {n_withdraw} & "
+                f"{fmt(stat)} & {fmt_p(p_value)} \\\\"
+            )
+            lines.append(line)
+
+        lines.append("        \\hline")
+
     lines.append("    \\end{tabular}")
     if caption:
         lines.append(f"    \\caption{{{caption}}}")

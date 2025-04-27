@@ -15,6 +15,7 @@ if __name__ == "__main__":
         website_statistics=True,
         friedman=False,
         wilcoxon=False,
+        withdrawal=True,
     )
-    plot_response_times_per_device(df, "computer")
-    plot_response_times_per_device(df, "phone")
+    # plot_response_times_per_device(df, "computer")
+    # plot_response_times_per_device(df, "phone")

@@ -1,8 +1,9 @@
 import numpy as np
+import pandas as pd
 
 from src.get_constants import get_constants
-from src.hypothesis_tests import (get_means_and_sd, run_bootstrap_test, run_pairwise_wilcoxon_tests, run_friedman_test,
-                                  run_group_test, run_grouped_shapiro_wilk_normality_test)
+from src.hypothesis_tests import (get_means_and_sd, run_bootstrap_test, run_friedman_test, run_group_test,
+                                  run_grouped_shapiro_wilk_normality_test, run_pairwise_wilcoxon_tests)
 from src.process_data import _quantisize_answers
 
 CONSTANTS = get_constants()
@@ -325,3 +326,128 @@ def get_all_wilcoxon_test_results(df):
             all_results[test_variable][device] = results
 
     return all_results
+
+
+def get_withdrawal_and_answer_times(df, min_withdrawals=3, test_type="mannwhitney"):
+    """
+    Computes average cookie banner response times, withdrawal times,
+    and runs hypothesis tests, including an 'all websites' aggregation.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing response and withdrawal times.
+        min_withdrawals (int): Minimum number of withdrawals to run hypothesis test.
+        test_type (str): Which test to use ("mannwhitney", "t-test", etc.).
+
+    Returns:
+        dict: Nested dictionary with statistics for each website and device, plus 'all'.
+    """
+    result = {}
+    aggregated = {"computer": [], "phone": [], "both": []}
+
+    for website in WEBSITES:
+        result[website] = {}
+
+        for device in ["computer", "phone", "both"]:
+            if device == "both":
+                answer_columns = [f"computer.{website}.time", f"phone.{website}.time"]
+                withdraw_columns = [f"Withdraw.computer.{website}.time", f"Withdraw.phone.{website}.time"]
+
+                answer_columns = [col for col in answer_columns if col in df.columns]
+                withdraw_columns = [col for col in withdraw_columns if col in df.columns]
+
+                answer_times = df[answer_columns].sum(axis=1, min_count=1)
+                withdraw_times = df[withdraw_columns].sum(
+                    axis=1, min_count=1) if withdraw_columns else pd.Series(dtype=float)
+            else:
+                answer_column = f"{device}.{website}.time"
+                withdraw_column = f"Withdraw.{device}.{website}.time"
+
+                answer_times = df[answer_column]
+                withdraw_times = df[withdraw_column] if withdraw_column in df.columns else pd.Series(dtype=float)
+
+            withdraw_times = withdraw_times.reindex(answer_times.index)
+
+            avg_answer_all = answer_times.mean()
+            avg_answer_no_withdraw = answer_times[withdraw_times.isna()].mean()
+            avg_withdraw = withdraw_times.mean()
+            n_withdraw = withdraw_times.notna().sum()
+
+            # Hypothesis test if enough withdrawals
+            if n_withdraw >= min_withdrawals:
+                group1 = withdraw_times.dropna()
+                group2 = answer_times[withdraw_times.isna()]
+                temp_df1 = pd.DataFrame({"value": group1})
+                temp_df2 = pd.DataFrame({"value": group2})
+                test_result = run_group_test(
+                    temp_df1,
+                    temp_df2,
+                    value_column="value",
+                    test_type=test_type,
+                )
+                stat = test_result.get("stat")
+                p_value = test_result.get("p_value")
+            else:
+                stat = None
+                p_value = None
+
+            result[website][device] = {
+                "avg_answer_all": avg_answer_all,
+                "avg_answer_no_withdraw": avg_answer_no_withdraw,
+                "avg_withdraw": avg_withdraw,
+                "n_withdraw": n_withdraw,
+                "stat": stat,
+                "p_value": p_value,
+            }
+
+            aggregated[device].append({
+                "answer_times": answer_times,
+                "withdraw_times": withdraw_times
+            })
+
+    # Now compute aggregated 'all websites'
+    result["all"] = {}
+    for device in ["computer", "phone", "both"]:
+        if not aggregated[device]:
+            continue
+
+        answer_times_list = [entry["answer_times"] for entry in aggregated[device]]
+        withdraw_times_list = [entry["withdraw_times"] for entry in aggregated[device]]
+
+        combined_answer_times = pd.concat(answer_times_list, axis=1).sum(axis=1, min_count=1)
+        combined_withdraw_times = pd.concat(withdraw_times_list, axis=1).sum(axis=1, min_count=1)
+
+        combined_withdraw_times = combined_withdraw_times.reindex(combined_answer_times.index)
+
+        avg_answer_all = combined_answer_times.mean()
+        avg_answer_no_withdraw = combined_answer_times[combined_withdraw_times.isna()].mean()
+        avg_withdraw = combined_withdraw_times.mean()
+        n_withdraw = combined_withdraw_times.notna().sum()
+
+        # Hypothesis test for "all"
+        if n_withdraw >= min_withdrawals:
+            group1 = combined_withdraw_times.dropna()
+            group2 = combined_answer_times[combined_withdraw_times.isna()]
+            temp_df1 = pd.DataFrame({"value": group1})
+            temp_df2 = pd.DataFrame({"value": group2})
+            test_result = run_group_test(
+                temp_df1,
+                temp_df2,
+                value_column="value",
+                test_type=test_type,
+            )
+            stat = test_result.get("stat")
+            p_value = test_result.get("p_value")
+        else:
+            stat = None
+            p_value = None
+
+        result["all"][device] = {
+            "avg_answer_all": avg_answer_all,
+            "avg_answer_no_withdraw": avg_answer_no_withdraw,
+            "avg_withdraw": avg_withdraw,
+            "n_withdraw": n_withdraw,
+            "stat": stat,
+            "p_value": p_value,
+        }
+
+    return result
