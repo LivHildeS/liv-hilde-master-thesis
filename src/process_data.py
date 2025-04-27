@@ -74,7 +74,7 @@ def process_participant_data():
         all_data.append(pd.json_normalize(data))
     df = pd.concat(all_data, ignore_index=True)
 
-    # Now process the data further. Quantify the number of accepts per websites.
+    # Now process the data further. Quantify the number of accepts per websites and the time spent answering banners.
     df["computer_accepts"] = 0
     df["phone_accepts"] = 0
     df["computer_average_time"] = 0
