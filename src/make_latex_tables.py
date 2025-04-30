@@ -126,7 +126,7 @@ def make_nettskjema_report_latex(df, caption="", label=""):
     columns = list(all_nettskjema_answer_options.keys())
 
     lines = []
-    lines.append("\\begin{table}[tb]")
+    lines.append("\\begin{table}[htbp]")
     lines.append("    \\centering")
     lines.append("    \\footnotesize")
     lines.append("    \\begin{tabular}{|p{12.5cm}|r|}")
@@ -173,7 +173,7 @@ def make_shapiro_latex_table(results_dict, test_variables=None, groups=None, cap
     test_varible_mapping = _get_test_varible_mapping()
 
     lines = []
-    lines.append("\\begin{table}[tb]")
+    lines.append("\\begin{table}[htbp]")
     lines.append("    \\centering")
     lines.append("    \\begin{tabular}{|l|r|r|r|}")
     lines.append("        \\hline")
@@ -241,7 +241,7 @@ def make_mean_sd_latex_table(results_dict, test_variables=None, groups=None, cap
     test_variable_mapping = _get_test_varible_mapping()
 
     lines = []
-    lines.append("\\begin{table}[tb]")
+    lines.append("\\begin{table}[htbp]")
     lines.append("    \\centering")
     lines.append("    \\begin{tabular}{|l|r|r|r|}")
     lines.append("        \\hline")
@@ -301,7 +301,7 @@ def make_bootstrap_latex_table(results_dict, test_variables=None, groups=None, c
     test_variable_mapping = _get_test_varible_mapping()
 
     lines = []
-    lines.append("\\begin{table}[tb]")
+    lines.append("\\begin{table}[htbp]")
     lines.append("    \\centering")
     lines.append("    \\begin{tabular}{|l|r|r|r|}")
     lines.append("        \\hline")
@@ -366,7 +366,7 @@ def make_website_statistics_latex_table(website_stats, test_variable="accepts", 
     stat_suffix = "accepts" if test_variable == "accepts" else "time"
 
     lines = []
-    lines.append("\\begin{table}[tb]")
+    lines.append("\\begin{table}[htbp]")
     lines.append("    \\centering")
     lines.append("    \\footnotesize")
     lines.append("    \\begin{tabular}{|l|r|r|r|}")
@@ -414,7 +414,7 @@ def make_friedman_latex_table(results_dict, caption="", label=""):
         str: A LaTeX-formatted table string.
     """
     lines = []
-    lines.append("\\begin{table}[tb]")
+    lines.append("\\begin{table}[htbp]")
     lines.append("    \\centering")
     lines.append("    \\begin{tabular}{|l|l|r|r|}")
     lines.append("        \\hline")
@@ -477,7 +477,7 @@ def make_wilcoxon_latex_table(wilcoxon_results, caption="", label=""):
         str: A LaTeX-formatted table string.
     """
     lines = []
-    lines.append("\\begin{table}[tb]")
+    lines.append("\\begin{table}[htbp]")
     lines.append("    \\centering")
     lines.append("    \\footnotesize")
     lines.append("    \\begin{tabular}{|l|l|r|r|r|}")
@@ -527,7 +527,7 @@ def make_withdrawal_statistics_latex_table(results_dict, caption="", label=""):
         str: LaTeX table string.
     """
     lines = []
-    lines.append("\\begin{table}[tb]")
+    lines.append("\\begin{table}[htbp]")
     lines.append("    \\centering")
     lines.append("    \\footnotesize")
     lines.append("    \\begin{tabular}{|l|l|r|r|r|r|r|r|}")
