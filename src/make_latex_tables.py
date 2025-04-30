@@ -73,13 +73,13 @@ def _get_nettskjema_question_mapping():
         dict: The question mapping.
     """
     question_mapping = {
-        "privacy_concern": "Q1. Privacy is about your right, as far as possible, to decide for yourself over"
+        "privacy_concern": "Q1. Privacy is about your right, as far as possible, to decide for yourself over "
         "your own personal data. To what extent are you concerned about privacy?",
         "knows_cookies": "Q2. Do you know what cookies are?",
-        "understand_cookie_consent": "Q4. Most websites ask for consent to collect information about you through"
-        "cookies. To what extent would you say you understand what kind of information"
+        "understand_cookie_consent": "Q4. Most websites ask for consent to collect information about you through "
+        "cookies. To what extent would you say you understand what kind of information "
         "different websites request permission to collect?",
-        "cookie_sharing_feeling": "Q6. Which statement best describes how you feel about sharing your information"
+        "cookie_sharing_feeling": "Q6. Which statement best describes how you feel about sharing your information "
         "through cookies?",
         "cookie_banner_response": "Q7. How do you usually respond to cookie consent banners?",
         "have_withdrawn_consent": "Q8. Have you ever withdrawn your consent to cookies, after first having given it?",
@@ -138,7 +138,7 @@ def make_nettskjema_report_latex(df, caption="", label=""):
         # Add a bold row with the question name above the responses
         question = nettskjema_question_mapping[column]
         question_formatted = re.sub(r"(Q\d{1,2}\.)", r"\\textbf{\1}", question)
-        lines.append(f"        {question_formatted} & \\\\[0.2em]")
+        lines.append(f"        {question_formatted} & ~ \\\\[0.2em]")
 
         counts = df[column].value_counts().reindex(all_nettskjema_answer_options[column], fill_value=0)
         for response, count in counts.items():
@@ -516,7 +516,7 @@ def make_wilcoxon_latex_table(wilcoxon_results, caption="", label=""):
 def make_withdrawal_statistics_latex_table(results_dict, caption="", label=""):
     """
     Generate a LaTeX table summarizing answer times, withdrawal times,
-    and Mann–Whitney U test results per website and device.
+    and Mann-Whitney U test results per website and device.
 
     Args:
         results_dict (dict): Nested dictionary with websites -> devices -> stats.
