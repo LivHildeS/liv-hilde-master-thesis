@@ -98,7 +98,7 @@ def _get_test_varible_mapping():
         dict: The test variable (column name) to description mapping.
     """
     test_variable_mapping = {
-        "cookie_questions_score": "Q3. Cookie questions score",
+        "cookie_questions_score": "Cookie questions score",
         "computer_accepts": "Total accepts on computer",
         "phone_accepts": "Total accepts on phone",
         "total_accepts": "Total accepts on both devices",
@@ -253,11 +253,16 @@ def make_mean_sd_latex_table(results_dict, test_variables=None, groups=None, cap
             continue
 
         test_variable_description = test_variable_mapping[test_variable]
-        lines.append(f"        \\multicolumn{{4}}{{|l|}}{{\\textbf{{{test_variable_description}}}}} \\\\")
+        full_dataset_results = results_dict[test_variable]["Full Dataset"]
+        line = f"\\textbf{{{test_variable_description}}} &"
+        line += f"{full_dataset_results.get('group_sizes', [0])[0]} & "
+        line += f"{full_dataset_results.get('group_means', [0])[0]:.2f} & "
+        line += f"{full_dataset_results.get('group_sds', [0])[0]:.2f} \\\\"
+        lines.append(line)
         lines.append("        \\hline")
 
         for group_name, result in group_dict.items():
-            if groups and group_name not in groups:
+            if (groups and group_name not in groups) or group_name == "Full Dataset":
                 continue
 
             group_sizes = result.get("group_sizes", [None, None])
@@ -479,7 +484,7 @@ def make_wilcoxon_latex_table(wilcoxon_results, caption="", label=""):
     lines = []
     lines.append("\\begin{table}[htbp]")
     lines.append("    \\centering")
-    lines.append("    \\footnotesize")
+    lines.append("    \\footnotesize")  # TODO: Is this needed here?
     lines.append("    \\begin{tabular}{|l|l|r|r|r|}")
     lines.append("        \\hline")
     lines.append(

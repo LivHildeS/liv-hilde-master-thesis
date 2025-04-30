@@ -8,20 +8,19 @@ NETTSKJEMA_REPORT_CAPTION = """
 """
 
 SHAPIRO_WILK_GENERIC_CAPTION = """
-The \\textbf{W} is the Shapiro-Wilk test statistic, highlighted in \\textbf{bold} if it is greater than 0.9.
+The  Shapiro-Wilk test statistic \\textbf{W}, highlighted in \\textbf{bold} if it is greater than 0.9.
 The p-value is highlighted in \\textbf{bold} if it is less than 0.05.
 """
 
 SHAPIRO_WILK_MAIN_CAPTION = """
-\\textbf{The group test data is \\textit{not} approximately normal.} For most groups, The Shapiro Wilk test show a low
-\\textbf{W} (< 0.9), and the null hypothesis of normality is rejected (p-value < 0.05). The data is split based on
-survey responses, and three different variables are investigated.
+\\textbf{The group test data is \\textit{not} approximately normal.} The table shows results from Shapiro-Wilk normality
+tests for the subgroups and outcome variables inspected. The null hypothesis of normality is often clearly rejected.
 """ + SHAPIRO_WILK_GENERIC_CAPTION
 
 SHAPIRO_WILK_EXTRA_ACCEPTS_CAPTION = """
 \\textbf{Shapiro-Wilk normality statistics for the number of cookie banner accepts on different devices.}
 The Shapiro-Wilk \\textbf{W} statistic is never above 0.9 when the data is grouped based on survey questions and the
-number of acceptances on computer and phone,  indicating that the data is not approximately normal.
+number of acceptances on computer and phone, indicating that the data is not approximately normal.
 Additionally, the p-value is less than 0.05 for most groups, rejecting the null hypothesis of normality.
 """ + SHAPIRO_WILK_GENERIC_CAPTION
 
@@ -34,17 +33,19 @@ small number of groups overall.
 """ + SHAPIRO_WILK_GENERIC_CAPTION
 
 MEAN_AND_SD_MAIN_CAPTION = """
-\\textbf{Means and standard deviations} for the subgroups investigated and variables investigated. The means and
-standard deviations are calculated on the cookie question score, the total amount of cookie consent accepts and the
-average time spent answering the cookie consent banners. The groups are made from the survey question responses.
+\\textbf{Means and standard deviations} for the subgroups and outcome variables investigated. The sub-headers marks
+which outcome variable that the statistics are calculated with, and the values immediately following them on the right
+corresponds to the full dataset.
 """
 
 MEAN_AND_SD_EXTRA_ACCEPTS_CAPTION = """
-\\textbf{Means and standard deviations of the number of accepts on different devices}.
+\\textbf{Means and standard deviations of the number of accepts on different devices}. The numbers on the same
+line as the subheaders with the outcome variables corresponds to the full dataset.
 """
 
 MEAN_AND_SD_EXTRA_TIME_CAPTION = """
-\\textbf{Means and standard deviations of cookie banner response time on different devices}.
+\\textbf{Means and standard deviations of cookie banner response time on different devices}. The numbers on the same
+line as the subheaders with the outcome variables corresponds to the full dataset.
 """
 
 BOOTSTRAP_MAIN_CAPTION = f"""
