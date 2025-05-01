@@ -2,6 +2,10 @@ import re
 
 import numpy as np
 import pandas as pd
+from src.get_constants import get_constants
+
+CONSTANTS = get_constants()
+WEBSITES = CONSTANTS["websites"]
 
 
 def _get_nettskjema_answer_options():
@@ -254,7 +258,7 @@ def make_mean_sd_latex_table(results_dict, test_variables=None, groups=None, cap
 
         test_variable_description = test_variable_mapping[test_variable]
         full_dataset_results = results_dict[test_variable]["Full Dataset"]
-        line = f"\\textbf{{{test_variable_description}}} &"
+        line = f"        \\textbf{{{test_variable_description}}} &"
         line += f"{full_dataset_results.get('group_sizes', [0])[0]} & "
         line += f"{full_dataset_results.get('group_means', [0])[0]:.2f} & "
         line += f"{full_dataset_results.get('group_sds', [0])[0]:.2f} \\\\"
@@ -310,8 +314,8 @@ def make_bootstrap_latex_table(results_dict, test_variables=None, groups=None, c
     lines.append("    \\centering")
     lines.append("    \\begin{tabular}{|l|r|r|r|}")
     lines.append("        \\hline")
-    header = "        \\textbf{Group comparison} & \\textbf{Mean difference} & \\textbf{Cohen's d} "
-    header += "& \\textbf{95\\% Bootstrap CI} \\\\"
+    header = "        \\textbf{Group comparison} & \\textbf{Mean diff} & \\textbf{Cohen's d} "
+    header += "& \\textbf{95\\% CI} \\\\"
     lines.append(header)
     lines.append("        \\hline")
 
@@ -373,7 +377,6 @@ def make_website_statistics_latex_table(website_stats, test_variable="accepts", 
     lines = []
     lines.append("\\begin{table}[htbp]")
     lines.append("    \\centering")
-    lines.append("    \\footnotesize")
     lines.append("    \\begin{tabular}{|l|r|r|r|}")
     lines.append("        \\hline")
     if test_variable == "accepts":
@@ -484,7 +487,6 @@ def make_wilcoxon_latex_table(wilcoxon_results, caption="", label=""):
     lines = []
     lines.append("\\begin{table}[htbp]")
     lines.append("    \\centering")
-    lines.append("    \\footnotesize")  # TODO: Is this needed here?
     lines.append("    \\begin{tabular}{|l|l|r|r|r|}")
     lines.append("        \\hline")
     lines.append(
@@ -518,70 +520,54 @@ def make_wilcoxon_latex_table(wilcoxon_results, caption="", label=""):
     return "\n".join(lines)
 
 
-def make_withdrawal_statistics_latex_table(results_dict, caption="", label=""):
+def make_withdrawal_latex_table(results_dict, caption="", label=""):
     """
-    Generate a LaTeX table summarizing answer times, withdrawal times,
-    and Mann-Whitney U test results per website and device.
+    Generate a LaTeX table with average answer times, withdrawal times,
+    and corresponding sample sizes for each website and device.
 
     Args:
-        results_dict (dict): Nested dictionary with websites -> devices -> stats.
-        caption (str): Caption for the table.
-        label (str): Label for the table.
+        results_dict (dict): Nested dictionary with results per device and website.
+        caption (str): Caption text for the LaTeX table.
+        label (str): Label for the LaTeX table.
 
     Returns:
-        str: LaTeX table string.
+        str: A LaTeX-formatted table string.
     """
     lines = []
     lines.append("\\begin{table}[htbp]")
     lines.append("    \\centering")
     lines.append("    \\footnotesize")
-    lines.append("    \\begin{tabular}{|l|l|r|r|r|r|r|r|}")
+    lines.append("    \\begin{tabular}{|l|l|r|r|r|r|}")
     lines.append("        \\hline")
-    header = "\\textbf{Website} & \\textbf{Device} & \\makecell{\\textbf{Answer} \\\\ (mean)} & "
-    header += "\\makecell{\\textbf{Answer} \\\\ (no withdraws)} & \\makecell{\\textbf{Withdraw} \\\\ (mean)} & "
-    header += "\\textbf{ n} & \\textbf{U-value} & \\textbf{p-value}\\\\"
+    header = "        \\textbf{Website} & \\textbf{Device} & \\makecell{\\textbf{Average} \\\\ \\textbf{consent time}} "
+    header += " & \\makecell{\\textbf{Avgerage} \\\\ \\textbf{withdrawal time}} & \\makecell{\\textbf{Number of} \\\\ "
+    header += "\\textbf{consents}} & \\makecell{\\textbf{Number of} \\\\ \\textbf{withdraws}} \\\\"
     lines.append(header)
     lines.append("        \\hline")
 
     device_mapping = {
         "computer": "Computer",
         "phone": "Phone",
-        "both": "Both"
+        "both": "Both devices"
     }
 
-    for website, device_dict in results_dict.items():
+    website_order = WEBSITES + ["all"]
+
+    for website in website_order:
         for device in ["computer", "phone", "both"]:
-            data = device_dict.get(device, {})
+            device_data = results_dict.get(device, {})
+            data = device_data.get(website, {})
 
-            avg_answer_all = data.get("avg_answer_all", "-")
-            avg_answer_no_withdraw = data.get("avg_answer_no_withdraw", "-")
-            avg_withdraw = data.get("avg_withdraw", "-")
-            n_withdraw = data.get("n_withdraw", "-")
+            avg_answer = data.get("avg_answer_all")
+            avg_withdraw = data.get("avg_withdraw")
+            n_answers = data.get("n_answers", 0)
+            n_withdraw = data.get("n_withdraw", 0)
 
-            stat = data.get("stat", "-")
-            p_value = data.get("p_value", "-")
+            avg_answer_fmt = f"{avg_answer:.2f}" if not pd.isna(avg_answer) else "-"
+            avg_withdraw_fmt = f"{avg_withdraw:.2f}" if not pd.isna(avg_withdraw) else "-"
 
-            def fmt(x):
-                if isinstance(x, (float, int)):
-                    if pd.isna(x):
-                        return "-"
-                    return f"{x:.2f}"
-                if x is None:
-                    return "-"
-                return str(x)
-
-            def fmt_p(x):
-                if isinstance(x, (float, int)):
-                    return f"\\textbf{{{x:.4f}}}" if x < 0.05 else f"{x:.4f}"
-                if x is None:
-                    return "-"
-                return str(x)
-
-            line = (
-                f"        {website.capitalize()} & {device_mapping[device]} & {fmt(avg_answer_all)} & "
-                f"{fmt(avg_answer_no_withdraw)} & {fmt(avg_withdraw)} & {n_withdraw} & "
-                f"{fmt(stat)} & {fmt_p(p_value)} \\\\"
-            )
+            line = f"        {website} & {device_mapping[device]} & {avg_answer_fmt} & {avg_withdraw_fmt} & "
+            line += f"{n_answers} & {n_withdraw} \\\\"
             lines.append(line)
 
         lines.append("        \\hline")

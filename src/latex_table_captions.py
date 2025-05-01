@@ -24,7 +24,6 @@ number of acceptances on computer and phone, indicating that the data is not app
 Additionally, the p-value is less than 0.05 for most groups, rejecting the null hypothesis of normality.
 """ + SHAPIRO_WILK_GENERIC_CAPTION
 
-
 SHAPIRO_WILK_EXTRA_TIME_CAPTION = """
 \\textbf{Shapiro-Wilk normality statistics for time spent on cookie banners on different devices.} When considering the
 average response time on computer, Shapiro-Wilk rejects normality for most groups. However, on phone, many groups
@@ -51,19 +50,19 @@ line as the subheaders with the outcome variables corresponds to the full datase
 BOOTSTRAP_MAIN_CAPTION = f"""
 \\textbf{{Bootstrap confidence intervals (CI) and statistics for the survey groups}}.
 The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{{bold}}.
-The bootstrap used {CONSTANTS['n_bootstraps']} iterations.
+The amount of bootstrap samples used was {CONSTANTS['n_bootstraps']}.
 """
 
 BOOTSTRAP_EXTRA_ACCEPTS_CAPTION = f"""
 \\textbf{{Bootstrap confidence intervals (CI) for the number of cookie banner accepts on different devices}}.
 The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{{bold}}.
-The bootstrap used {CONSTANTS['n_bootstraps']} iterations.
+The amount of bootstrap samples used was {CONSTANTS['n_bootstraps']}.
 """
 
 BOOTSTRAP_EXTRA_TIME_CAPTION = f"""
 \\textbf{{Bootstrap confidence intervals (CI) for cookie banner response time on different devices}}.
 The CI's not containing 0 rejects the null hypothesis, and are marked in \\textbf{{bold}}.
-The bootstrap used {CONSTANTS['n_bootstraps']} iterations.
+The amount of bootstrap samples used was {CONSTANTS['n_bootstraps']}.
 """
 
 WEBSITE_STATISTICS_ACCEPTS_CAPTION = f"""
@@ -83,12 +82,13 @@ same expected cookie consent acceptance rate and cookie banner answer time can s
 """
 
 WILCOXON_GENERIC_CAPTION = """
-\\textbf{n} marks the amount of observations with different responses for each pair of website, as the Wilcoxon test
-only uses this. The statistic shows bigger difference the closer the number is to 0.
+The number \\textbf{n} marks the amount of observations with different responses for each pair of website, as the
+Wilcoxon test only uses these. The statistic shows bigger difference the closer the number is to 0.
 """
 
 WILCOXON_TOTAL_ACCEPTS_CAPTION = """
-\\textbf{Pairwise Wilcoxon tests on the consent acceptances on both devices.}
+\\textbf{Pairwise Wilcoxon tests on the consent acceptances on both devices.} ``Dagens'' has significantly different
+responses than the other websites.
 """ + WILCOXON_GENERIC_CAPTION
 
 WILCOXON_COMPUTER_ACCEPTS_CAPTION = """
@@ -104,7 +104,8 @@ WILCOXON_TOTAL_TIME_CAPTION = """
 """ + WILCOXON_GENERIC_CAPTION
 
 WILCOXON_COMPUTER_TIME_CAPTION = """
-\\textbf{Pairwise Wilcoxon tests on the banner response time on computer.}
+\\textbf{Pairwise Wilcoxon tests on the banner response time on computer.} ``Dagens'' has significantly different
+responses than the other websites.
 """ + WILCOXON_GENERIC_CAPTION
 
 WILCOXON_PHONE_TIME_CAPTION = """
@@ -112,11 +113,16 @@ WILCOXON_PHONE_TIME_CAPTION = """
 """ + WILCOXON_GENERIC_CAPTION
 
 WITHDRAWAL_TIMES_CAPTION = """
-\\textbf{Average cookie consent answer times and withdrawal times}. Even though the withdrawal data is sparse,
-the data clearly suggests that withdrawing consent takes longer than giving it. The answer times are in seconds.
-The column ``\\textbf{n}'' denotes the amount of withdrawals.
-The ``\\textbf{Answer} (no withdraws)'' columns shows average answer time only for the participants that did not
-withdrawal for that website and device. These values are used in the Mann-Withney-U test against the withdrawal times.
-The test are ran if both groups has at least 3 values, but the u-value and p-value must be interpreted with care since
-the group sizes are small and unbalanced.
+\\textbf{Withdrawing consent takes over 20 times as much time as giving it.} The table shows average time spent giving
+consent and withdrawing it in seconds, and the number of participants that has given consent and withdrawn it.
 """
+
+# WITHDRAWAL_TIMES_CAPTION = """
+# \\textbf{Average cookie consent answer times and withdrawal times}. Even though the withdrawal data is sparse,
+# the data clearly suggests that withdrawing consent takes longer than giving it. The answer times are in seconds.
+# The column ``\\textbf{n}'' denotes the amount of withdrawals.
+# The ``\\textbf{Answer} (no withdraws)'' columns shows average answer time only for the participants that did not
+# withdrawal for that website and device. These values are used in the Mann-Withney-U test against the withdrawal times.
+# The test are ran if both groups has at least 3 values, but the u-value and p-value must be interpreted with care since
+# the group sizes are small and unbalanced.
+# """

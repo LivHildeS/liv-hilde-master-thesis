@@ -18,7 +18,7 @@ from src.latex_table_captions import (BOOTSTRAP_EXTRA_ACCEPTS_CAPTION, BOOTSTRAP
 from src.make_latex_tables import (make_bootstrap_latex_table, make_friedman_latex_table, make_mean_sd_latex_table,
                                    make_nettskjema_report_latex, make_shapiro_latex_table,
                                    make_website_statistics_latex_table, make_wilcoxon_latex_table,
-                                   make_withdrawal_statistics_latex_table)
+                                   make_withdrawal_latex_table)
 
 CONSTANTS = get_constants()
 GROUP_TESTS_FOLDER = CONSTANTS["paths"]["folders"]["group_tests_folder"]
@@ -505,7 +505,7 @@ def write_withdrawal_table(df):
     filename = "withdrawal.txt"
     folder = WEBISTE_TESTS_FOLDER
     results = get_withdrawal_and_answer_times(df)
-    withdrawal_table = make_withdrawal_statistics_latex_table(
+    withdrawal_table = make_withdrawal_latex_table(
         results_dict=results,
         caption=caption,
         label=label,
