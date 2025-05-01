@@ -14,11 +14,11 @@ from src.latex_table_captions import (BOOTSTRAP_EXTRA_ACCEPTS_CAPTION, BOOTSTRAP
                                       WILCOXON_COMPUTER_ACCEPTS_CAPTION, WILCOXON_COMPUTER_TIME_CAPTION,
                                       WILCOXON_PHONE_ACCEPTS_CAPTION, WILCOXON_PHONE_TIME_CAPTION,
                                       WILCOXON_TOTAL_ACCEPTS_CAPTION, WILCOXON_TOTAL_TIME_CAPTION,
-                                      WITHDRAWAL_TIMES_CAPTION)
+                                      WITHDRAWAL_STATISTICS_CAPTION)
 from src.make_latex_tables import (make_bootstrap_latex_table, make_friedman_latex_table, make_mean_sd_latex_table,
                                    make_nettskjema_report_latex, make_shapiro_latex_table,
                                    make_website_statistics_latex_table, make_wilcoxon_latex_table,
-                                   make_withdrawal_latex_table)
+                                   make_withdrawal_statistics_latex_table)
 
 CONSTANTS = get_constants()
 GROUP_TESTS_FOLDER = CONSTANTS["paths"]["folders"]["group_tests_folder"]
@@ -493,19 +493,19 @@ def write_wilcoxon_phone_time(df):
     _write_latex_table_to_file(text=wilcoxon_table, filename=filename, folder=folder)
 
 
-def write_withdrawal_table(df):
+def write_withdrawal_statistics_table(df):
     """
     Writes the table with average response and withdrawal times.
 
     Args:
         df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
     """
-    caption = WITHDRAWAL_TIMES_CAPTION.replace("\n", " ")
-    label = "tab:withdrawal"
-    filename = "withdrawal.txt"
+    caption = WITHDRAWAL_STATISTICS_CAPTION.replace("\n", " ")
+    label = "tab:withdrawal_statistics"
+    filename = "withdrawal_statistics.txt"
     folder = WEBISTE_TESTS_FOLDER
     results = get_withdrawal_and_answer_times(df)
-    withdrawal_table = make_withdrawal_latex_table(
+    withdrawal_table = make_withdrawal_statistics_latex_table(
         results_dict=results,
         caption=caption,
         label=label,
@@ -556,4 +556,4 @@ def write_all_latex_tables(df, nettskjema_report=False, shapiro_wilk=False, mean
         write_wilcoxon_computer_time(df)
         write_wilcoxon_phone_time(df)
     if withdrawal:
-        write_withdrawal_table(df)
+        write_withdrawal_statistics_table(df)

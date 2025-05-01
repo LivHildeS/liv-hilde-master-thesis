@@ -391,3 +391,18 @@ def run_pairwise_wilcoxon_tests(df, test_variable, device):
         })
 
     return results
+
+
+def run_withdrawal_wilcoxon_test(df):
+    """
+    Runs Wilcoxon signed-rank test on avg consent vs withdrawal times.
+
+    Args:
+        df (pd.DataFrame): Dataframe with the results
+
+    Returns:
+        dict: {"stat": test statistic, "p_value": p-value}
+    """
+    valid = df.dropna(subset=["average_consent_given_withdrawal_times", "average_withdrawal_times"])
+    stat, p_value = wilcoxon(valid["average_consent_given_withdrawal_times"], valid["average_withdrawal_times"])
+    return {"stat": stat, "p_value": p_value}

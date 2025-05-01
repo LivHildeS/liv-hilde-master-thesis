@@ -520,7 +520,7 @@ def make_wilcoxon_latex_table(wilcoxon_results, caption="", label=""):
     return "\n".join(lines)
 
 
-def make_withdrawal_latex_table(results_dict, caption="", label=""):
+def make_withdrawal_statistics_latex_table(results_dict, caption="", label=""):
     """
     Generate a LaTeX table with average answer times, withdrawal times,
     and corresponding sample sizes for each website and device.

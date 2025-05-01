@@ -86,10 +86,9 @@ def process_participant_data():
 
     for device in DEVICES:
         for website in WEBSITES:
-            column_name = f"{device}.{website}.answer"
-            df[f"{column_name}.int"] = df[column_name].apply(_quantisize_answers)
-            df[f"{device}_accepts"] += df[f"{column_name}.int"]
-            df[f"{website}_accepts_int"] += df[f"{column_name}.int"]
+            df[f"{device}.{website}.answer.int"] = df[f"{device}.{website}.answer"].apply(_quantisize_answers)
+            df[f"{device}_accepts"] += df[f"{device}.{website}.answer.int"]
+            df[f"{website}_accepts_int"] += df[f"{device}.{website}.answer.int"]
             df[f"{device}_average_time"] += df[f"{device}.{website}.time"]
             df[f"{website}_average_time"] += df[f"{device}.{website}.time"]
 
@@ -98,6 +97,44 @@ def process_participant_data():
     df["computer_average_time"] = df["computer_average_time"] / len(WEBSITES)
     df["phone_average_time"] = df["phone_average_time"] / len(WEBSITES)
     df["total_average_time"] = (df["computer_average_time"] + df["phone_average_time"]) / 2
+
+    # Make average withdrawal and consent column per participant
+    withdrawal_column_names = []
+
+    for device in DEVICES:
+        for website in WEBSITES:
+            # Check which withdrawal columns that exists, and save them for later with corresponding answer time.
+            withdrawal_column_name = f"Withdraw.{device}.{website}.time"
+            if withdrawal_column_name in df:
+                withdrawal_column_names.append({
+                    "withdraw": withdrawal_column_name,
+                    "answer": f"{device}.{website}.time"
+                })
+
+    average_withdrawal_times = []
+    average_consent_given_withdrawal_times = []
+
+    for i, row in df.iterrows():
+        withdrawal_times = []
+        consent_times = []
+
+        for column_name_dict in withdrawal_column_names:
+            withdrawal_column_name = column_name_dict["withdraw"]
+            consent_column_name = column_name_dict["answer"]
+
+            if not pd.isna(row[withdrawal_column_name]):
+                withdrawal_times.append(row[withdrawal_column_name])
+                consent_times.append(row[consent_column_name])
+
+        if withdrawal_times != []:
+            average_withdrawal_times.append(np.mean(withdrawal_times))
+            average_consent_given_withdrawal_times.append(np.mean(consent_times))
+        else:
+            average_withdrawal_times.append(np.nan)
+            average_consent_given_withdrawal_times.append(np.nan)
+
+    df["average_withdrawal_times"] = average_withdrawal_times
+    df["average_consent_given_withdrawal_times"] = average_consent_given_withdrawal_times
 
     return df
 

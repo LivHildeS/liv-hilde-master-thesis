@@ -112,17 +112,10 @@ WILCOXON_PHONE_TIME_CAPTION = """
 \\textbf{Pairwise Wilcoxon tests on the banner response time on phone.}
 """ + WILCOXON_GENERIC_CAPTION
 
-WITHDRAWAL_TIMES_CAPTION = """
-\\textbf{Withdrawing consent takes over 20 times as much time as giving it.} The table shows average time spent giving
+WITHDRAWAL_STATISTICS_CAPTION = """
+\\textbf{Withdrawing consent takes over 20 times longer than giving it.} The table shows average time spent giving
 consent and withdrawing it in seconds, and the number of participants that has given consent and withdrawn it.
+Comparing the average withdrawal time and corresponding consent time per participant gave highly significant results
+with a Wilcoxon test, with a test statistic of 0 and p-value of \\textbf{0.000061}, rejecting the null hypothesis
+of equal consent and withdrawal times.
 """
-
-# WITHDRAWAL_TIMES_CAPTION = """
-# \\textbf{Average cookie consent answer times and withdrawal times}. Even though the withdrawal data is sparse,
-# the data clearly suggests that withdrawing consent takes longer than giving it. The answer times are in seconds.
-# The column ``\\textbf{n}'' denotes the amount of withdrawals.
-# The ``\\textbf{Answer} (no withdraws)'' columns shows average answer time only for the participants that did not
-# withdrawal for that website and device. These values are used in the Mann-Withney-U test against the withdrawal times.
-# The test are ran if both groups has at least 3 values, but the u-value and p-value must be interpreted with care since
-# the group sizes are small and unbalanced.
-# """

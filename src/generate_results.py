@@ -328,15 +328,13 @@ def get_all_wilcoxon_test_results(df):
     return all_results
 
 
-def get_withdrawal_and_answer_times(df, min_group_size=3, test_type="mannwhitney"):
+def get_withdrawal_and_answer_times(df):
     """
-    Computes average cookie banner response times, withdrawal times,
-    and runs hypothesis tests, including an 'all websites' aggregation.
+    Computes average cookie banner response times, withdrawal times, and group sizes for all devices and websites,
+    including both devices and all websites aggregated.
 
     Args:
         df (pd.DataFrame): DataFrame containing response and withdrawal times.
-        min_group_size (int): Minimum number of participants in a group in order to conduct hypothesis test.
-        test_type (str): Which test to use ("mannwhitney", "t-test", etc.).
 
     Returns:
         dict: Nested dictionary with statistics for each website and device, plus 'all'.
@@ -366,14 +364,12 @@ def get_withdrawal_and_answer_times(df, min_group_size=3, test_type="mannwhitney
             withdraw_times = withdraw_times.reindex(answer_times.index)
 
             avg_answer_all = answer_times.mean()
-            avg_answer_no_withdraw = answer_times[withdraw_times.isna()].mean()
             avg_withdraw = withdraw_times.mean()
             n_withdraw = withdraw_times.notna().sum()
             n_answer_all = len(answer_times)
 
             result[device][website] = {
                 "avg_answer_all": avg_answer_all,
-                "avg_answer_no_withdraw": avg_answer_no_withdraw,
                 "avg_withdraw": avg_withdraw,
                 "n_withdraw": n_withdraw,
                 "n_answers": n_answer_all,
@@ -381,7 +377,6 @@ def get_withdrawal_and_answer_times(df, min_group_size=3, test_type="mannwhitney
 
             # Aggregate websites
             all_websites[device]["avg_answer_all"] += avg_answer_all / len(WEBSITES)
-            all_websites[device]["avg_answer_no_withdraw"] += avg_answer_no_withdraw / len(WEBSITES)
             if n_withdraw > 0:
                 all_websites[device]["avg_withdraw"] += avg_withdraw / len(WEBSITES)
             all_websites[device]["n_withdraw"] += n_withdraw
@@ -396,40 +391,14 @@ def get_withdrawal_and_answer_times(df, min_group_size=3, test_type="mannwhitney
         result_computer = result["computer"][website]
         result["both"][website] = {
             "avg_answer_all": (result_computer["avg_answer_all"] + result_phone["avg_answer_all"]) / 2,
-            "avg_answer_no_withdraw": (
-                result_computer["avg_answer_no_withdraw"] + result_phone["avg_answer_no_withdraw"]
-            ) / 2,
             "avg_withdraw": 0,
             "n_withdraw": result_computer["n_withdraw"] + result_phone["n_withdraw"],
             "n_answers": result_computer["n_answers"] + result_phone["n_answers"],
         }
-        # avg_withdraw is pd.nan if there are no withdraws, and x + nan = nan, so remove adding those.
+        # avg_withdraw is nan if there are no withdraws, and x + nan = nan, so remove adding those.
         if result["computer"][website]["n_withdraw"] > 0:
             result["both"][website]["avg_withdraw"] += result["computer"][website]["avg_withdraw"] / 2
         if result["phone"][website]["n_withdraw"] > 0:
             result["both"][website]["avg_withdraw"] += result["phone"][website]["avg_withdraw"] / 2
-
-    # Run hypothesis tests
-    for device in ["computer", "phone", "both"]:
-        for website in WEBSITES:
-            if n_withdraw >= min_group_size and (n_answer_all - n_withdraw) >= min_group_size:
-                group1 = withdraw_times.dropna()
-                group2 = answer_times[withdraw_times.isna()]
-                temp_df1 = pd.DataFrame({"value": group1})
-                temp_df2 = pd.DataFrame({"value": group2})
-                test_result = run_group_test(
-                    temp_df1,
-                    temp_df2,
-                    value_column="value",
-                    test_type=test_type,
-                )
-                stat = test_result.get("stat")
-                p_value = test_result.get("p_value")
-            else:
-                stat = None
-                p_value = None
-
-            result[device][website]["stat"] = stat
-            result[device][website]["p_value"] = p_value
 
     return result
