@@ -114,7 +114,7 @@ def process_participant_data():
     average_withdrawal_times = []
     average_consent_given_withdrawal_times = []
 
-    for i, row in df.iterrows():
+    for _, row in df.iterrows():
         withdrawal_times = []
         consent_times = []
 

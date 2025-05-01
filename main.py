@@ -11,13 +11,13 @@ if __name__ == "__main__":
     df = get_all_data()
     write_all_latex_tables(
         df,
-        nettskjema_report=False,
-        shapiro_wilk=False,
-        mean_and_sd=False,
+        nettskjema_report=True,
+        shapiro_wilk=True,
+        mean_and_sd=True,
         bootstrap=False,
-        website_statistics=False,
-        friedman=False,
-        wilcoxon=False,
+        website_statistics=True,
+        friedman=True,
+        wilcoxon=True,
         withdrawal=True,
     )
 

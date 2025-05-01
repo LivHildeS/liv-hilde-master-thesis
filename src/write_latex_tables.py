@@ -73,7 +73,7 @@ def write_shapiro_wilk_main(df):
     label = "tab:shapiro_wilk_main"
     filename = "shapiro_wilk_main.txt"
     folder = GROUP_TESTS_FOLDER
-    results = get_all_group_test_results(df, test_type="shapiro-wilk", print_values=False)
+    results = get_all_group_test_results(df, test_type="shapiro-wilk")
     shapiro_wilk_table = make_shapiro_latex_table(
         results,
         test_variables=[
@@ -99,7 +99,7 @@ def write_shapiro_wilk_extra_accepts(df):
     label = "tab:shapiro_wilk_extra_accepts"
     filename = "shapiro_wilk_extra_accepts.txt"
     folder = GROUP_TESTS_FOLDER
-    results = get_all_group_test_results(df, test_type="shapiro-wilk", print_values=False)
+    results = get_all_group_test_results(df, test_type="shapiro-wilk")
     shapiro_wilk_table = make_shapiro_latex_table(
         results,
         test_variables=[
@@ -124,7 +124,7 @@ def write_shapiro_wilk_extra_time(df):
     label = "tab:shapiro_wilk_extra_time"
     filename = "shapiro_wilk_extra_time.txt"
     folder = GROUP_TESTS_FOLDER
-    results = get_all_group_test_results(df, test_type="shapiro-wilk", print_values=False)
+    results = get_all_group_test_results(df, test_type="shapiro-wilk")
     shaprio_wilk_table = make_shapiro_latex_table(
         results,
         test_variables=[
@@ -149,7 +149,7 @@ def write_mean_sd_main(df):
     label = "tab:mean_and_sd_main"
     filename = "mean_and_sd_main.txt"
     folder = GROUP_TESTS_FOLDER
-    results = get_all_group_test_results(df, test_type="mean-sd", print_values=False)
+    results = get_all_group_test_results(df, test_type="mean-sd")
     mean_and_sd_table = make_mean_sd_latex_table(
         results_dict=results,
         test_variables=[
@@ -175,7 +175,7 @@ def write_mean_sd_extra_accepts(df):
     label = "tab:mean_and_sd_extra_accepts"
     filename = "mean_and_sd_extra_accepts.txt"
     folder = GROUP_TESTS_FOLDER
-    results = get_all_group_test_results(df, test_type="mean-sd", print_values=False)
+    results = get_all_group_test_results(df, test_type="mean-sd")
     mean_and_sd_table = make_mean_sd_latex_table(
         results_dict=results,
         test_variables=[
@@ -199,7 +199,7 @@ def write_mean_sd_extra_time(df):
     label = "tab:mean_and_sd_extra_time"
     filename = "mean_and_sd_extra_time.txt"
     folder = GROUP_TESTS_FOLDER
-    results = get_all_group_test_results(df, test_type="mean-sd", print_values=False)
+    results = get_all_group_test_results(df, test_type="mean-sd")
     mean_and_sd_table = make_mean_sd_latex_table(
         results_dict=results,
         test_variables=[
@@ -223,7 +223,7 @@ def write_bootstrap_main(df):
     label = "tab:bootstrap_main"
     filename = "bootstrap_main.txt"
     folder = GROUP_TESTS_FOLDER
-    results = get_all_group_test_results(df, test_type="bootstrap", print_values=False)
+    results = get_all_group_test_results(df, test_type="bootstrap")
     mean_and_sd_table = make_bootstrap_latex_table(
         results_dict=results,
         test_variables=[
@@ -248,7 +248,7 @@ def write_bootstrap_extra_accepts(df):
     label = "tab:bootstrap_extra_accepts"
     filename = "bootstrap_extra_accepts.txt"
     folder = GROUP_TESTS_FOLDER
-    results = get_all_group_test_results(df, test_type="bootstrap", print_values=False)
+    results = get_all_group_test_results(df, test_type="bootstrap")
     mean_and_sd_table = make_bootstrap_latex_table(
         results_dict=results,
         test_variables=[
@@ -272,7 +272,7 @@ def write_bootstrap_extra_time(df):
     label = "tab:bootstrap_extra_time"
     filename = "bootstrap_extra_time.txt"
     folder = GROUP_TESTS_FOLDER
-    results = get_all_group_test_results(df, test_type="bootstrap", print_values=False)
+    results = get_all_group_test_results(df, test_type="bootstrap")
     mean_and_sd_table = make_bootstrap_latex_table(
         results_dict=results,
         test_variables=[

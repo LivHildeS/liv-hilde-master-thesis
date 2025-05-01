@@ -91,10 +91,9 @@ def run_grouped_shapiro_wilk_normality_test(group_df1, group_df2, value_column, 
     return result
 
 
-def run_group_test(group_df1, group_df2, value_column, test_type, group_names=None, n_permutations=10000,
-                   random_state=2025):
+def run_group_test(group_df1, group_df2, value_column, test_type, group_names=None):
     """
-    Runs an independent samples test (t-test, Mann-Whitney U, or permutation test) on two groups.
+    Runs an independent samples test (t-test or Mann-Whitney U) on two groups.
     Also tests for normality with Shapiro-Wilk.
 
     Args:
@@ -103,15 +102,14 @@ def run_group_test(group_df1, group_df2, value_column, test_type, group_names=No
         value_column (str): Name of numeric column to compare between groups.
         test_type (str): In ["t-test", "mannwhitney", "u-test", "permutation"].
         group_names (list of str or None): Optional list of names for the two groups.
-        n_permutations (int): Number of permutations for the permutation test.
         random_state (int or None): Random seed for reproducibility.
 
     Returns:
         Dictionary with group labels, sizes, means, normality checks, test statistic, and p-value.
     """
-    if test_type not in ["t-test", "mannwhitney", "u-test", "permutation"]:
+    if test_type not in ["t-test", "mannwhitney", "u-test"]:
         raise ValueError(
-            f"Unsupported test type. Use 't-test', 'mannwhitney', 'u-test', or 'permutation'. Got {test_type}")
+            f"Unsupported test type. Use \"t-test\" or \"mannwhitney\". Got {test_type}")
 
     if group_names is None:
         group_names = ["group1", "group2"]
@@ -138,19 +136,6 @@ def run_group_test(group_df1, group_df2, value_column, test_type, group_names=No
         stat, p_value = ttest_ind(values1, values2, equal_var=False)
     elif test_type in ["mannwhitney", "u-test"]:
         stat, p_value = mannwhitneyu(values1, values2, alternative="two-sided", method="exact")
-    elif test_type == "permutation":
-        rng = np.random.default_rng(seed=random_state)
-        observed_diff = abs(values1.mean() - values2.mean())
-        combined = np.concatenate([values1, values2])
-        n1 = len(values1)
-        count = 0
-        for _ in range(n_permutations):
-            rng.shuffle(combined)
-            new_diff = abs(combined[:n1].mean() - combined[n1:].mean())
-            if new_diff >= observed_diff:
-                count += 1
-        stat = observed_diff
-        p_value = count / n_permutations
 
     result["stat"] = stat
     result["p_value"] = p_value
@@ -216,74 +201,6 @@ def run_bootstrap_test(group_df1, group_df2, value_column, group_names=None):
     }
 
     return result
-
-
-def run_cochrans_q_test(df, device):
-    """
-    Runs Cochran's Q test for binary repeated measures data across multiple conditions.
-    This is just binary Friedman test, so we could wrap it around that function, but we use `cocrhans_q` from a
-    library instead.
-
-    Args:
-        df (pd.Dataframe): DataFrame with participants as rows, binary responses as columns.
-        device (str): "phone" or "computer" — selects which device's data to test.
-
-    Returns:
-        Dictionary with test statistic and p-value.
-    """
-    # Extract the relevant columns
-    columns = [f"{device}.{site}.answer.int" for site in WEBSITES]
-    data = df[columns]
-
-    # Cochran's Q expects a 2D array of shape (n_subjects, k_conditions) with binary values
-    result = cochrans_q(data)
-
-    return {
-        "test_type": "cochrans_q",
-        "device": device,
-        "websites": WEBSITES,
-        "statistic": result.statistic,
-        "df": result.df,
-        "p_value": result.pvalue
-    }
-
-
-def run_pairwise_mcnemar_tests(df, device, exact=True):
-    """
-    Runs McNemar's test for all pairs of websites on a single device.
-
-    Args:
-        df (pd.DataFrame): DataFrame with participants as rows and binary responses as columns.
-        device (str): 'phone' or 'computer'.
-        exact (bool): Whether or not to run exact (binomial) McNeymar test or not (Chi-Square approximation).
-
-    Returns:
-        List of result dictionaries with test results per website pair.
-    """
-    results = []
-
-    for site1, site2 in combinations(WEBSITES, 2):
-        col1 = f"{device}.{site1}.answer.int"
-        col2 = f"{device}.{site2}.answer.int"
-
-        # 2x2 contingency table
-        table = pd.crosstab(df[col1], df[col2])
-
-        # Normalize to ensure all 2x2 cells exist
-        table = table.reindex(index=[0, 1], columns=[0, 1], fill_value=0)
-
-        test_result = mcnemar(table, exact=exact)
-
-        results.append({
-            "test_type": "mcnemar",
-            "device": device,
-            "pair": (site1, site2),
-            "table": table,
-            "statistic": test_result.statistic,
-            "p_value": test_result.pvalue
-        })
-
-    return results
 
 
 def run_friedman_test(df, test_variable, device):

@@ -11,78 +11,6 @@ WEBSITES = CONSTANTS["websites"]
 DEVICES = CONSTANTS["devices"]
 
 
-def print_group_test_result(result):
-    """
-    Prints the result dictionary returned by run_group_test in a readable format.
-
-    Args:
-        result (dict): Output dictionary from run_group_test.
-    """
-    group1, group2 = result["group_names"]
-    size1, size2 = result["group_sizes"]
-    mean1, mean2 = result["group_means"]
-    sd1, sd2 = result["group_sds"]
-    print("-----------------------------------------")
-    print(f"Test variable : {result['test_variable']}")
-    print(f"Test type     : {result['test_type']}")
-    print(f"Group 1       : {group1} (n={size1}, mean={mean1:.3f}, sd={sd1:.3f})")
-    print(f"Group 2       : {group2} (n={size2}, mean={mean2:.3f}, sd={sd2:.3f})")
-
-    if "normality" in result:
-        print("\nNormality (Shapiro-Wilk):")
-        for group in result["normality"]:
-            W = result["normality"][group]["W"]
-            p = result["normality"][group]["p"]
-            print(f"  {group:<12}: W = {W:.3f}, p = {p:.4f}")
-
-    if "bootstrap_ci" in result:
-        significant = np.sign(result['bootstrap_ci'][0]) == np.sign(result['bootstrap_ci'][1])
-        print(f"Observed mean difference : {result['observed_mean_difference']:.3f}")
-        print(f"Cohen's d                : {result['cohens_d']:.3f}")
-        print(f"Bootstrap lower CI       : {result['bootstrap_ci'][0]:.3f}")
-        print(f"Bootstrap upper CI       : {result['bootstrap_ci'][1]:.3f}")
-        print(f"Significant              : {significant}")
-
-    print("\nTest statistic:")
-    print(f"  stat = {result['stat']:.4f}")
-    print(f"  p     = {result['p_value']:.4f}")
-    print("-----------------------------------------\n")
-
-
-def print_pairwise_mcnemar_results(results):
-    """
-    Prints McNemar pairwise test results in a formatted table.
-
-    Args:
-        results (list): Output from run_pairwise_mcnemar_tests.
-    """
-    print("Pairwise McNemar Test Results:")
-    print(f"{'Site 1':<12} {'Site 2':<12} {'Stat':>6} {'p-value':>10}")
-    print("-" * 42)
-    for r in results:
-        site1, site2 = r['pair']
-        stat = f"{r['statistic']:.2f}" if r['statistic'] is not None else "-"
-        pval = f"{r['p_value']:.4f}"
-        print(f"{site1:<12} {site2:<12} {stat:>6} {pval:>10}")
-
-
-def print_pairwise_wilcoxon_results(results):
-    """
-    Prints Wilcoxon pairwise test results in a formatted table.
-
-    Args:
-        results (list): Output from run_pairwise_wilcoxon_tests.
-    """
-    print("Pairwise Wilcoxon Test Results:")
-    print(f"{'Site 1':<12} {'Site 2':<12} {'N':>3} {'Stat':>8} {'p-value':>10}")
-    print("-" * 48)
-    for r in results:
-        site1, site2 = r['pair']
-        stat = f"{r['statistic']:.2f}" if r['statistic'] is not None else "-"
-        pval = f"{r['p_value']:.4f}" if r['p_value'] is not None else "-"
-        print(f"{site1:<12} {site2:<12} {r['n']:>3} {stat:>8} {pval:>10}")
-
-
 def get_website_averages(df):
     """
     Calculates the average number of accepts per website and per device.
@@ -112,27 +40,13 @@ def get_website_averages(df):
     print(f"{len(df)=}")
 
 
-def test_time_given_accept(df):
-    for device in DEVICES:
-        for website in WEBSITES:
-            df1 = df[df[f"{device}.{website}.answer.int"] == 0]
-            df2 = df[df[f"{device}.{website}.answer.int"] == 1]
-            group_names = [f"Accept {device} {website}", f"Reject {device} {website}"]
-            test_variable = f"{device}.{website}.time"
-            result = run_group_test(
-                df1, df2, value_column=test_variable, test_type="permutation", group_names=group_names
-            )
-            print_group_test_result(result)
-
-
-def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
+def get_all_group_test_results(df, test_type="mannwhitney"):
     """
     Run grouped tests for all the groups and test statistics of interest.
 
     Args:
         df (pd.Dataframe): All the data.
-        test_type (str): In ["mean-sd", "shapiro-wilk", "t-test", "mannwhitney", "permutation", "bootstrap"].
-        print_values (bool): Whether to print results or not.
+        test_type (str): In ["mean-sd", "shapiro-wilk", "t-test", "mannwhitney", "bootstrap"].
 
     Returns:
         dict: Dict of all the results.
@@ -248,8 +162,6 @@ def get_all_group_test_results(df, test_type="mannwhitney", print_values=False):
                 )
             result["grouping_name"] = group["grouping_name"]
             test_variable_results[group["grouping_name"]] = result
-            if print_values:
-                print_group_test_result(result)
 
         all_results[test_variable] = test_variable_results
 
