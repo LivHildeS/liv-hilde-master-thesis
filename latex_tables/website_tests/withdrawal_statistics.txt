@@ -1,0 +1,35 @@
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|l|r|r|r|r|}
+        \hline
+        \textbf{Website} & \textbf{Device} & \makecell{\textbf{Average} \\ \textbf{consent time}}  & \makecell{\textbf{Avgerage} \\ \textbf{withdrawal time}} & \makecell{\textbf{Number of} \\ \textbf{consents}} & \makecell{\textbf{Number of} \\ \textbf{withdraws}} \\
+        \hline
+        facebook & Computer & 6.00 & 180.00 & 3 & 1 \\
+        facebook & Phone & 3.50 & - & 2 & 0 \\
+        facebook & Both devices & 4.75 & 90.00 & 5 & 1 \\
+        \hline
+        dnb & Computer & 7.75 & 135.00 & 4 & 2 \\
+        dnb & Phone & 4.50 & 220.00 & 4 & 1 \\
+        dnb & Both devices & 6.12 & 177.50 & 8 & 3 \\
+        \hline
+        google & Computer & 4.83 & 105.00 & 6 & 1 \\
+        google & Phone & 3.67 & - & 3 & 0 \\
+        google & Both devices & 4.25 & 52.50 & 9 & 1 \\
+        \hline
+        finn & Computer & 4.22 & 133.75 & 9 & 4 \\
+        finn & Phone & 4.00 & 216.00 & 6 & 4 \\
+        finn & Both devices & 4.11 & 174.88 & 15 & 8 \\
+        \hline
+        dagens & Computer & 10.18 & 70.00 & 11 & 2 \\
+        dagens & Phone & 5.27 & 88.33 & 11 & 3 \\
+        dagens & Both devices & 7.73 & 79.17 & 22 & 5 \\
+        \hline
+        all & Computer & 6.60 & 124.75 & 33 & 10 \\
+        all & Phone & 4.19 & 104.87 & 26 & 8 \\
+        all & Both devices & 5.39 & 114.81 & 59 & 18 \\
+        \hline
+    \end{tabular}
+    \caption{ \textbf{Withdrawing consent takes over 20 times longer than giving it.} The table shows average time spent giving consent and withdrawing it in seconds, and the number of participants that has given consent and withdrawn it. Comparing the average withdrawal time and corresponding consent time per participant gave highly significant results with a Wilcoxon test, with a test statistic of 0 and p-value of \textbf{0.000061}, rejecting the null hypothesis of equal consent and withdrawal times. }
+    \label{tab:withdrawal_statistics}
+\end{table}

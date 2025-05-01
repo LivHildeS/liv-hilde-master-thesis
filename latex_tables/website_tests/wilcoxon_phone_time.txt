@@ -1,14 +1,13 @@
-\begin{table}[tb]
+\begin{table}[htbp]
     \centering
-    \footnotesize
     \begin{tabular}{|l|l|r|r|r|}
         \hline
         \textbf{Website 1} & \textbf{Website 2} & \textbf{n} & \textbf{Statistic} & \textbf{p-value} \\
         \hline
-        Facebook & Dnb & 14 & 38.0 & 0.357302 \\
-        Facebook & Google & 18 & 47.5 & 0.094754 \\
-        Facebook & Finn & 17 & 74.5 & 0.923759 \\
-        Facebook & Dagens & 16 & 22.5 & \textbf{0.018399} \\
+        Facebook & Dnb & 13 & 37.0 & 0.584229 \\
+        Facebook & Google & 17 & 47.0 & 0.158193 \\
+        Facebook & Finn & 16 & 63.5 & 0.813852 \\
+        Facebook & Dagens & 15 & 15.5 & \textbf{0.011291} \\
         Dnb & Google & 16 & 60.0 & 0.674987 \\
         Dnb & Finn & 16 & 54.0 & 0.463761 \\
         Dnb & Dagens & 17 & 9.0 & \textbf{0.001329} \\
@@ -17,6 +16,6 @@
         Finn & Dagens & 18 & 27.0 & \textbf{0.010638} \\
         \hline
     \end{tabular}
-    \caption{ \textbf{Pairwise Wilcoxon tests on the banner response time on phone.}  \textbf{n} marks the amount of observations with different responses for each pair of website, as the Wilcoxon test only uses this. The statistic shows bigger difference the closer the number is to 0. }
+    \caption{ \textbf{Pairwise Wilcoxon tests on the banner response time on phone.}  The number \textbf{n} marks the amount of observations with different responses for each pair of website, as the Wilcoxon test only uses these. The statistic shows bigger difference the closer the number is to 0. }
     \label{tab:wilcoxon_phone_times}
 \end{table}

@@ -1,15 +1,14 @@
-\begin{table}[tb]
+\begin{table}[htbp]
     \centering
-    \footnotesize
     \begin{tabular}{|l|r|r|r|}
         \hline
         \textbf{Website} & \textbf{Computer} (Mean (SD)) & \textbf{Phone} (Mean (SD)) & \textbf{Total} (Mean (SD))\\
         \hline
-        Facebook & 98 (2.15) & 86 (2.00) & 184 (3.77) \\
-        Dnb & 108 (4.04) & 84 (3.90) & 192 (5.61) \\
-        Google & 87 (2.78) & 66 (1.49) & 153 (3.16) \\
-        Finn & 104 (2.65) & 85 (1.88) & 189 (3.99) \\
-        Dagens & 428 (25.62) & 166 (7.06) & 594 (25.82) \\
+        Facebook & 4.75 (2.17) & 4.15 (2.03) & 8.9 (3.81) \\
+        Dnb & 5.25 (4.12) & 4.2 (3.89) & 9.45 (5.57) \\
+        Google & 4.15 (2.85) & 3.3 (1.34) & 7.45 (3.15) \\
+        Finn & 4.95 (2.72) & 4.25 (1.68) & 9.2 (3.98) \\
+        Dagens & 19.9 (26.19) & 8.3 (7.00) & 28.2 (26.49) \\
         \hline
     \end{tabular}
     \caption{ \textbf{Average time in seconds spent on cookie banners} for the different websites on all devices. The paranthesis contains the standard deviations. }

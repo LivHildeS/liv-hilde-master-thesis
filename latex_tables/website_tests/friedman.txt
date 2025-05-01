@@ -1,4 +1,4 @@
-\begin{table}[tb]
+\begin{table}[htbp]
     \centering
     \begin{tabular}{|l|l|r|r|}
         \hline
@@ -7,9 +7,9 @@
         Consent accepts & Computer & 16.741 & \textbf{0.00217046} \\
         Consent accepts & Phone & 19.538 & \textbf{0.00061583} \\
         Consent accepts & Both devices & 20.409 & \textbf{0.00041468} \\
-        Banner answer time & Computer & 34.859 & \textbf{0.00000050} \\
-        Banner answer time & Phone & 14.581 & \textbf{0.00565400} \\
-        Banner answer time & Both devices & 40.252 & \textbf{0.00000004} \\
+        Banner answer time & Computer & 32.742 & \textbf{0.00000135} \\
+        Banner answer time & Phone & 15.172 & \textbf{0.00435666} \\
+        Banner answer time & Both devices & 37.825 & \textbf{0.00000012} \\
         \hline
     \end{tabular}
     \caption{ \textbf{Friedman tests on consent accepts and banner answer time on the different websites are highly significant}. All of the tests have very low p-values, indicating that the null hypothesis stating that the websites have the same expected cookie consent acceptance rate and cookie banner answer time can safely be rejected. }

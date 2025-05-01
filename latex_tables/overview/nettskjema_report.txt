@@ -6,25 +6,25 @@
         \textbf{Response} & \textbf{Count} \\
         \hline
         \textbf{Q1.} Privacy is about your right, as far as possible, to decide for yourself over your own personal data. To what extent are you concerned about privacy? & ~ \\[0.2em]
-        Very concerned & 7 \\
+        Very concerned & 6 \\
         Quite concerned & 8 \\
         Slightly concerned & 6 \\
         Don't know & 0 \\
         \hline
         \textbf{Q2.} Do you know what cookies are? & ~ \\[0.2em]
-        Yes & 20 \\
+        Yes & 19 \\
         No & 1 \\
         \hline
         \textbf{Q4.} Most websites ask for consent to collect information about you through cookies. To what extent would you say you understand what kind of information different websites request permission to collect? & ~ \\[0.2em]
         To a great extent & 2 \\
         To some extent & 11 \\
         Neither nor & 2 \\
-        To a small extent & 4 \\
+        To a small extent & 3 \\
         Not at all & 2 \\
         Don't know & 0 \\
         \hline
         \textbf{Q6.} Which statement best describes how you feel about sharing your information through cookies? & ~ \\[0.2em]
-        I want as little information as possible about me and my online activity to be saved and shared. & 19 \\
+        I want as little information as possible about me and my online activity to be saved and shared. & 18 \\
         I want information about me and my online activity to be saved and shared, since it improves my user experience. & 1 \\
         I am indifferent to my information and online activity being saved and shared. & 1 \\
         Don't know & 0 \\
@@ -33,30 +33,30 @@
         I ignore them and leave them open. & 0 \\
         I choose the easiest option, whether it's accept or decline. & 1 \\
         I try to decline when possible, but accept if rejecting is too much effort. & 12 \\
-        I actively take steps to withhold my consent. & 7 \\
+        I actively take steps to withhold my consent. & 6 \\
         I consent because it improves my user experience. & 1 \\
         Don't know & 0 \\
         \hline
         \textbf{Q8.} Have you ever withdrawn your consent to cookies, after first having given it? & ~ \\[0.2em]
-        Yes & 6 \\
+        Yes & 5 \\
         No & 14 \\
         Don't know & 1 \\
         \hline
         \textbf{Q9.} Were you aware that legally, withdrawing consent must be as easy as giving it? & ~ \\[0.2em]
-        Yes & 8 \\
+        Yes & 7 \\
         No & 13 \\
         Don't know & 0 \\
         \hline
         \textbf{Q11.} How old are you? & ~ \\[0.2em]
         15 - 19 years & 0 \\
         20 - 29 years & 8 \\
-        30 - 39 years & 8 \\
+        30 - 39 years & 7 \\
         40 - 49 years & 2 \\
         50 - 59 years & 2 \\
         60+ years & 1 \\
         \hline
         \textbf{Q12.} Do you have an IT-related background? & ~ \\[0.2em]
-        Yes, programming and/or design related & 16 \\
+        Yes, programming and/or design related & 15 \\
         Yes, other & 0 \\
         No & 5 \\
         \hline

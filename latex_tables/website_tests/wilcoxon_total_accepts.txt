@@ -1,6 +1,5 @@
-\begin{table}[tb]
+\begin{table}[htbp]
     \centering
-    \footnotesize
     \begin{tabular}{|l|l|r|r|r|}
         \hline
         \textbf{Website 1} & \textbf{Website 2} & \textbf{n} & \textbf{Statistic} & \textbf{p-value} \\
@@ -17,6 +16,6 @@
         Finn & Dagens & 11 & 16.0 & 0.127930 \\
         \hline
     \end{tabular}
-    \caption{ \textbf{Pairwise Wilcoxon tests on the consent acceptances on both devices.}  \textbf{n} marks the amount of observations with different responses for each pair of website, as the Wilcoxon test only uses this. The statistic shows bigger difference the closer the number is to 0. }
+    \caption{ \textbf{Pairwise Wilcoxon tests on the consent acceptances on both devices.} ``Dagens'' has significantly different responses than the other websites.  The number \textbf{n} marks the amount of observations with different responses for each pair of website, as the Wilcoxon test only uses these. The statistic shows bigger difference the closer the number is to 0. }
     \label{tab:wilcoxon_total_accepts}
 \end{table}

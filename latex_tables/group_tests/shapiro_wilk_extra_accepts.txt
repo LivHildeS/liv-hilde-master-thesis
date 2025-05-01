@@ -1,4 +1,4 @@
-\begin{table}[tb]
+\begin{table}[htbp]
     \centering
     \begin{tabular}{|l|r|r|r|}
         \hline
@@ -6,39 +6,39 @@
         \hline
         \multicolumn{4}{|l|}{\textbf{Total accepts on computer}} \\
         \hline
-        \textbf{Q1.} Quite or very concerned about privacy & 15 & 0.766 & \textbf{0.0014} \\
-        \textbf{Q1.} Slightly concered about privacy & 6 & 0.850 & 0.1579 \\
-        \textbf{Q4.} Understand cookie consent to some or more extent & 8 & 0.894 & 0.2523 \\
+        \textbf{Q1.} Quite or very concerned about privacy & 14 & 0.787 & \textbf{0.0035} \\
+        \textbf{Q1.} Slightly concerned about privacy & 6 & 0.850 & 0.1579 \\
+        \textbf{Q4.} Understand cookie consent to some or more extent & 7 & \textbf{0.9197} & 0.4667 \\
         \textbf{Q4.} Do not understand cookie consent well & 13 & 0.767 & \textbf{0.0029} \\
-        \textbf{Q7.} Activly withholds consent & 7 & 0.710 & \textbf{0.0048} \\
-        \textbf{Q7.} Does not activly withhold consent & 14 & 0.794 & \textbf{0.0042} \\
-        \textbf{Q8.} Have withdrawn consent & 6 & 0.772 & \textbf{0.0328} \\
+        \textbf{Q7.} Actively withholds consent & 6 & 0.755 & \textbf{0.0221} \\
+        \textbf{Q7.} Does not actively withhold consent & 20 & 0.824 & \textbf{0.0020} \\
+        \textbf{Q8.} Have withdrawn consent & 5 & 0.842 & 0.1710 \\
         \textbf{Q8.} Have not withdrawn consent & 14 & 0.854 & \textbf{0.0250} \\
-        \textbf{Q9.} Aware of withdrawal ease & 8 & 0.780 & \textbf{0.0175} \\
+        \textbf{Q9.} Aware of withdrawal ease & 7 & 0.813 & 0.0552 \\
         \textbf{Q9.} Not aware of withdrawal ease & 13 & 0.864 & \textbf{0.0439} \\
         \textbf{Q11.} Under 30 years & 8 & 0.882 & 0.1973 \\
-        \textbf{Q11.} 30 years or older & 13 & 0.798 & \textbf{0.0065} \\
-        \textbf{Q12.} With IT background & 16 & 0.830 & \textbf{0.0071} \\
+        \textbf{Q11.} 30 years or older & 12 & 0.814 & \textbf{0.0134} \\
+        \textbf{Q12.} With IT background & 15 & 0.845 & \textbf{0.0145} \\
         \textbf{Q12.} Without IT background & 5 & 0.842 & 0.1710 \\
         \hline
         \multicolumn{4}{|l|}{\textbf{Total accepts on phone}} \\
         \hline
-        \textbf{Q1.} Quite or very concerned about privacy & 15 & 0.630 & \textbf{0.0000} \\
-        \textbf{Q1.} Slightly concered about privacy & 6 & 0.753 & \textbf{0.0211} \\
-        \textbf{Q4.} Understand cookie consent to some or more extent & 8 & 0.782 & \textbf{0.0185} \\
+        \textbf{Q1.} Quite or very concerned about privacy & 14 & 0.616 & \textbf{0.0001} \\
+        \textbf{Q1.} Slightly concerned about privacy & 6 & 0.753 & \textbf{0.0211} \\
+        \textbf{Q4.} Understand cookie consent to some or more extent & 7 & 0.813 & 0.0546 \\
         \textbf{Q4.} Do not understand cookie consent well & 13 & 0.533 & \textbf{0.0000} \\
-        \textbf{Q7.} Activly withholds consent & 7 & 0.671 & \textbf{0.0018} \\
-        \textbf{Q7.} Does not activly withhold consent & 14 & 0.584 & \textbf{0.0000} \\
-        \textbf{Q8.} Have withdrawn consent & 6 & 0.640 & \textbf{0.0014} \\
+        \textbf{Q7.} Actively withholds consent & 6 & 0.721 & \textbf{0.0101} \\
+        \textbf{Q7.} Does not actively withhold consent & 20 & 0.654 & \textbf{0.0000} \\
+        \textbf{Q8.} Have withdrawn consent & 5 & 0.684 & \textbf{0.0065} \\
         \textbf{Q8.} Have not withdrawn consent & 14 & 0.678 & \textbf{0.0002} \\
-        \textbf{Q9.} Aware of withdrawal ease & 8 & 0.655 & \textbf{0.0007} \\
+        \textbf{Q9.} Aware of withdrawal ease & 7 & 0.671 & \textbf{0.0018} \\
         \textbf{Q9.} Not aware of withdrawal ease & 13 & 0.675 & \textbf{0.0003} \\
         \textbf{Q11.} Under 30 years & 8 & 0.641 & \textbf{0.0005} \\
-        \textbf{Q11.} 30 years or older & 13 & 0.720 & \textbf{0.0009} \\
-        \textbf{Q12.} With IT background & 16 & 0.665 & \textbf{0.0001} \\
+        \textbf{Q11.} 30 years or older & 12 & 0.719 & \textbf{0.0013} \\
+        \textbf{Q12.} With IT background & 15 & 0.672 & \textbf{0.0001} \\
         \textbf{Q12.} Without IT background & 5 & 0.552 & \textbf{0.0001} \\
         \hline
     \end{tabular}
-    \caption{ \textbf{Shapiro-Wilk normality statistics for the number of cookie banner accepts on different devices.} The Shapiro-Wilk \textbf{W} statistic is never above 0.9 when the data is grouped based on survey questions and the number of acceptances on computer and phone,  indicating that the data is not approximately normal. Additionally, the p-value is less than 0.05 for most groups, rejecting the null hypothesis of normality.  The \textbf{W} is the Shapiro-Wilk test statistic, highlighted in \textbf{bold} if it is greater than 0.9. The p-value is highlighted in \textbf{bold} if it is less than 0.05. }
+    \caption{ \textbf{Shapiro-Wilk normality statistics for the number of cookie banner accepts on different devices.} The Shapiro-Wilk \textbf{W} statistic is never above 0.9 when the data is grouped based on survey questions and the number of acceptances on computer and phone, indicating that the data is not approximately normal. Additionally, the p-value is less than 0.05 for most groups, rejecting the null hypothesis of normality.  The  Shapiro-Wilk test statistic \textbf{W}, highlighted in \textbf{bold} if it is greater than 0.9. The p-value is highlighted in \textbf{bold} if it is less than 0.05. }
     \label{tab:shapiro_wilk_extra_accepts}
 \end{table}

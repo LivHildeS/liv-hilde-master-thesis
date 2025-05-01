@@ -1,4 +1,4 @@
-\begin{table}[tb]
+\begin{table}[htbp]
     \centering
     \begin{tabular}{|l|r|r|r|}
         \hline
@@ -6,39 +6,39 @@
         \hline
         \multicolumn{4}{|l|}{\textbf{Average computer banner answer time}} \\
         \hline
-        \textbf{Q1.} Quite or very concerned about privacy & 15 & 0.752 & \textbf{0.0010} \\
-        \textbf{Q1.} Slightly concered about privacy & 6 & 0.839 & 0.1275 \\
-        \textbf{Q4.} Understand cookie consent to some or more extent & 8 & 0.869 & 0.1463 \\
+        \textbf{Q1.} Quite or very concerned about privacy & 14 & 0.750 & \textbf{0.0013} \\
+        \textbf{Q1.} Slightly concerned about privacy & 6 & 0.839 & 0.1275 \\
+        \textbf{Q4.} Understand cookie consent to some or more extent & 7 & 0.871 & 0.1883 \\
         \textbf{Q4.} Do not understand cookie consent well & 13 & 0.747 & \textbf{0.0017} \\
-        \textbf{Q7.} Activly withholds consent & 7 & 0.781 & \textbf{0.0262} \\
-        \textbf{Q7.} Does not activly withhold consent & 14 & 0.869 & \textbf{0.0403} \\
-        \textbf{Q8.} Have withdrawn consent & 6 & 0.804 & 0.0641 \\
+        \textbf{Q7.} Actively withholds consent & 6 & 0.765 & \textbf{0.0281} \\
+        \textbf{Q7.} Does not actively withhold consent & 20 & 0.695 & \textbf{0.0000} \\
+        \textbf{Q8.} Have withdrawn consent & 5 & 0.822 & 0.1208 \\
         \textbf{Q8.} Have not withdrawn consent & 14 & 0.692 & \textbf{0.0003} \\
-        \textbf{Q9.} Aware of withdrawal ease & 8 & 0.778 & \textbf{0.0167} \\
+        \textbf{Q9.} Aware of withdrawal ease & 7 & 0.774 & \textbf{0.0222} \\
         \textbf{Q9.} Not aware of withdrawal ease & 13 & 0.664 & \textbf{0.0003} \\
         \textbf{Q11.} Under 30 years & 8 & 0.565 & \textbf{0.0001} \\
-        \textbf{Q11.} 30 years or older & 13 & 0.769 & \textbf{0.0030} \\
-        \textbf{Q12.} With IT background & 16 & 0.721 & \textbf{0.0003} \\
+        \textbf{Q11.} 30 years or older & 12 & 0.771 & \textbf{0.0045} \\
+        \textbf{Q12.} With IT background & 15 & 0.707 & \textbf{0.0003} \\
         \textbf{Q12.} Without IT background & 5 & 0.759 & \textbf{0.0359} \\
         \hline
         \multicolumn{4}{|l|}{\textbf{Average phone banner answer time}} \\
         \hline
-        \textbf{Q1.} Quite or very concerned about privacy & 15 & \textbf{0.9291} & 0.2643 \\
-        \textbf{Q1.} Slightly concered about privacy & 6 & \textbf{0.9401} & 0.6599 \\
-        \textbf{Q4.} Understand cookie consent to some or more extent & 8 & \textbf{0.9344} & 0.5568 \\
+        \textbf{Q1.} Quite or very concerned about privacy & 14 & 0.869 & \textbf{0.0404} \\
+        \textbf{Q1.} Slightly concerned about privacy & 6 & \textbf{0.9401} & 0.6599 \\
+        \textbf{Q4.} Understand cookie consent to some or more extent & 7 & 0.815 & 0.0580 \\
         \textbf{Q4.} Do not understand cookie consent well & 13 & 0.777 & \textbf{0.0037} \\
-        \textbf{Q7.} Activly withholds consent & 7 & \textbf{0.9324} & 0.5714 \\
-        \textbf{Q7.} Does not activly withhold consent & 14 & 0.785 & \textbf{0.0033} \\
-        \textbf{Q8.} Have withdrawn consent & 6 & \textbf{0.9842} & 0.9706 \\
+        \textbf{Q7.} Actively withholds consent & 6 & 0.792 & \textbf{0.0496} \\
+        \textbf{Q7.} Does not actively withhold consent & 20 & 0.803 & \textbf{0.0009} \\
+        \textbf{Q8.} Have withdrawn consent & 5 & \textbf{0.9816} & 0.9428 \\
         \textbf{Q8.} Have not withdrawn consent & 14 & \textbf{0.9240} & 0.2507 \\
-        \textbf{Q9.} Aware of withdrawal ease & 8 & 0.789 & \textbf{0.0216} \\
+        \textbf{Q9.} Aware of withdrawal ease & 7 & 0.644 & \textbf{0.0009} \\
         \textbf{Q9.} Not aware of withdrawal ease & 13 & \textbf{0.9136} & 0.2053 \\
         \textbf{Q11.} Under 30 years & 8 & \textbf{0.9733} & 0.9225 \\
-        \textbf{Q11.} 30 years or older & 13 & 0.703 & \textbf{0.0006} \\
-        \textbf{Q12.} With IT background & 16 & 0.877 & \textbf{0.0355} \\
+        \textbf{Q11.} 30 years or older & 12 & 0.560 & \textbf{0.0001} \\
+        \textbf{Q12.} With IT background & 15 & 0.787 & \textbf{0.0025} \\
         \textbf{Q12.} Without IT background & 5 & 0.736 & \textbf{0.0221} \\
         \hline
     \end{tabular}
-    \caption{ \textbf{Shapiro-Wilk normality statistics for time spent on cookie banners on different devices.} When considering the average response time on computer, Shapiro-Wilk rejects normality for most groups. However, on phone, many groups have high \textbf{W} and p-values, suggesting that the data is approximately normal. Nevertheless, this is only for a small number of groups overall.  The \textbf{W} is the Shapiro-Wilk test statistic, highlighted in \textbf{bold} if it is greater than 0.9. The p-value is highlighted in \textbf{bold} if it is less than 0.05. }
+    \caption{ \textbf{Shapiro-Wilk normality statistics for time spent on cookie banners on different devices.} When considering the average response time on computer, Shapiro-Wilk rejects normality for most groups. However, on phone, many groups have high \textbf{W} and p-values, suggesting that the data is approximately normal. Nevertheless, this is only for a small number of groups overall.  The  Shapiro-Wilk test statistic \textbf{W}, highlighted in \textbf{bold} if it is greater than 0.9. The p-value is highlighted in \textbf{bold} if it is less than 0.05. }
     \label{tab:shapiro_wilk_extra_time}
 \end{table}

@@ -1,22 +1,21 @@
-\begin{table}[tb]
+\begin{table}[htbp]
     \centering
-    \footnotesize
     \begin{tabular}{|l|l|r|r|r|}
         \hline
         \textbf{Website 1} & \textbf{Website 2} & \textbf{n} & \textbf{Statistic} & \textbf{p-value} \\
         \hline
         Facebook & Dnb & 14 & 47.0 & 0.727099 \\
-        Facebook & Google & 18 & 56.5 & 0.196439 \\
-        Facebook & Finn & 16 & 62.0 & 0.753887 \\
-        Facebook & Dagens & 19 & 1.0 & \textbf{0.000152} \\
-        Dnb & Google & 14 & 35.5 & 0.283497 \\
-        Dnb & Finn & 17 & 55.0 & 0.302335 \\
-        Dnb & Dagens & 19 & 1.0 & \textbf{0.000152} \\
-        Google & Finn & 20 & 72.5 & 0.221149 \\
-        Google & Dagens & 19 & 0.0 & \textbf{0.000127} \\
-        Finn & Dagens & 18 & 2.5 & \textbf{0.000294} \\
+        Facebook & Google & 17 & 47.0 & 0.154187 \\
+        Facebook & Finn & 15 & 58.0 & 0.908807 \\
+        Facebook & Dagens & 18 & 1.0 & \textbf{0.000228} \\
+        Dnb & Google & 13 & 29.5 & 0.281006 \\
+        Dnb & Finn & 16 & 52.0 & 0.401031 \\
+        Dnb & Dagens & 18 & 1.0 & \textbf{0.000228} \\
+        Google & Finn & 19 & 67.0 & 0.256243 \\
+        Google & Dagens & 18 & 0.0 & \textbf{0.000189} \\
+        Finn & Dagens & 17 & 2.5 & \textbf{0.000450} \\
         \hline
     \end{tabular}
-    \caption{ \textbf{Pairwise Wilcoxon tests on the banner response time on computer.}  \textbf{n} marks the amount of observations with different responses for each pair of website, as the Wilcoxon test only uses this. The statistic shows bigger difference the closer the number is to 0. }
+    \caption{ \textbf{Pairwise Wilcoxon tests on the banner response time on computer.} ``Dagens'' has significantly different responses than the other websites.  The number \textbf{n} marks the amount of observations with different responses for each pair of website, as the Wilcoxon test only uses these. The statistic shows bigger difference the closer the number is to 0. }
     \label{tab:wilcoxon_computer_times}
 \end{table}

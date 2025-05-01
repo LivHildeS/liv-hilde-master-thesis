@@ -1,6 +1,5 @@
-\begin{table}[tb]
+\begin{table}[htbp]
     \centering
-    \footnotesize
     \begin{tabular}{|l|r|r|r|}
         \hline
         \textbf{Website} & \textbf{Computer} & \textbf{Phone} & \textbf{Total} \\
@@ -12,6 +11,6 @@
         Dagens & 11 & 11 & 22 \\
         \hline
     \end{tabular}
-    \caption{ \textbf{Total amount of cookie consent accepts} for the different websites on all devices. There were 21 number of participants. }
+    \caption{ \textbf{Total amount of cookie consent accepts} for the different websites on all devices. There were 20 number of participants. }
     \label{tab:website_statistics_accepts}
 \end{table}
