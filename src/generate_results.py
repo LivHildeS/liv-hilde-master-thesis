@@ -181,21 +181,44 @@ def get_website_statistics(df):
         dict: Dict of all the results.
     """
     results = {}
+
+    # Calculate stats for all individual websites
     for website in WEBSITES:
-        results[website] = {
-            "computer_accepts": df[f"computer.{website}.answer.int"].sum(),
-            "computer_accepts_std": df[f"computer.{website}.answer.int"].std(),
-            "phone_accepts": df[f"phone.{website}.answer.int"].sum(),
-            "phone_accepts_std": df[f"phone.{website}.answer.int"].std(),
-            "total_accepts": df[f"{website}_accepts_int"].sum(),
-            "total_accepts_std": df[f"{website}_accepts_int"].std(),
-            "computer_time": df[f"computer.{website}.time"].mean(),
-            "computer_time_std": df[f"computer.{website}.time"].std(),
-            "phone_time": df[f"phone.{website}.time"].mean(),
-            "phone_time_std": df[f"phone.{website}.time"].std(),
-            "total_time": df[f"{website}_average_time"].mean(),
-            "total_time_std": df[f"{website}_average_time"].std(),
-        }
+        results[website] = {}
+        for device in DEVICES:
+            results[website][f"{device}_accepts"] = df[f"{device}.{website}.answer.int"].sum()
+            results[website][f"{device}_accepts_std"] = df[f"{device}.{website}.answer.int"].std()
+            results[website][f"{device}_time"] = df[f"{device}.{website}.time"].mean()
+            results[website][f"{device}_time_std"] = df[f"{device}.{website}.time"].std()
+
+        # Add results for both devices
+        results[website]["total_accepts"] = df[f"{website}_accepts_int"].sum()
+        results[website]["total_accepts_std"] = df[f"{website}_accepts_int"].std()
+        results[website]["total_time"] = df[f"{website}_average_time"].mean()
+        results[website]["total_time_std"] = df[f"{website}_average_time"].std()
+
+    all_stats = {}  # Aggregates all websites
+
+    for device in DEVICES:
+        all_accepts = pd.concat([df[f"{device}.{website}.answer.int"] for website in WEBSITES])
+        all_times = pd.concat([df[f"{device}.{website}.time"] for website in WEBSITES])
+
+        all_stats[f"{device}_accepts"] = all_accepts.sum()
+        all_stats[f"{device}_accepts_std"] = all_accepts.std()
+        all_stats[f"{device}_time"] = all_times.mean()
+        all_stats[f"{device}_time_std"] = all_times.std()
+
+    # Calculate both devices for all websites aggregated
+    all_accepts = pd.concat([df[f"{website}_accepts_int"] for website in WEBSITES])
+    all_times = pd.concat([df[f"{website}_average_time"] for website in WEBSITES])
+
+    all_stats["total_accepts"] = all_accepts.sum()
+    all_stats["total_accepts_std"] = all_accepts.std()
+    all_stats["total_time"] = all_times.mean()
+    all_stats["total_time_std"] = all_times.std()
+
+    results["all"] = all_stats
+
     return results
 
 

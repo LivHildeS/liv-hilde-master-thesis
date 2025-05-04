@@ -9,6 +9,7 @@
         Google & 4.15 (2.85) & 3.3 (1.34) & 7.45 (3.15) \\
         Finn & 4.95 (2.72) & 4.25 (1.68) & 9.2 (3.98) \\
         Dagens & 19.9 (26.19) & 8.3 (7.00) & 28.2 (26.49) \\
+        All & 7.8 (13.26) & 4.84 (4.14) & 12.64 (14.49) \\
         \hline
     \end{tabular}
     \caption{ \textbf{Average time in seconds spent on cookie banners} for the different websites on all devices. The paranthesis contains the standard deviations. }

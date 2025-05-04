@@ -9,6 +9,7 @@
         Google & 6 & 3 & 9 \\
         Finn & 9 & 6 & 15 \\
         Dagens & 11 & 11 & 22 \\
+        All & 33 & 26 & 59 \\
         \hline
     \end{tabular}
     \caption{ \textbf{Total amount of cookie consent accepts} for the different websites on all devices. There were 20 number of participants. }
