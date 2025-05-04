@@ -370,7 +370,7 @@ def make_website_statistics_latex_table(website_stats, test_variable="accepts", 
         str: A LaTeX-formatted table string.
     """
     if test_variable not in ["accepts", "time"]:
-        raise ValueError(f"Invalid test_variable '{test_variable}'. Must be 'accepts' or 'time'.")
+        raise ValueError(f"Invalid test_variable \"{test_variable}\". Must be \"accepts\" or \"time\".")
 
     stat_suffix = "accepts" if test_variable == "accepts" else "time"
 
@@ -397,6 +397,56 @@ def make_website_statistics_latex_table(website_stats, test_variable="accepts", 
             total += f" ({stats[f'total_{stat_suffix}_std']:.2f})"
         line = f"        {site.capitalize()} & {computer} & {phone} & {total} \\\\"
         lines.append(line)
+
+    lines.append("        \\hline")
+    lines.append("    \\end{tabular}")
+    if caption:
+        lines.append(f"    \\caption{{{caption}}}")
+    if label:
+        lines.append(f"    \\label{{{label}}}")
+    lines.append("\\end{table}")
+
+    return "\n".join(lines)
+
+
+def make_devices_wilcoxon_table(website_stats, test_variable="accepts", caption="", label=""):
+    """
+    Generate a LaTeX table showing Wilcoxon test statistics and p-values for each website and device comparison.
+
+    Args:
+        website_stats (dict): Output dictionary from get_website_statistics.
+        test_variable (str): "accepts" or "time" — determines which test results to show.
+        caption (str): Caption text for the LaTeX table.
+        label (str): Label for the LaTeX table.
+
+    Returns:
+        str: A LaTeX-formatted table string.
+    """
+    if test_variable not in ["accepts", "time"]:
+        raise ValueError(f"Invalid test_variable \"{test_variable}\". Must be \"accepts\" or \"time\".")
+
+    key = f"test_statistics_{test_variable}"
+
+    lines = []
+    lines.append("\\begin{table}[htbp]")
+    lines.append("    \\centering")
+    lines.append("    \\begin{tabular}{|l|r|r|}")
+    lines.append("        \\hline")
+    lines.append("        \\textbf{Website} & \\textbf{Statistic} & \\textbf{p-value} \\\\")
+    lines.append("        \\hline")
+
+    for site in website_stats:
+        stat_info = website_stats[site].get(key, {})
+        stat = stat_info.get("stat")
+        p = stat_info.get("p_value")
+
+        stat_fmt = f"{stat:.3f}" if isinstance(stat, float) else "-"
+        if isinstance(p, float):
+            p_fmt = f"\\textbf{{{p:.6f}}}" if p < 0.05 else f"{p:.6f}"
+        else:
+            p_fmt = "-"
+
+        lines.append(f"        {site.capitalize()} & {stat_fmt} & {p_fmt} \\\\")
 
     lines.append("        \\hline")
     lines.append("    \\end{tabular}")

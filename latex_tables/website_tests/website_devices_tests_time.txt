@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{|l|r|r|}
+        \hline
+        \textbf{Website} & \textbf{Statistic} & \textbf{p-value} \\
+        \hline
+        Facebook & 36.000 & 0.157929 \\
+        Dnb & 45.500 & 0.138431 \\
+        Google & 33.000 & 0.378689 \\
+        Finn & 21.000 & 0.278762 \\
+        Dagens & 53.000 & 0.090733 \\
+        All & 915.000 & \textbf{0.006580} \\
+        \hline
+    \end{tabular}
+    \caption{ \textbf{Wilcoxon's signed rank test for the times spent answering cookie banners on the different devices.} }
+    \label{tab:website_devices_tests_time}
+\end{table}

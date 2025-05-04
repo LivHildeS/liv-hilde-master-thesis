@@ -10,13 +10,14 @@ from src.latex_table_captions import (BOOTSTRAP_EXTRA_ACCEPTS_CAPTION, BOOTSTRAP
                                       MEAN_AND_SD_EXTRA_TIME_CAPTION, MEAN_AND_SD_MAIN_CAPTION,
                                       NETTSKJEMA_REPORT_CAPTION, SHAPIRO_WILK_EXTRA_ACCEPTS_CAPTION,
                                       SHAPIRO_WILK_EXTRA_TIME_CAPTION, SHAPIRO_WILK_MAIN_CAPTION,
+                                      WEBSITE_DEVICES_TESTS_ACCEPTS_CAPTION, WEBSITE_DEVICES_TESTS_TIME_CAPTION,
                                       WEBSITE_STATISTICS_ACCEPTS_CAPTION, WEBSITE_STATISTICS_TIME_CAPTION,
                                       WILCOXON_COMPUTER_ACCEPTS_CAPTION, WILCOXON_COMPUTER_TIME_CAPTION,
                                       WILCOXON_PHONE_ACCEPTS_CAPTION, WILCOXON_PHONE_TIME_CAPTION,
                                       WILCOXON_TOTAL_ACCEPTS_CAPTION, WILCOXON_TOTAL_TIME_CAPTION,
                                       WITHDRAWAL_STATISTICS_CAPTION)
-from src.make_latex_tables import (make_bootstrap_latex_table, make_friedman_latex_table, make_mean_sd_latex_table,
-                                   make_nettskjema_report_latex, make_shapiro_latex_table,
+from src.make_latex_tables import (make_bootstrap_latex_table, make_devices_wilcoxon_table, make_friedman_latex_table,
+                                   make_mean_sd_latex_table, make_nettskjema_report_latex, make_shapiro_latex_table,
                                    make_website_statistics_latex_table, make_wilcoxon_latex_table,
                                    make_withdrawal_statistics_latex_table)
 
@@ -327,6 +328,48 @@ def write_website_statistics_time(df):
     _write_latex_table_to_file(website_statistics_table, filename=filename, folder=folder)
 
 
+def write_website_tests_accepts(df):
+    """
+    Writes the Wilcoxon tests on the website accepts.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    caption = WEBSITE_DEVICES_TESTS_ACCEPTS_CAPTION.replace("\n", " ")
+    label = "tab:website_devices_tests_accepts"
+    filename = "website_devices_tests_accepts.txt"
+    folder = WEBISTE_TESTS_FOLDER
+    results = get_website_statistics(df, perform_wilcoxon_test=True)
+    website_statistics_table = make_devices_wilcoxon_table(
+        results,
+        test_variable="accepts",
+        caption=caption,
+        label=label
+    )
+    _write_latex_table_to_file(website_statistics_table, filename=filename, folder=folder)
+
+
+def write_website_tests_time(df):
+    """
+    Writes the Wilcoxon tests on the website times.
+
+    Args:
+        df (pd.DataFrame): The dataframe with the results. Get with `src.utils.get_all_data()`
+    """
+    caption = WEBSITE_DEVICES_TESTS_TIME_CAPTION.replace("\n", " ")
+    label = "tab:website_devices_tests_time"
+    filename = "website_devices_tests_time.txt"
+    folder = WEBISTE_TESTS_FOLDER
+    results = get_website_statistics(df, perform_wilcoxon_test=True)
+    website_statistics_table = make_devices_wilcoxon_table(
+        results,
+        test_variable="time",
+        caption=caption,
+        label=label
+    )
+    _write_latex_table_to_file(website_statistics_table, filename=filename, folder=folder)
+
+
 def write_friedman(df):
     """
     Writes table with Friedman test for the different websites with one row for each device (including "both"),
@@ -546,6 +589,8 @@ def write_all_latex_tables(df, nettskjema_report=False, shapiro_wilk=False, mean
     if website_statistics:
         write_website_statistics_accepts(df)
         write_website_statistics_time(df)
+        write_website_tests_accepts(df)
+        write_website_tests_time(df)
     if friedman:
         write_friedman(df)
     if wilcoxon:

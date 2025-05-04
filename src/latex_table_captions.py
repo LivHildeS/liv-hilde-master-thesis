@@ -75,6 +75,14 @@ WEBSITE_STATISTICS_TIME_CAPTION = """
 contains the standard deviations.
 """
 
+WEBSITE_DEVICES_TESTS_ACCEPTS_CAPTION = """
+\\textbf{Wilcoxon's signed rank test for whether accept were given on the different devices.}
+"""
+
+WEBSITE_DEVICES_TESTS_TIME_CAPTION = """
+\\textbf{Wilcoxon's signed rank test for the times spent answering cookie banners on the different devices.}
+"""
+
 FRIEDMAN_CAPTION = """
 \\textbf{Friedman tests on consent accepts and banner answer time on the different websites are highly significant}.
 All of the tests have very low p-values, indicating that the null hypothesis stating that the websites have the

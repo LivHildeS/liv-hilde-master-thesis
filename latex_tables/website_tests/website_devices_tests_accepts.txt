@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{|l|r|r|}
+        \hline
+        \textbf{Website} & \textbf{Statistic} & \textbf{p-value} \\
+        \hline
+        Facebook & 0.000 & 0.317311 \\
+        Dnb & 5.000 & 1.000000 \\
+        Google & 0.000 & 0.083265 \\
+        Finn & 8.000 & 0.256839 \\
+        Dagens & 1.500 & 1.000000 \\
+        All & 45.000 & 0.089555 \\
+        \hline
+    \end{tabular}
+    \caption{ \textbf{Wilcoxon's signed rank test for whether accept were given on the different devices.} }
+    \label{tab:website_devices_tests_accepts}
+\end{table}

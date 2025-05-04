@@ -250,6 +250,33 @@ def run_friedman_test(df, test_variable, device):
     }
 
 
+def run_device_wilcoxon_tests(df, column_name1, column_name2, min_group_size=3):
+    """
+    Run a Wilcoxon signed rank test based on the columns `column_name1` and `column_name2` in the dataframe `df`.
+
+    Args:
+        df (pd.DataFrame): DataFrame of with the columns
+        column_name1 (str): Name of the first column to test.
+        column_name2 (str): name of the second column to test
+        min_group_size (int, optional): The minimum amount of instances that must be included to run the test.
+            Defaults to 3.
+
+    Returns:
+        dict: Dictionary of the test statistic and the corresponding p-value.
+    """
+    # Wilcoxon test can only use values were the participants have answered differently for the two options
+    accept_mask = df[[column_name1, column_name2]].notna().all(axis=1)
+    if accept_mask.sum() >= min_group_size:
+        stat, p_value = wilcoxon(
+            df.loc[accept_mask, column_name1],
+            df.loc[accept_mask, column_name2]
+        )
+    else:
+        stat = None
+        p_value = None
+    return {"stat": stat, "p_value": p_value}
+
+
 def run_pairwise_wilcoxon_tests(df, test_variable, device):
     """
     Runs Wilcoxon signed-rank tests for all pairs of websites with ordinal response values (0-2).

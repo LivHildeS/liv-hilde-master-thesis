@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 
 from src.get_constants import get_constants
-from src.hypothesis_tests import (get_means_and_sd, run_bootstrap_test, run_friedman_test, run_group_test,
-                                  run_grouped_shapiro_wilk_normality_test, run_pairwise_wilcoxon_tests)
+from src.hypothesis_tests import (get_means_and_sd, run_bootstrap_test, run_device_wilcoxon_tests, run_friedman_test,
+                                  run_group_test, run_grouped_shapiro_wilk_normality_test, run_pairwise_wilcoxon_tests)
 from src.process_data import _quantisize_answers
 
 CONSTANTS = get_constants()
@@ -168,7 +168,7 @@ def get_all_group_test_results(df, test_type="mannwhitney"):
     return all_results
 
 
-def get_website_statistics(df):
+def get_website_statistics(df, perform_wilcoxon_test=False):
     """
     Collects high level website data from the dataframe and returns as a dictionary.
     This data is the total amount of accepts and average time spent on the cookie banner for each of the websites,
@@ -176,6 +176,9 @@ def get_website_statistics(df):
 
     Args:
         df (pd.Dataframe): All the data.
+        perform_wilcoxon_test (bool): If True, will perform wilcoxon signed ranked test on each website. The outcome
+            variable will be the amount of accepts and the time spent on each website, and it will test computer
+            against phone.
 
     Returns:
         dict: Dict of all the results.
@@ -198,15 +201,20 @@ def get_website_statistics(df):
         results[website]["total_time_std"] = df[f"{website}_average_time"].std()
 
     all_stats = {}  # Aggregates all websites
+    all_df = {}  # For Wilcoxon tests
 
     for device in DEVICES:
         all_accepts = pd.concat([df[f"{device}.{website}.answer.int"] for website in WEBSITES])
         all_times = pd.concat([df[f"{device}.{website}.time"] for website in WEBSITES])
+        all_df[f"{device}_accepts"] = all_accepts
+        all_df[f"{device}_time"] = all_times
 
         all_stats[f"{device}_accepts"] = all_accepts.sum()
         all_stats[f"{device}_accepts_std"] = all_accepts.std()
         all_stats[f"{device}_time"] = all_times.mean()
         all_stats[f"{device}_time_std"] = all_times.std()
+
+    all_df = pd.DataFrame(all_df)
 
     # Calculate both devices for all websites aggregated
     all_accepts = pd.concat([df[f"{website}_accepts_int"] for website in WEBSITES])
@@ -218,6 +226,29 @@ def get_website_statistics(df):
     all_stats["total_time_std"] = all_times.std()
 
     results["all"] = all_stats
+
+    if perform_wilcoxon_test:  # Run Wilcoxon signed ranked test on accepts and time given different devices.
+        for website in WEBSITES:
+            test_results_accepts = run_device_wilcoxon_tests(
+                df, column_name1=f"computer.{website}.answer.int", column_name2=f"phone.{website}.answer.int"
+            )
+            results[website]["test_statistics_accepts"] = test_results_accepts
+
+            test_results_time = run_device_wilcoxon_tests(
+                df, column_name1=f"computer.{website}.time", column_name2=f"phone.{website}.time"
+            )
+            results[website]["test_statistics_time"] = test_results_time
+
+        # Also run tests for the all website aggregation
+        test_results_accepts = run_device_wilcoxon_tests(
+            all_df, column_name1="computer_accepts", column_name2="phone_accepts"
+        )
+        results["all"]["test_statistics_accepts"] = test_results_accepts
+
+        test_results_time = run_device_wilcoxon_tests(
+            all_df, column_name1="computer_time", column_name2="phone_time"
+        )
+        results["all"]["test_statistics_time"] = test_results_time
 
     return results
 
