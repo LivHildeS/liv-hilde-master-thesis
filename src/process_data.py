@@ -3,7 +3,7 @@ import pandas as pd
 import yaml
 
 from src.get_constants import get_constants
-from src.paths import get_experiment_results_path
+from src.paths import QUALITATIVE_ANSWERS_FILENAME, get_experiment_results_path
 
 CONSTANTS = get_constants()
 WEBSITES = CONSTANTS["websites"]
@@ -199,3 +199,30 @@ def process_nettskjema_data(df):
         )
 
     return df
+
+
+def write_qualitative_answers_per_participant(df):
+    """
+    Writes the qualitative answers in the same folder as the experiment results.
+
+    Args:
+        df (pd.Dataframe): The dataframe of the data containing the qualitative answers.
+    """
+    qualitative_questions = [
+        "Q5: How do you feel about cookie consent banners?",
+        "Q10: During the task-solving earlier, you were presented with cookie consent banners from the various "
+        "web-sites. Can you explain why you chose the responses you did to these banners?",
+        "Q13: Do you have any other comments?"
+    ]
+    qualitative_questions_column_names = [
+        "cookie_banner_feeling", "banner_response_reasoning", "freetext_additional_comments"
+    ]
+
+    for i, row in df.iterrows():
+        experiments_path = get_experiment_results_path(i + 1)
+        file_path = experiments_path.parent / QUALITATIVE_ANSWERS_FILENAME
+        with open(file_path, "w") as outfile:
+            for j in range(len(qualitative_questions)):
+                outfile.write(qualitative_questions[j] + "\n\n")
+                answer = row[qualitative_questions_column_names[j]]
+                outfile.write(answer + "\n\n\n")

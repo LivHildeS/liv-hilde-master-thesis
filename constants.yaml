@@ -14,6 +14,7 @@ paths:
     all_experiment_results: all_experiment_results.csv
     answer_times_line_plot_computer: answer_time_line_plot_computer.pdf
     answer_times_line_plot_phone: answer_time_line_plot_phone.pdf
+    qualitative_answers: qualitative_answers.txt
 number_of_participants: 20
 nettskjema_column_names:
   0: submission_id

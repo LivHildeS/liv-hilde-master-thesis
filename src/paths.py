@@ -12,6 +12,7 @@ NETTSKJEMA_FILENAME = PATHS["filenames"]["nettskjema"]
 EXPERIMENT_RESULTS_FILENAME = PATHS["filenames"]["experiment_results"]
 ALL_EXPERIMENTS_FILENAME = PATHS["filenames"]["all_experiment_results"]
 NETTSKJEMA_QUESTIONS_FILENAME = PATHS["filenames"]["nettskjema_questions"]
+QUALITATIVE_ANSWERS_FILENAME = PATHS["filenames"]["qualitative_answers"]
 
 NETTSKJEMA_PATH = DATA_FOLDER / NETTSKJEMA_FILENAME
 ALL_EXPERIMENTS_PATH = DATA_FOLDER / ALL_EXPERIMENTS_FILENAME
