@@ -1,9 +1,7 @@
 from itertools import combinations
 
 import numpy as np
-import pandas as pd
 from scipy.stats import friedmanchisquare, mannwhitneyu, shapiro, ttest_ind, wilcoxon
-from statsmodels.stats.contingency_tables import cochrans_q, mcnemar
 
 from src.get_constants import get_constants
 
