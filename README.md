@@ -1,10 +1,10 @@
-# Deceptive Cookies: Conset by Desgin - A Mixed Method Study
+# Deceptive Cookies: Consent by Design - A Mixed Method Study
 
 ## About
 
-This repository contains the code used to quantitativly analyse the data in my master's thesis. It makes descriptive statistics, performs hypothesis tests and creates tables and output used in the thesis.
+This repository contains the code used to quantitatively analyse the data in my master's thesis. It makes descriptive statistics, performs hypothesis tests and creates tables and output used in the thesis.
 
-The data used is not shared, it is only presented in aggregates forms found in the tables and figures.
+The data used is not shared, it is only presented in aggregated forms found in the tables and figures.
 
 The processing mostly uses `pandas` dataframes, with hypothesis tests from `scipy`.
 
